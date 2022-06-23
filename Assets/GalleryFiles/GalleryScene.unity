@@ -14598,7 +14598,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 2c8ecd42b90e6d744929711778298ff7, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  KickButton: {fileID: 0}
+  KickButton: {fileID: 999497148}
 --- !u!4 &2014157606
 Transform:
   m_ObjectHideFlags: 0
