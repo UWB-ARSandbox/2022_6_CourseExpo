@@ -1,0 +1,1224 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Expo xml:base="http://uri1" xmlns="CourseXpoSchema">
+	<modules>
+		<Module>
+			<name>Chapter 1</name>
+			<description>Basic Concepts</description>
+			<examples>
+        <Example>
+          <name>Example 1</name>
+          <description>Content Desc</description>
+          <Content>
+			  <Slides>
+	            <text>Text to go with an image</text>
+              <image>
+                <link>https://cdn.vox-cdn.com/thumbor/CNLDJd5-M-WtOsYh_yugQ-S-FJs=/715x248:1689x721/1400x933/filters:focal(972x299:1278x605):no_upscale()/cdn.vox-cdn.com/uploads/chorus_image/image/69305239/shrek4_disneyscreencaps.com_675.0.jpg</link>
+              </image>
+              <text>more text</text>
+              <image>
+                <link>https://www.looper.com/img/gallery/things-only-adults-notice-in-shrek/intro-1573597941.jpg</link>
+              </image>
+              <text>even more text</text>
+			  </Slides>
+          </Content>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>The Number Line</name>
+          <description>The number line is a line on which each point represents exactly one number. It is used to illustrate simple numerical operations.</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971953357520531526/unknown.png</link>
+              </image>
+              <text>On the number line, the numbers always increase from left to right. To show the scale, numbers are marked off at equal intervals. We draw an arrow at the end to indicate that the numbers extend infinitely in that direction.</text>
+              <text>Positive numbers, which we may indicate with a + in front of the number, are numbers greater than 0. Negative numbers, which we indicate with a − in front of the number, are numbers less than 0. The word sign refers to the property of being positive or negative. The term signed numbers refers to numbers and their signs. Numbers that don’t have a sign in front of them are understood to be positive.</text>
+              <text>Warning: We use the + and − symbols to represent both addition and subtraction and the sign of a number.</text>
+              <text>The absolute value of a number is its distance from 0 on a number line. Since the absolute value represents distance, it is always positive (unless we’re talking about 0, which has an absolute value of 0). For example, |+15| is equal to 15, |−15| is equal to 15, and |0| is equal to 0.</text>
+              <text>Two numbers that are the same distance from 0 on the number line but have different signs, such as +2 and −2, are opposites. Zero is an exception—the opposite of 0 is itself.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>Operations: Part 1</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Operations: Part 1</name>
+          <description>In math, we have four basic operations (mathematical processes performed on quantities to get a result): addition, subtraction, multiplication, and division. When we combine quantities with operations, we make an expression.</description>
+          <ProblemSolution>
+            <Problem>
+              <Slides>
+                <text>Evaluate -40 + 54</text>
+              </Slides>
+            </Problem>
+            <Solution>
+              <Slides>
+                <text>When we evaluate an expression, we perform mathematical calculations to get a single number.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/971962470447083590/unknown.png</link>
+                </image>
+                <text>Step 1: Split +54 into +40 and +14.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/971962498913804328/unknown.png</link>
+                </image>
+                <text>Step 2: Group the -40 and +40 together to make a zero pair. A “zero pair” is a pair of numbers that add up to zero.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/971953474071846922/unknown.png</link>
+                </image>
+                <text>Step 3: The remainder after removing the zero pair is the answer: 14.</text>
+                <text>In this example, we use the = symbol (which is called an equal sign and reads “equals” or “is equal to”). The equal sign means that the expression on its left has the same value as the expression on its right. A mathematical statement containing an equal sign is called an equation.</text>
+                <text>Steps to Add Signed Numbers:&#10;1. Determine the number with the larger absolute value.&#10;2. Form zero pairs with the number with the smaller absolute value.&#10;3. The remainder is the final answer, called the sum.</text>
+              </Slides>
+						</Solution>
+          </ProblemSolution>
+          <unlockAfterCompletion>Operations: Part 2</unlockAfterCompletion>
+        </Example>
+				<Example>
+					<name>Operations: Part 2</name>
+					<description>In math, we have four basic operations (mathematical processes performed on quantities to get a result): addition, subtraction, multiplication, and division. When we combine quantities with operations, we make an expression.</description>
+					<ProblemSolution>
+						<Problem>
+              <Slides>
+                <text>Evaluate (-30) - (-46)</text>
+              </Slides>
+						</Problem>
+						<Solution>
+              <Slides>
+                <text>Addition and subtraction undo each other. For example, 5 + 3 − 3 equals 5. More formally, we say that addition and subtraction are inverse operations. This means that when we apply inverse operations on a number, the result is the original number. We can think of subtraction in terms of addition.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/971960568846098482/unknown.png</link>
+                </image>
+                <text>Step 1: Starting with just -30, we try to remove a -46. Since we don’t have a -46, we can add a 46 zero pair (+46 and -46) because adding 0 to an expression keeps it the same. Then we can remove the -46.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/971960591554052156/unknown.png</link>
+                </image>
+                <text>Step 2: After removing the -46, we are left with a -30 and +46.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/971960619748188160/unknown.png</link>
+                </image>
+                <text>Step 3: To determine what we have left in step 2, we separate the +46 into +30 and +16 (since 46 − 30 equals 16).</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/971953795934347334/unknown.png</link>
+                </image>
+                <text>Step 4: The -30 and +30 make a zero pair which we can remove leaving 16 as the final answer.</text>
+                <text>To subtract a positive number, add a negative number with the same absolute value, so 5 − 3 = 5 + (−3). The result, called the difference, is 2. (This models real-world behavior—adding debt lowers your net worth.)</text>
+                <text>To subtract a negative number, add a positive number with the same absolute value, so 5 − (−3) is the same as 5 + 3. The difference is 8. (This also models real-world behavior—removing debt raises your net worth.)</text>
+              </Slides>
+					  </Solution>
+					</ProblemSolution>
+					<unlockAfterCompletion>Operations: Part 3</unlockAfterCompletion>
+				</Example>
+        <Example>
+          <name>Operations: Part 3</name>
+          <description>How to Multiply Signed Numbers</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971953995788722256/unknown.png</link>
+              </image>
+              <text>Multiply the absolute values of the factors (the numbers being multiplied).&#10;If we multiply two numbers with different signs, the result (called the product) is negative.&#10;If we multiply two numbers with the same sign, the result is positive.</text>
+              <text>We write the multiplication of 3 times 2 either with an x or a dot between the numbers, as in 3 x 2 or 3 (dot) 2, or with parentheses around one or both numbers, as in (3)(2), 3(2), or (3)2. We recommend not using the x symbol in algebra because it can easily be mistaken for the letter x.</text>
+              <text>Since the area of a rectangle is the product of its length and width, then we can use rectangles to represent multiplication.</text>
+              <text>We can represent (-10)(-5) as this rectangle with -10 and -5 as its dimensions. We can also think of this as removing 5 groups of −10, which results in a net increase of 50.</text>
+              <text>Special Cases:&#10;Any number multiplied by 0 equals 0. For example, 4 groups of 0 is still 0.&#10;A number multiplied by 1 equals itself. We can explain this conceptually by noticing that 1 group of 4 is just that number, so 4(1) = 4.&#10;A number multiplied by −1 equals its opposite. For example, 4(−1) = −4 and −4(−1) = 4.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>Operations: Part 4</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Operations: Part 4</name>
+          <description>How to Multiply Signed Numbers (Part 2): Exponents</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971954415693094932/unknown.png</link>
+              </image>
+              <text>When we multiply a number by itself several times, we say that we raise it to a power. For example, we say that 2(2)(2)(2) equals 2&lt;sup&gt;4&lt;/sup&gt;, which we read as “two to the fourth power” or “two to the fourth.” In this case, 2 is called the base (the number being multiplied) and 4 is the power or exponent (the number of times the base is being multiplied). The exponent is written above and to the right of the base. The term power refers to both the number 16 (what 2&lt;sup&gt;4&lt;/sup&gt; equals) as well as the exponent 4.</text>
+              <text>Special Cases (Part 1):&#10;A number raised to the first power is equal to the number, so 2&lt;sup&gt;1&lt;/sup&gt; = 2.&#10;A number raised to the second power is squared, so 4&lt;sup&gt;2&lt;/sup&gt; can be read as “four squared,” “four to the second power,” or “four to the second.” (We get this term from the formula for the area of a square, which is the length of its edge multiplied by itself.)</text>
+              <text>Special Cases (Part 2):&#10;A number raised to the third power is cubed, so 4&lt;sup&gt;3&lt;/sup&gt; can be read as “four cubed,” “four to the third power,” or “four to the third.” (We get this term from the formula for the volume of a cube, which is the length of its edge multiplied by itself three times.)</text>
+              <text>A positive number raised to a positive power is always positive. We can surround the base with parentheses, so (3)&lt;sup&gt;4&lt;/sup&gt;, (+3)&lt;sup&gt;4&lt;/sup&gt;, and 3&lt;sup&gt;4&lt;/sup&gt; all represent the same quantity. When we raise negative numbers to a power, we always surround the base with parentheses, so we write (−3)(−3)(−3)(−3) as (−3)&lt;sup&gt;4&lt;/sup&gt;.</text>
+              <text>A negative number raised to an odd power is negative and a negative number raised to an even power is positive.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>Operations: Part 5</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Operations: Part 5</name>
+          <description>How to Divide Signed Numbers</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971954456415596634/unknown.png</link>
+              </image>
+              <text>Divide the absolute values of the number that we divide (called the dividend) and the number that we divide by (called the divisor).&#10;If we divide two numbers with different signs, the result (called the quotient) is negative.&#10;If we divide two numbers with the same sign, the result is positive.</text>
+              <text>When we divide numbers, we separate into groups of equal size. Multiplication and division are inverse operations. Division is often associated with fractions. A fraction is a quantity consisting of one number (called the numerator) divided by a nonzero number (called the denominator).</text>
+              <text>We write division by using either the ÷ or / symbol between 2 numbers such as 8 ÷ 2 or 8/2 or by writing one number on top of the other and separating the two with a fraction bar (sometimes called a vinculum).</text>
+              <text>Special Cases (Part 1):&#10;Any number divided by 1 equals itself. For example, 8/1, which means 8 divided into 1 group, equals 8.&#10;Any number divided by 0 is meaningless. Another way of saying this is that a fraction can never have a denominator equal to 0. For example, 8/0 has no meaning since there is no number that when multiplied by 0 would give a product of 8 (this would have to be true since multiplication and division are inverse operations).&#10;Any nonzero number divided by itself equals 1. For example, 8/8 = 1.</text>
+              <text>Special Cases (Part 2):&#10;Zero divided by a nonzero number equals 0. The fraction 0/8 equals 0.&#10;The reciprocal of a number is 1 divided by that number. The reciprocal of 8 is 1/8.&#10;The product of a number and its reciprocal is 1. For example, 8(1/8) = 1.</text>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971954487801573396/unknown.png</link>
+              </image>
+              <text>Example: Using a rectangle, we can think of this as dividing a rectangle that has an area of +6 and a side length of −3. Using the rules for dividing two numbers with different signs, we conclude that the quotient must be negative, so the answer is −2.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Order of Operations</name>
+          <description>The order of operations is the order in which mathematical operations should be performed.</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971954749467422730/unknown.png</link>
+              </image>
+              <text>Step 1: Grouping.&#10;First, evaluate everything surrounded by parentheses, brackets, fraction bars, absolute value symbols, and other grouping symbols, working from the innermost symbols outwards. To group numbers inside parentheses, we use square brackets or another set of parentheses: 2 − (3 − [5 − 1]) or 2 − (3 − (5 − 1)).</text>
+              <text>Step 2: Exponents.&#10;Next, evaluate exponents.</text>
+              <text>Step 3: Multiplication/Division.&#10;Next, when multiplication and division occur together, evaluate them left to right.</text>
+              <text>Step 4: Addition/Subtraction.&#10;Finally, when addition and subtraction occur together, evaluate them left to right.</text>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971954904723767316/unknown.png</link>
+              </image>
+              <text>The fraction bar acts as a grouping symbol, separating the numerator from the denominator, so we calculate each separately. In the denominator, we work with grouping symbols from the inside out.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Sets and Properties of Numbers</name>
+          <description>In math, we work with different groups, or sets, of numbers.</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971954993450090506/unknown.png</link>
+              </image>
+              <text>Counting numbers are the numbers we use to count: 1, 2, 3, 4, and so on.&#10;Whole numbers are the counting numbers and zero: 0, 1, 2, 3, 4, and so on.&#10;Integers are the whole numbers and their opposites: ... , –3, –2, –1, 0, 1, 2, 3, ...&#10;Rational numbers are numbers that can be expressed as an integer divided by a nonzero integer.</text>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/971955056863764490/unknown.png</link>
+              </image>
+              <text>The table seen here summarizes important properties of numbers, some of which we have already mentioned: In this table, a, b, and c are variables—letters or other symbols that represent quantities that can change in value.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Example>
+			</examples>
+      <medias>
+        <Media>
+          <name>PickyUppy</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>360 Video Booth</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>Synced Video Booth</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>Portal: Chapter 1</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>Portal: Chapter 2</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>Video: Order of Operations</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>Video: Order of Operations w/Hololive</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>Video: Number Groups</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+      </medias>
+			<assignments>
+				<Assignment>
+					<name>Assignment 1.1</name>
+					<description>6 Questions. [Multiple Choice]</description>
+					<questions>
+						<Question timer="0.0">
+							<text>Evaluate |-3|</text>
+              <value>1</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+                <Answer>0</Answer>
+                <Answer>-3</Answer>
+							</answers>
+							<correct>3</correct>
+						</Question>
+            <Question timer="0.0">
+              <text>Evaluate (-30) + (20)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>10</Answer>
+                <Answer>50</Answer>
+                <Answer>-50</Answer>
+              </answers>
+              <correct>-10</correct>
+            </Question>
+            <Question timer="0.0">
+              <text>Evaluate (-6)(2)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>-4</Answer>
+                <Answer>4</Answer>
+                <Answer>12</Answer>
+              </answers>
+              <correct>-12</correct>
+            </Question>
+            <Question timer="0.0">
+              <text>Evaluate (-7)&lt;sup&gt;2&lt;/sup&gt;</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>14</Answer>
+                <Answer>-14</Answer>
+                <Answer>-49</Answer>
+              </answers>
+              <correct>49</correct>
+            </Question>
+            <Question timer="0.0">
+              <text>Evaluate 0/9</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>undefined</Answer>
+                <Answer>1</Answer>
+                <Answer>9</Answer>
+              </answers>
+              <correct>0</correct>
+            </Question>
+            <Question timer="0.0">
+              <text>Evaluate (-25)/(-5)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>2</Answer>
+                <Answer>-2</Answer>
+                <Answer>-5</Answer>
+              </answers>
+              <correct>5</correct>
+            </Question>
+					</questions>
+					<unlockAfterCompletion>Assignment 1.2,Order of Operations,Video: Order of Operations,Video: Order of Operations w/Hololive</unlockAfterCompletion>
+				</Assignment>
+				<Assignment>
+					<name>Assignment 1.2</name>
+					<description>4 Questions. [Multiple Choice]</description>
+					<questions>
+            <Question timer="0">
+              <text>Evaluate 6 - 3 + 2</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>11</Answer>
+                <Answer>1</Answer>
+                <Answer>-1</Answer>
+              </answers>
+              <correct>5</correct>
+            </Question>
+            <Question timer="0">
+              <text>Evaluate 8 / 2(2 + 2)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>4/3</Answer>
+                <Answer>10</Answer>
+                <Answer>1</Answer>
+              </answers>
+              <correct>16</correct>
+            </Question>
+            <Question timer="0">
+              <text>Evaluate 2(-4)&lt;sup&gt;2&lt;/sup&gt;</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>-64</Answer>
+                <Answer>64</Answer>
+                <Answer>-32</Answer>
+              </answers>
+              <correct>32</correct>
+            </Question>
+            <Question timer="0">
+              <text>Evaluate 9 + |1 - 5|&lt;sup&gt;2&lt;/sup&gt;</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>13</Answer>
+                <Answer>5</Answer>
+                <Answer>-7</Answer>
+              </answers>
+              <correct>25</correct>
+            </Question>
+					</questions>
+					<unlockAfterCompletion>Mid-Chapter 1 Quiz</unlockAfterCompletion>
+				</Assignment>
+				<Assignment>
+					<name>Assignment 1.3</name>
+					<description>Description: 4 Questions. [True or False]</description>
+					<questions>
+            <Question timer="0.0">
+              <text>Every integer is a counting number.</text>
+              <value>1</value>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>True</Answer>
+              </answers>
+              <correct>False</correct>
+            </Question>
+            <Question timer="0.0">
+              <text>Every counting number is positive.</text>
+              <value>1</value>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>False</Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+            <Question timer="0.0">
+              <text>Every rational number is an integer.</text>
+              <value>1</value>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>True</Answer>
+              </answers>
+              <correct>False</correct>
+            </Question>
+            <Question timer="0.0">
+              <text>Every whole number can be written as a fraction.</text>
+              <value>1</value>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>False</Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+					</questions>
+					<unlockAfterCompletion>End of Chapter 1 Quiz</unlockAfterCompletion>
+				</Assignment>
+			</assignments>
+			<quizzes>
+				<Quiz>
+					<name>Mid-Chapter 1 Quiz</name>
+					<description>7 Questions. 10 to 45 seconds per question. [Mixed Types]</description>
+					<questions>
+						<Question timer="10">
+							<text>|-889| = 889</text>
+              <value>1</value>
+							<questionType>TrueFalse</questionType>
+							<answers>
+                <Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+            <Question timer="10">
+              <text>Evaluate (-9) - (5)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>4</Answer>
+                <Answer>-4</Answer>
+                <Answer>14</Answer>
+              </answers>
+              <correct>-14</correct>
+            </Question>
+            <Question timer="10">
+              <text>Evaluate 2&lt;sup&gt;3&lt;/sup&gt;</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>9</Answer>
+                <Answer>6</Answer>
+              </answers>
+              <correct>8</correct>
+            </Question>
+            <Question timer="10">
+              <text>Evaluate (15)/(-3)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>-1/5</Answer>
+                <Answer>1/5</Answer>
+                <Answer>5</Answer>
+              </answers>
+              <correct>-5</correct>
+            </Question>
+            <Question timer="10">
+              <text>Evaluate 12 / 2(3)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>3/2</Answer>
+                <Answer>12</Answer>
+                <Answer>2</Answer>
+              </answers>
+              <correct>18</correct>
+            </Question>
+            <Question timer="20">
+              <text>Evaluate 7 + 5(8)&#10;Enter only integers (with negative sign if answer is negative)</text>
+              <value>2</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>47</correct>
+            </Question>
+            <Question timer="45">
+              <text>Evaluate (2&lt;sup&gt;2&lt;/sup&gt;3&lt;sup&gt;2&lt;/sup&gt;) / (5 - 1 + 4)&#10;Enter only integers (with negative sign if answer is negative)</text>
+              <value>3</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>9</correct>
+            </Question>
+					</questions>
+					<unlockAfterCompletion>Assignment 1.3,Video: Number Groups,Sets and Properties of Numbers</unlockAfterCompletion>
+				</Quiz>
+				<Quiz>
+					<name>End of Chapter 1 Quiz</name>
+					<description>9 Questions. 10 to 60 seconds per question. [Mixed Types]</description>
+					<questions>
+            <Question timer="10">
+              <text>Evaluate (50) + (-10)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>-60</Answer>
+                <Answer>-40</Answer>
+                <Answer>60</Answer>
+              </answers>
+              <correct>40</correct>
+            </Question>
+            <Question timer="15">
+              <text>Evaluate (-100) - (-40)</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>-140</Answer>
+                <Answer>140</Answer>
+                <Answer>60</Answer>
+              </answers>
+              <correct>-60</correct>
+            </Question>
+            <Question timer="15">
+              <text>Evaluate -(-1)&lt;sup&gt;2&lt;/sup&gt;</text>
+              <value>2</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>1</Answer>
+              </answers>
+              <correct>-1</correct>
+            </Question>
+            <Question timer="15">
+              <text>Evaluate 9 + (-3)&lt;sup&gt;2&lt;/sup&gt;</text>
+              <value>2</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>15</Answer>
+                <Answer>3</Answer>
+                <Answer>0</Answer>
+              </answers>
+              <correct>18</correct>
+            </Question>
+            <Question timer="15">
+              <text>Evaluate 4(-2)&lt;sup&gt;3&lt;/sup&gt;</text>
+              <value>2</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>-512</Answer>
+                <Answer>512</Answer>
+                <Answer>32</Answer>
+              </answers>
+              <correct>-32</correct>
+            </Question>
+            <Question timer="60">
+              <text>Evaluate ( (5(16 + 4)) / (16 - 2(3)) )&lt;sup&gt;2&lt;/sup&gt;&#10;Enter only integers (with negative sign if answer is negative)</text>
+              <value>3</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>100</correct>
+            </Question>
+						<Question timer="10">
+							<text>Every whole number is an integer.</text>
+              <value>1</value>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+            <Question timer="10">
+              <text>Every whole number is positive.</text>
+              <value>1</value>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>True</Answer>
+              </answers>
+              <correct>False</correct>
+            </Question>
+            <Question timer="10">
+              <text>Every whole number is rational.</text>
+              <value>1</value>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>False</Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+					</questions>
+					<unlockAfterCompletion>Chapter 1 Test</unlockAfterCompletion>
+				</Quiz>
+			</quizzes>
+			<tests>
+        <Test timeLimit="300.0">
+          <name>Chapter 1 Test</name>
+          <description>13 Questions. Time Limit: 5 Minutes.&#10;[Mixed Types]</description>
+          <questions>
+            <Question timer="10">
+              <text>Which number is a counting number?</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>0</Answer>
+                <Answer>-1</Answer>
+                <Answer>1/2</Answer>
+              </answers>
+              <correct>1</correct>
+            </Question>
+            <Question timer="10">
+              <text>Which operation is the inverse of multiplication?</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>Subtraction</Answer>
+                <Answer>Addition</Answer>
+                <Answer>Squaring</Answer>
+              </answers>
+              <correct>Division</correct>
+            </Question>
+            <Question timer="15">
+              <text>If a positive number is multiplied by a negative number, the result...</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>is always positive.</Answer>
+                <Answer>is always 0.</Answer>
+                <Answer>can be positive or negative.</Answer>
+              </answers>
+              <correct>is always negative.</correct>
+            </Question>
+            <Question timer="15">
+              <text>According to the order of operations, to calculate 1 + (3 - (6 - 4))&lt;sup&gt;2&lt;/sup&gt;, which step must be done first?</text>
+              <value>2</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>1&lt;sup&gt;2&lt;/sup&gt;</Answer>
+                <Answer>1 + 3</Answer>
+                <Answer>3 - 6</Answer>
+              </answers>
+              <correct>6 - 4</correct>
+            </Question>
+            <Question timer="15">
+              <text>Which number is equivalent to (-1)&lt;sup&gt;15&lt;/sup&gt;</text>
+              <value>2</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>+15</Answer>
+                <Answer>-15</Answer>
+                <Answer>+1</Answer>
+              </answers>
+              <correct>-1</correct>
+            </Question>
+            <Question timer="20">
+              <text>On a number line, the absolute value of a number is...</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>its signed distance from any other point</Answer>
+                <Answer>the sum of 2 numbers</Answer>
+                <Answer>its positive dist. from any other point</Answer>
+              </answers>
+              <correct>its distance from zero</correct>
+            </Question>
+            <Question timer="15">
+              <text>Which statement about -3/1 is correct?</text>
+              <value>2</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>Only Rational + Fraction</Answer>
+                <Answer>Only Integer + Fraction</Answer>
+                <Answer>Only Fraction</Answer>
+              </answers>
+              <correct>Rational + Fraction + Integer</correct>
+            </Question>
+            <Question timer="15">
+              <text>If a negative number is subtracted from a positive number, which statement is correct about the result?</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>Can be positive, negative, or 0</Answer>
+                <Answer>Can be positive or 0</Answer>
+                <Answer>Always negative</Answer>
+              </answers>
+              <correct>Always positive</correct>
+            </Question>
+            <Question timer="10">
+              <text>Every integer is a whole number.</text>
+              <value>1</value>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>True</Answer>
+              </answers>
+              <correct>False</correct>
+            </Question>
+            <Question timer="10">
+              <text>The number 0 is rational.</text>
+              <value>1</value>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>False</Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+            <Question timer="0">
+              <text>Evaluate (-50) - (40)&#10;Enter only integers (with negative sign if answer is negative)</text>
+              <value>2</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>-90</correct>
+            </Question>
+            <Question timer="0">
+              <text>Evaluate (12 - (3 + 1))&lt;sup&gt;2&lt;/sup&gt; - 8&#10;Enter only integers (with negative sign if answer is negative)</text>
+              <value>3</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>56</correct>
+            </Question>
+            <Question timer="0">
+              <text>Evaluate ( (13 - 8 + 1) / (2(6 - 7)) ) + 1&#10;Enter only integers (with negative sign if answer is negative)</text>
+              <value>4</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>-2</correct>
+            </Question>
+          </questions>
+          <unlockAfterCompletion>Portal: Chapter 2,Basic Operations: Part 1,Video: AddSubFractions,Video: Fractions w/Hololive</unlockAfterCompletion>
+        </Test>
+        <Test timeLimit="300.0">
+          <name>?????</name>
+          <description>10 Questions. Time Limit: 5 Minutes.&#10;[Mixed Types] First to score 100% gets ???</description>
+          <questions>
+            <Question timer="40">
+              <text>Which of the following words contains the most vowels?</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>VOWEL</Answer>
+                <Answer>LETTER</Answer>
+              </answers>
+              <correct>CONSONANT</correct>
+            </Question>
+            <Question timer="40">
+              <text>What word replaces the question marks?&#10;WEIGHTY | CANINE | PO???TIAL&#10;[Enter only ONE three-letter word]</text>
+              <value>1</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>TEN</correct>
+            </Question>
+            <Question timer="40">
+              <text>How many words in this question contain five or more letters?</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>5</Answer>
+                <Answer>6</Answer>
+                <Answer>7</Answer>
+              </answers>
+              <correct>4</correct>
+            </Question>
+            <Question timer="40">
+              <text>In which of these words are the letters NOT in alphabetical order?</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>Glory</Answer>
+                <Answer>Almost</Answer>
+                <Answer>Begins</Answer>
+              </answers>
+              <correct>Eight</correct>
+            </Question>
+            <Question timer="40">
+              <text>'A' is the first capital letter in the alphabet that looks the same in the mirror.&#10;What is the second?&#10;[Enter only a SINGLE letter]</text>
+              <value>1</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>H</correct>
+            </Question>
+            <Question timer="40">
+              <text>Which option would complete this ANIMAL list?&#10;Antelope | Newt | Iguana | Mole | Alligator</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>Turkey</Answer>
+                <Answer>Snake</Answer>
+              </answers>
+              <correct>Lion</correct>
+            </Question>
+            <Question timer="40">
+              <text>Which of these is an anagram of a day of the week?</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>DUSTY TEA</Answer>
+                <Answer>WEEDY DAWN</Answer>
+              </answers>
+              <correct>SHADY RUT</correct>
+            </Question>
+            <Question timer="40">
+              <text>What letter can you add to the word 'ARE' to turn it from a one-syllable word to a three-syllable word?&#10;[Enter only a SINGLE letter]</text>
+              <value>1</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>A</correct>
+            </Question>
+            <Question timer="40">
+              <text>Which of these is the odd one out?</text>
+              <value>1</value>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>H &#38; S</Answer>
+                <Answer>C &#38; Y</Answer>
+                <Answer>P &#38; A</Answer>
+              </answers>
+              <correct>T &#38; E</correct>
+            </Question>
+            <Question timer="40">
+              <text>In sport, if being FT gets you GD and being SD gets you SR, what does being TD get you?&#10;[Enter only TWO letters]</text>
+              <value>1</value>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>BE</correct>
+            </Question>
+          </questions>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Test>
+			</tests>
+			<unlockAfterCompletion>None</unlockAfterCompletion>
+		</Module>
+		<Module>
+			<name>Chapter 2</name>
+			<description>Fractions</description>
+      <examples>
+        <Example>
+          <name>Basic Operations: Part 1</name>
+          <description>We now review the basic operations with fractions. This booth covers addition and subtraction.</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/976279077025619998/unknown.png</link>
+              </image>
+              <text>To understand fractions, we start by dividing a quantity into equal parts. For example, if we divide a rectangular pizza into 8 slices, each slice represents 1/8 (pronounced “one-eighth” or “one over eight”).</text>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/976279094067073094/unknown.png</link>
+              </image>
+              <text>In the fraction 1/8 , 1 is the numerator and 8 is the denominator</text>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/976279112329089114/unknown.png</link>
+              </image>
+              <text>We add or subtract fractions by adding or subtracting their numerators while keeping the denominators unchanged. This rule only works if the fractions have the same denominator. For example, if Audrey has 3/8 of a pizza and Benjamin has 2/8 of a pizza, then together they have 3/8 + 2/8 = 5/8 of the pizza.</text>
+              <text>The numerator of the sum or difference of fractions with like denominators is the sum or difference of the numerators. The denominator remains unchanged. In symbols, a/c + b/c = (a+b)/c , where c ≠ 0.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>Basic Operations: Part 2</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Basic Operations: Part 2</name>
+          <description>We now review the basic operations with fractions. This booth covers multiplication.</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/976279153949179934/unknown.png</link>
+              </image>
+              <text>To multiply fractions, we multiply their numerators and multiply their denominators. For example, if Audrey and Benjamin decide they only want to eat 3/4 of their 5/8 of a pizza, then they eat 3/4(5/8) = 15/32 of the pizza.</text>
+              <text>The numerator of a product of fractions equals the product of their numerators. The denominator of a product of fractions equals the product of their denominators. In symbols, (a/b)(c/d) = (ac)/(bd), where b ≠ 0 and d ≠ 0.</text>
+              <text>Many times, we need to multiply a fraction by an integer. For example, to multiply 3 by 2/7, we rewrite 3 as a fraction whose numerator is itself and whose denominator is 1 (recall from Section 1.1 that any number divided by itself equals 1), so 3(2/7) = (3/1)(2/7) = (3(2)) / (1(7)) = 6/7.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>Basic Operations: Part 3</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Basic Operations: Part 3</name>
+          <description>We now review the basic operations with fractions. This booth covers division.</description>
+          <Content>
+            <Slides>
+              <text>To divide fractions, we can divide the numerators and divide the denominators to give us, respectively, the numerator and denominator of the quotient.</text>
+              <text>For example, (4/8)/(1/4) = 4/2. However, this rule isn’t helpful when the numerators and denominators of the quotient aren’t integers, such as (1/5) / (4/7).&#10;Fortunately, we have another way to solve division problems.</text>
+              <text>Let’s think about this in terms of pizza. Taking 1 part of a pizza that is divided into 2 equal parts is equivalent to taking 1/2 of the pizza.</text>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/976279238774771772/unknown.png</link>
+              </image>
+              <text>In general, for any nonzero number a, dividing by a is equivalent to multiplying by 1/a , the reciprocal of a. To find the reciprocal of a fraction, we invert the fraction by switching the positions of the numerator and denominator.</text>
+              <text>To divide two fractions, multiply the first one (the dividend) by the reciprocal of the second one (the divisor). In symbols, (a/b) / (c/d) = (ad)/(bc), where b ≠ 0, c ≠ 0, and d ≠ 0.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>Basic Operations: Part 4</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Basic Operations: Part 4</name>
+          <description>Practice Problems and Solutions</description>
+          <ProblemSolution>
+            <Problem>
+              <Slides>
+                <text>Q1: Calculate (3/7)-(1/7)+(8/7).&#10; Q2: Calculate (2/7)(4/3).&#10;Q3: Express (2/3) / (5/7) in simplest form.</text>
+              </Slides>
+            </Problem>
+            <Solution>
+              <Slides>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279285176348752/unknown.png</link>
+                </image>
+                <text>(a/c) + (b/c) = (a+b)/c, where c ≠ 0.&#10;Add the numbers in the numerator.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279321721319505/unknown.png</link>
+                </image>
+                <text>(a/b) / (c/d) = (ac)/(bd), where b ≠ 0 and d ≠ 0.&#10;Multiply factors together.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279369557372978/unknown.png</link>
+                </image>
+                <text>(a/b) / (c/d) = (ad)/(bc), where b ≠ 0, c ≠ 0, and d ≠ 0.&#10;The reciprocal of 5/7 is 7/5.&#10;(a/b)(c/d) = (ac)/(bd), where b ≠ 0 and d ≠ 0.&#10;Multiply factors in the numerator and in the denominator.</text>
+              </Slides>
+						</Solution>
+          </ProblemSolution>
+          <unlockAfterCompletion>Assignment 2.1</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Simplifying Fractions: Part 1</name>
+          <description>When a fraction’s numerator and denominator have no common factors, we say that the fraction is in simplest form or simplified. Simplifying fractions allows us to compare them more easily, especially when the numerators and denominators get large.</description>
+          <ProblemSolution>
+            <Problem>
+              <Slides>
+                <text>Simplify 225/360.</text>
+              </Slides>
+            </Problem>
+            <Solution>
+              <Slides>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279421805817856/unknown.png</link>
+                </image>
+                <text>First, we write the prime factorization of 225 and 360. We can draw a factor tree, a diagram that shows the process of dividing the number by each prime factor (2, 3, 5, 7, 11, and so on) in order, repeating if possible, until all factors are prime, as shown here.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279577531936788/unknown.png</link>
+                </image>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279602362216448/unknown.png</link>
+                </image>
+                <text>As you get more experienced with simplifying fractions, you can skip some steps.</text>
+              </Slides>
+						</Solution>
+          </ProblemSolution>
+          <unlockAfterCompletion>Simplifying Fractions: Part 2</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Simplifying Fractions: Part 2</name>
+          <description>When a fraction’s numerator and denominator have no common factors, we say that the fraction is in simplest form or simplified. Simplifying fractions allows us to compare them more easily, especially when the numerators and denominators get large.</description>
+          <ProblemSolution>
+            <Problem>
+              <Slides>
+                <text>Express (14/35)(5/16) in simplest form.</text>
+              </Slides>
+            </Problem>
+            <Solution>
+              <Slides>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279713993601054/unknown.png</link>
+                </image>
+                <text>Multiplying the numerator and denominator results in big numbers that are difficult to factor. Instead, we can factor the numerator and denominator of each fraction first.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279758377717780/unknown.png</link>
+                </image>
+              </Slides>
+						</Solution>
+          </ProblemSolution>
+          <unlockAfterCompletion>Simplifying Fractions: Part 3,Video: AddUnlikeFractions</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Simplifying Fractions: Part 3</name>
+          <description>The Least Common Denominator (LCD)</description>
+          <Content>
+            <Slides>
+              <image>
+                <link>https://cdn.discordapp.com/attachments/971953160967057469/976279803592331284/unknown.png</link>
+              </image>
+              <text>Just as we need common units to add or subtract measurements (3 hours + 4 hours = 7 hours, but 3 hours + 4 minutes doesn’t equal 7 hours), we need common denominators to add or subtract fractions with unlike denominators.</text>
+              <text>For example, to add 1/2 + 1/3 , we need a common denominator of 2(3) = 6. When we divide each fraction into 6 equal parts, we see that 1/2 + 1/3 = 3/6 + 2/6 = 5/6.</text>
+              <text>We can always find a common denominator by multiplying the denominators of the fractions. However, doing so can result in large numbers. To keep our numbers smaller and easier to manage, we use the smallest possible common denominator. We call this the least common denominator, often abbreviated LCD.</text>
+              <text>Step 1: Write the prime factorization of each denominator, using exponents for repeated factors.&#10;Step 2: The LCD is the product of all prime factors, using the highest exponent for each factor.</text>
+            </Slides>
+          </Content>
+          <unlockAfterCompletion>Simplifying Fractions: Part 4</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Simplifying Fractions: Part 4</name>
+          <description>The Least Common Denominator (LCD)</description>
+          <ProblemSolution>
+            <Problem>
+              <Slides>
+                <text>Find the least common denominator of 1/60, 2/27, and 5/18.</text>
+              </Slides>
+            </Problem>
+            <Solution>
+              <Slides>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279904528248852/unknown.png</link>
+                </image>
+                <text>Draw a factor tree for each denominator. The LCD is 540.</text>
+              </Slides>
+						</Solution>
+          </ProblemSolution>
+          <unlockAfterCompletion>Simplifying Fractions: Part 5</unlockAfterCompletion>
+        </Example>
+        <Example>
+          <name>Simplifying Fractions: Part 5</name>
+          <description>The Least Common Denominator (LCD)</description>
+          <ProblemSolution>
+            <Problem>
+              <Slides>
+                <text>Express 2/45 - 3/35 + 13/21 in simplest form.</text>
+              </Slides>
+            </Problem>
+            <Solution>
+              <Slides>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976279964947202078/unknown.png</link>
+                </image>
+                <text>Find the LCD: 315.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976280005799727114/unknown.png</link>
+                </image>
+                <text>Solve with operations.</text>
+                <image>
+                  <link>https://cdn.discordapp.com/attachments/971953160967057469/976280064473854012/unknown.png</link>
+                </image>
+                <text>Simplify.</text>
+              </Slides>
+						</Solution>
+          </ProblemSolution>
+          <unlockAfterCompletion>End of Chapter 2 Quiz</unlockAfterCompletion>
+        </Example>
+      </examples>
+      <medias>
+        <Media>
+          <name>Video: AddSubFractions</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>Video: AddUnlikeFractions</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+        <Media>
+          <name>Video: Fractions w/Hololive</name>
+          <description>if you see this, something is bork.</description>
+          <links>
+            <link></link>
+          </links>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Media>
+      </medias>
+			<assignments>
+				<Assignment>
+					<name>Assignment 2.1</name>
+					<description>2 Questions. [Multiple Choice]</description>
+					<questions>
+						<Question timer="0.0">
+							<text>(5/8) + (2/8)</text>
+              <value>1</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>7/16</Answer>
+                <Answer>10/13</Answer>
+                <Answer>13/10</Answer>
+							</answers>
+							<correct>7/8</correct>
+						</Question>
+						<Question timer="0">
+							<text>(1/5) / (1/2)</text>
+              <value>1</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>5/2</Answer>
+                <Answer>1/10</Answer>
+                <Answer>10/1</Answer>
+							</answers>
+							<correct>2/5</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>Simplifying Fractions: Part 1,Video: AddUnlikeFractions</unlockAfterCompletion>
+				</Assignment>
+			</assignments>
+			<quizzes>
+				<Quiz>
+					<name>End of Chapter 2 Quiz</name>
+					<description>3 Questions. 15 to 30 seconds each. [Multiple Choice]</description>
+					<questions>
+						<Question timer="15">
+							<text>Express 16/32 in simplest form.</text>
+              <value>1</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>4/8</Answer>
+                <Answer>8/16</Answer>
+                <Answer>16/32</Answer>
+							</answers>
+							<correct>1/2</correct>
+						</Question>
+            <Question timer="20">
+							<text>Evaluate (10/2)(5/12). Simplify if possible.</text>
+              <value>2</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>50/24</Answer>
+                <Answer>15/14</Answer>
+                <Answer>12</Answer>
+							</answers>
+							<correct>25/12</correct>
+						</Question>
+            <Question timer="30">
+							<text>Evaluate (1/3) / (7/30). Simplify if possible.</text>
+              <value>2</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>7/90</Answer>
+                <Answer>7/33</Answer>
+                <Answer>1/10</Answer>
+							</answers>
+							<correct>10/7</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>Chapter 2 Test</unlockAfterCompletion>
+				</Quiz>
+			</quizzes>
+			<tests>
+				<Test timeLimit="180.0">
+					<name>Chapter 2 Test</name>
+					<description>5 Questions. Time Limit: 3 Minutes. [Mixed Types]</description>
+					<questions>
+						<Question timer="0">
+							<text>The expression 5/2 + 8/2 equals</text>
+              <value>1</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>13/4</Answer>
+                <Answer>40/4</Answer>
+                <Answer>40/2</Answer>
+							</answers>
+							<correct>13/2</correct>
+						</Question>
+            <Question timer="0">
+							<text>What is the reciprocal of −3?</text>
+              <value>1</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>1/3</Answer>
+                <Answer>0</Answer>
+                <Answer>3</Answer>
+							</answers>
+							<correct>-1/3</correct>
+						</Question>
+            <Question timer="0">
+							<text>If n ≠ 0, which fraction equals n?</text>
+              <value>2</value>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>n/n</Answer>
+                <Answer>1/n</Answer>
+							</answers>
+							<correct>n/1</correct>
+						</Question>
+            <Question timer="0">
+							<text>The least common denominator of 3/12, 4/15, and 5/9 is 1620.</text>
+              <value>1</value>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>True</Answer>
+							</answers>
+							<correct>False</correct>
+						</Question>
+            <Question timer="0">
+							<text>Simplify 60/72.&#10;Input your answer as a numerator and denominator, separated by a ‘/’.</text>
+              <value>2</value>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>5/6</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Test>
+			</tests>
+			<unlockAfterCompletion>None</unlockAfterCompletion>
+		</Module>
+	</modules>
+	<unlocked>Chapter 1</unlocked>
+</Expo>

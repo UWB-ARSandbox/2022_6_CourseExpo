@@ -1,0 +1,324 @@
+<?xml version = "1.0"?>
+<xs:schema xmlns="CourseXpoSchema" xmlns:xs="http://www.w3.org/2001/XMLSchema" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" targetNamespace="CourseXpoSchema" elementFormDefault="qualified" version="0.1" xml:lang="EN" xsi:schemaLocation="http://www.w3.org/2001/XMLSchema http://www.w3.org/2001/XMLSchema.xsd">
+	<xs:import namespace="http://www.w3.org/XML/1998/namespace"/>
+
+	<!--	HIGH LEVEL CONSTRUCTS	-->
+	<!-- Expo -->
+	<xs:element name = "Expo">
+		<xs:complexType>
+			<xs:sequence maxOccurs = "1">
+				<xs:element ref = "modules"/>
+				<xs:element ref = "unlocked"/>
+			</xs:sequence>
+			<xs:attribute ref = "xml:base"/>
+		</xs:complexType>
+	</xs:element>
+
+	<!-- Module -->
+	<xs:element name = "Module" type = "module"/>
+	<xs:complexType name = "module">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "name"/>
+			<xs:element ref = "description"/>
+			<xs:element ref = "examples"/>
+			<xs:element ref = "medias" minOccurs = "0"/>
+			<xs:element ref = "assignments"/>
+			<xs:element ref = "discussions" minOccurs = "0"/>
+			<xs:element ref = "quizzes" minOccurs = "0"/>
+			<xs:element ref = "tests"/>
+			<xs:element ref = "unlockAfterCompletion"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name = "modules" type = "modules"/>
+	<xs:complexType name = "modules">
+		<xs:sequence minOccurs = "1" maxOccurs = "unbounded">
+			<xs:element ref = "Module"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Quiz -->
+	<xs:element name = "Quiz" type = "quiz"/>
+	<xs:complexType name = "quiz">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "name"/>
+			<xs:element ref = "description"/>
+			<xs:element ref = "questions"/>
+			<xs:element ref = "unlockAfterCompletion"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name = "quizzes" type = "quizzes"/>
+	<xs:complexType name = "quizzes">
+		<xs:sequence minOccurs = "1" maxOccurs = "10">
+			<xs:element ref = "Quiz"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Test -->
+	<xs:element name = "Test" type = "test"/>
+	<xs:complexType name = "test">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "name"/>
+			<xs:element ref = "description"/>
+			<xs:element ref = "questions"/>
+			<xs:element ref = "unlockAfterCompletion"/>
+		</xs:sequence>
+		<xs:attribute name = "timeLimit" type = "xs:float" default = "600.0" use = "optional"/>
+	</xs:complexType>
+
+	<xs:element name = "tests" type = "tests"/>
+	<xs:complexType name = "tests">
+		<xs:sequence minOccurs = "1" maxOccurs = "10">
+			<xs:element ref = "Test"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Assignment -->
+	<xs:element name = "Assignment" type = "assignment"/>
+	<xs:complexType name = "assignment">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "name"/>
+			<xs:element ref = "description"/>
+			<xs:element ref = "questions"/>
+			<xs:element ref = "unlockAfterCompletion"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name = "assignments" type = "assignments"/>
+	<xs:complexType name = "assignments">
+		<xs:sequence minOccurs =  "1" maxOccurs = "50">
+			<xs:element ref = "Assignment"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+		<!-- Discussion -->
+	<xs:element name = "Discussion" type = "discussion"/>
+	<xs:complexType name = "discussion">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "name"/>
+			<xs:element ref = "description"/>
+			<xs:element ref = "Problem"/>
+			<xs:element ref = "unlockAfterCompletion"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name = "discussions" type = "discussions"/>
+	<xs:complexType name = "discussions">
+		<xs:sequence minOccurs =  "1" maxOccurs = "20">
+			<xs:element ref = "Discussion"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Example -->
+	<xs:element name = "Example" type = "example"/>
+	<xs:complexType name = "example">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "name"/>
+			<xs:element ref = "description"/>
+			<xs:sequence maxOccurs = "1">
+				<xs:element ref = "ProblemSolution" minOccurs="0"/>
+				<xs:element ref = "Content" minOccurs="0"/>
+			</xs:sequence>
+			<xs:element ref = "unlockAfterCompletion"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name = "examples" type = "examples"/>
+	<xs:complexType name = "examples">
+		<xs:sequence minOccurs = "1" maxOccurs = "50">
+			<xs:element ref = "Example"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- Media -->
+	<xs:element name = "Media" type = "media"/>
+	<xs:complexType name = "media">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "name"/>
+			<xs:element ref = "description"/>
+			<xs:element ref = "links"/>
+			<xs:element ref = "unlockAfterCompletion"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name = "medias" type = "medias"/>
+	<xs:complexType name = "medias">
+		<xs:sequence minOccurs = "1" maxOccurs = "50">
+			<xs:element ref = "Media"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!--	LOWER LEVEL CONSTRUCTS	-->
+	<!--	Question	-->
+	<xs:element name = "Question" type = "question"/>
+	<xs:simpleType name = "QuestionType" final = "restriction">
+		<xs:restriction base = "xs:string">
+			<xs:enumeration value = "MultipleChoice"/>
+			<xs:enumeration value = "ShortAnswer"/>
+			<xs:enumeration value = "TrueFalse"/>
+			<xs:enumeration value = "DrawDiagram"/>
+		</xs:restriction>
+	</xs:simpleType>
+	<xs:complexType name = "question">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "text"/>
+			<xs:element ref = "value"/>
+			<xs:element name = "questionType" type = "QuestionType" default = "MultipleChoice"/>
+			<xs:element ref = "answers"/>
+			<xs:element ref = "correct"/>
+		</xs:sequence>
+		<xs:attribute name = "timer" type = "xs:float" use = "optional" default = "0.0"/>
+	</xs:complexType>
+
+	<xs:element name = "questions" type = "questions"/>
+	<xs:complexType name = "questions">
+		<xs:sequence minOccurs = "1" maxOccurs = "50">
+			<xs:element ref = "Question"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name = "correct" type = "correct"/>
+	<xs:simpleType name = "correct">
+		<xs:restriction base = "xs:string">
+			<xs:maxLength value = "40"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<!-- Answer	-->
+	<xs:element name = "Answer" type = "answer"/>
+	<xs:simpleType name = "answer">
+		<xs:restriction base = "xs:string">
+			<xs:maxLength value = "40"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name = "answers" type = "answers"/>
+	<xs:complexType name = "answers">
+		<xs:sequence minOccurs = "1" maxOccurs = "3">
+			<xs:element ref = "Answer"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name = "ProblemSolution" type = "problemSolution"/>
+	<xs:complexType name = "problemSolution">
+		<xs:sequence minOccurs = "1">
+			<xs:element ref = "Problem"/>
+			<xs:element ref = "Solution"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name = "Slides" type = "slides"/>
+	<xs:complexType name = "slides">
+		<xs:sequence>
+			<xs:choice minOccurs="0" maxOccurs="unbounded">
+				<xs:element ref = "text"/>
+				<xs:element ref = "image"/>
+				<xs:element ref = "video"/>
+				<xs:element ref = "links"/>
+			</xs:choice>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name = "Problem" type = "problem"/>
+	<xs:complexType name = "problem">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "Slides"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name = "Solution" type = "solution"/>
+	<xs:complexType name = "solution">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "Slides"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<!-- Content -->
+	<xs:element name = "Content" type = "content"/>
+	<xs:complexType name = "content">
+		<xs:sequence maxOccurs = "1">
+			<xs:element ref = "Slides"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<!-- TODO: -->
+	<!-- Content, ~Media~, Example -->
+	<!-- ~Assignment~, ~Discussion~ -->
+	<!-- ~Quiz~, ~Test~ -->
+
+
+	<!--	HELPER CONSTRUCTS	-->
+	<xs:element name = "unlockAfterCompletion" type = "boothList" default = "None"/>
+	<xs:simpleType name = "boothList">
+		<xs:restriction base = "xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value = "[^,]+(, ?[^,]+)*"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name = "unlocked" type = "moduleList" default = "None"/>
+	<xs:simpleType name = "moduleList">
+		<xs:restriction base = "xs:string">
+			<xs:whiteSpace value="preserve"/>
+			<xs:pattern value = "[^,]+(, ?[^,]+)*"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:element name = "description" type = "description"/>
+	<xs:simpleType name = "description">
+		<xs:restriction base = "xs:string">
+			<xs:maxLength value = "280"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:element name = "name" type = "name"/>
+	<xs:simpleType name = "name">
+		<xs:restriction base = "xs:string">
+			<xs:maxLength value = "40"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name = "link" type = "link"/>
+	<xs:simpleType name = "link">
+		<xs:restriction base = "xs:string">
+			<xs:maxLength value = "990"/>
+		</xs:restriction>
+	</xs:simpleType>
+	
+	<xs:element name = "links" type = "links"/>
+	<xs:complexType name = "links">
+		<xs:sequence minOccurs = "1" maxOccurs = "3">
+			<xs:element ref = "link"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name = "text" type = "text"/>
+	<xs:simpleType name = "text">
+		<xs:restriction base = "xs:string">
+			<xs:maxLength value = "800"/>
+		</xs:restriction>
+	</xs:simpleType>
+
+	<xs:element name = "image" type = "image"/>
+	<xs:complexType name = "image">
+		<xs:sequence minOccurs = "1">
+			<xs:element ref = "link"/>
+		</xs:sequence>
+	</xs:complexType>
+	
+	<xs:element name = "video" type = "video"/>
+	<xs:complexType name = "video">
+		<xs:sequence minOccurs = "1">
+			<xs:element ref = "link"/>
+		</xs:sequence>
+	</xs:complexType>
+
+	<xs:element name = "value" type = "value" default = "1.0"/>
+	<xs:simpleType name = "value">
+		<xs:restriction base = "xs:float"/>		
+	</xs:simpleType>
+	
+	<!-- <xs:element name = "" type = ""/> -->
+
+</xs:schema>

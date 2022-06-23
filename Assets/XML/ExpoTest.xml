@@ -1,0 +1,813 @@
+<?xml version="1.0" encoding="utf-8"?>
+<Expo xml:base="http://uri1" xmlns="CourseXpoSchema">
+	<modules>
+		<Module>
+			<name>Chapter 1</name>
+			<description>Functions and Models</description>
+			<contents>
+				<Content>
+					<name>Blah1</name>
+					<description>exists</description>
+					<text>hopefully functions</text>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Content>
+			</contents>
+			<examples>
+				<Example>
+					<name>Example 1</name>
+					<description>this is an example</description>
+					<ProblemSolution>
+						<Problem>
+							<text>only text</text>
+						</Problem>
+						<Solution>
+							<text>Text to go with an image</text>
+							<image>
+								<link>https://cdn.vox-cdn.com/thumbor/CNLDJd5-M-WtOsYh_yugQ-S-FJs=/715x248:1689x721/1400x933/filters:focal(972x299:1278x605):no_upscale()/cdn.vox-cdn.com/uploads/chorus_image/image/69305239/shrek4_disneyscreencaps.com_675.0.jpg</link>
+							</image>
+							<text>more text</text>
+							<image>
+								<link>https://www.looper.com/img/gallery/things-only-adults-notice-in-shrek/intro-1573597941.jpg</link>
+							</image>
+							<text>even more text</text>
+						</Solution>
+					</ProblemSolution>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Example>
+			</examples>
+			<assignments>
+				<Assignment>
+					<name>Chapter 1.1</name>
+					<description>Four ways to represent a function</description>
+					<questions>
+						<Question timer="0.0">
+							<text>If f(x) = x + sqrt(2-x) and g(u) = u + sqrt(2-u), is it true that f = g?</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(2) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>12</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(-2) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>16</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(a) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^2 - a + 2</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(-a) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^2 + a + 2</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(a+1) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^2 + 5a + 4</correct>
+						</Question>
+						<Question timer="0">
+							<text>2f(a) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>6a^2 - 2a + 4</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(2a) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>12a^2 - 2a + 2</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(a^2) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^4 - a^2 + 2</correct>
+						</Question>
+						<Question timer="0">
+							<text>(f(a))^2 in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>9a^4 - 6a^3 + 13a^2 - 4a + 4</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(a + h) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^2 + 6ah + 3h^2 - a - h + 2</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>Chapter 1.2</unlockAfterCompletion>
+				</Assignment>
+				<Assignment>
+					<name>Chapter 1.2</name>
+					<description>Mathematical models: A catalog of essential functions</description>
+					<questions>
+						<Question timer="0">
+							<text>Classify function: f(x) = log2(x)</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Power</Answer>
+								<Answer>Root</Answer>
+								<Answer>Polynomial</Answer>
+							</answers>
+							<correct>Logarithmic</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: g(x) = sqrt4(x)</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Trigonometric</Answer>
+								<Answer>Exponential</Answer>
+								<Answer>Logarithmic</Answer>
+							</answers>
+							<correct>Root</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: h(x) = (2x^3)/(1-x^2)</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Power</Answer>
+								<Answer>Exponential</Answer>
+								<Answer>Logarithmic</Answer>
+							</answers>
+							<correct>Rational</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: u(x) = 1 - 1.1x + 2.54x^2</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Algebraic</Answer>
+								<Answer>Trigonometric</Answer>
+								<Answer>Logarithmic</Answer>
+							</answers>
+							<correct>Polynomial</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: v(x) = 5^x</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Power</Answer>
+								<Answer>Rational</Answer>
+								<Answer>Algebraic</Answer>
+							</answers>
+							<correct>Exponential</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: w(theta) = sin(theta)cos^2(theta)</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Power</Answer>
+								<Answer>Root</Answer>
+								<Answer>Logarithmic</Answer>
+							</answers>
+							<correct>Trigonometric</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>Test CH1</unlockAfterCompletion>
+				</Assignment>
+				<Assignment>
+					<name>True and False Assignment</name>
+					<description>Test Assignment</description>
+					<questions>
+						<Question timer="0">
+							<text>Press True</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+						<Question timer="0">
+							<text>Press False</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>True</Answer>
+							</answers>
+							<correct>False</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Assignment>
+				<Assignment>
+					<name>Multiple Choice Assignment</name>
+					<description>Test Assignment</description>
+					<questions>
+						<Question timer="0">
+							<text>Choose A</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>B</Answer>
+								<Answer>C</Answer>
+								<Answer>D</Answer>
+							</answers>
+							<correct>A</correct>
+						</Question>
+						<Question timer="0">
+							<text>Choose L</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>A</Answer>
+								<Answer>F</Answer>
+								<Answer>C</Answer>
+							</answers>
+							<correct>L</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Assignment>
+				<Assignment>
+					<name>Short Answer Assignment</name>
+					<description>Test Assignment</description>
+					<questions>
+						<Question timer="0">
+							<text>Enter ASDF</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>ASDF</correct>
+						</Question>
+						<Question timer="0">
+							<text>Enter Please</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>Please</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Assignment>
+			</assignments>
+			<quizzes>
+				<Quiz>
+					<name>Garbage 1</name>
+					<description>So it works with andy</description>
+					<questions>
+						<Question timer="0">
+							<text>is the kelvin tree godlike?</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Quiz>
+				<Quiz>
+					<name>True and False Quiz</name>
+					<description>Test Assignment</description>
+					<questions>
+						<Question timer="0">
+							<text>Press True</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+						<Question timer="30">
+							<text>Press False</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>True</Answer>
+							</answers>
+							<correct>False</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Quiz>
+				<Quiz>
+					<name>Multiple Choice Quiz</name>
+					<description>Test Assignment</description>
+					<questions>
+						<Question timer="0">
+							<text>Choose A</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>B</Answer>
+								<Answer>C</Answer>
+								<Answer>D</Answer>
+							</answers>
+							<correct>A</correct>
+						</Question>
+						<Question timer="30">
+							<text>Choose L</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>A</Answer>
+								<Answer>F</Answer>
+								<Answer>C</Answer>
+							</answers>
+							<correct>L</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Quiz>
+				<Quiz>
+					<name>Short Answer Quiz</name>
+					<description>Test Assignment</description>
+					<questions>
+						<Question timer="0">
+							<text>Enter ASDF</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>ASDF</correct>
+						</Question>
+						<Question timer="30">
+							<text>Enter Please</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>Please</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Quiz>
+				<Quiz>
+					<name>Rapidfire</name>
+					<description>Test Assignment</description>
+					<questions>
+						<Question timer="5">
+							<text>Choose A</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>B</Answer>
+								<Answer>C</Answer>
+								<Answer>D</Answer>
+							</answers>
+							<correct>A</correct>
+						</Question>
+						<Question timer="5">
+							<text>Choose L</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>A</Answer>
+								<Answer>F</Answer>
+								<Answer>C</Answer>
+							</answers>
+							<correct>L</correct>
+						</Question>
+						<Question timer="5">
+							<text>Guess</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>True</Answer>
+							</answers>
+							<correct>False</correct>
+						</Question>
+						<Question timer="0">
+							<text>What word fills ___ity ___guard and ___couver</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>Van</correct>
+						</Question>
+						<Question timer="5">
+							<text>Good Luck</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+						<Question timer="0">
+							<text>What is the the program we are using?</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>Unity</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Quiz>
+        <Quiz>
+          <name>Demo Quiz</name>
+          <description>For 4/25 Demo. 6 Questions.</description>
+          <questions>
+            <Question timer="30">
+              <text>3 is greater than 7.</text>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>True</Answer>
+              </answers>
+              <correct>False</correct>
+            </Question>
+            <Question timer="30">
+              <text>What number is opposite of 3 on a standard 6-sided die?</text>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>1</Answer>
+                <Answer>2</Answer>
+                <Answer>5</Answer>
+              </answers>
+              <correct>4</correct>
+            </Question>
+            <Question timer="25">
+              <text>What was the answer to the first question in this quiz?</text>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>False</correct>
+            </Question>
+            <Question timer="0">
+              <text>Which number was the smallest incorrect answer in the 2nd question?</text>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>1</correct>
+            </Question>
+            <Question timer="0">
+              <text>3 Option Question Example</text>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>False</Answer>
+                <Answer>Falser</Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+            <Question timer="0">
+              <text>2 Option Question Example</text>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>Not Not True</Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+          </questions>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Quiz>
+			</quizzes>
+			<tests>
+        <Test timeLimit="150.0">
+          <name>Demo Test</name>
+          <description>For 4/25 Demo. 3 Questions.</description>
+          <questions>
+            <Question timer="0">
+              <text>The answer is True>.</text>
+              <questionType>TrueFalse</questionType>
+              <answers>
+                <Answer>False</Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+            <Question timer="0">
+              <text>The answer is still True.</text>
+              <questionType>MultipleChoice</questionType>
+              <answers>
+                <Answer>False</Answer>
+                <Answer>wah!</Answer>
+                <Answer>a</Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+            <Question timer="0">
+              <text>Take a guess....</text>
+              <questionType>ShortAnswer</questionType>
+              <answers>
+                <Answer></Answer>
+              </answers>
+              <correct>True</correct>
+            </Question>
+          </questions>
+          <unlockAfterCompletion>None</unlockAfterCompletion>
+        </Test>
+				<Test timeLimit="150.0">
+					<name>Test CH1</name>
+					<description>End of chapter tests</description>
+					<questions>
+						<Question timer="150.0">
+							<text>Are yoi smart</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Test>
+				<Test timeLimit="150.0">
+					<name>Timelimit test</name>
+					<description>Time</description>
+					<questions>
+						<Question>
+							<text>Does the time function function?</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+						<Question>
+							<text>Enter Please</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>Please</correct>
+						</Question>
+						<Question>
+							<text>Choose A</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>B</Answer>
+								<Answer>C</Answer>
+								<Answer>D</Answer>
+							</answers>
+							<correct>A</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Test>
+				<Test>
+					<name>Timelimitless test</name>
+					<description>No Time</description>
+					<questions>
+						<Question timer="150.0">
+							<text>Are you time limited</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>True</Answer>
+							</answers>
+							<correct>False</correct>
+						</Question>
+						<Question>
+							<text>Enter Please</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>Please</correct>
+						</Question>
+						<Question>
+							<text>Choose A</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>B</Answer>
+								<Answer>C</Answer>
+								<Answer>D</Answer>
+							</answers>
+							<correct>A</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Test>
+			</tests>
+			<unlockAfterCompletion>Chapter 2</unlockAfterCompletion>
+		</Module>
+		<Module>
+			<name>Chapter 2</name>
+			<description>Limits and Derivatives</description>
+			<contents>
+				<Content>
+					<name>Blah2</name>
+					<description>exists again</description>
+					<text>hopefully still functions</text>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Content>
+			</contents>
+			<assignments>
+				<Assignment>
+					<name>Chapter 2.1</name>
+					<description>Four ways to represent a function</description>
+					<questions>
+						<Question timer="0.0">
+							<text>If f(x) = x + sqrt(2-x) and g(u) = u + sqrt(2-u), is it true that f = g?</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(2) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>12</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(-2) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>16</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(a) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^2 - a + 2</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(-a) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^2 + a + 2</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(a+1) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^2 + 5a + 4</correct>
+						</Question>
+						<Question timer="0">
+							<text>2f(a) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>6a^2 - 2a + 4</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(2a) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>12a^2 - 2a + 2</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(a^2) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^4 - a^2 + 2</correct>
+						</Question>
+						<Question timer="0">
+							<text>(f(a))^2 in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>9a^4 - 6a^3 + 13a^2 - 4a + 4</correct>
+						</Question>
+						<Question timer="0">
+							<text>f(a + h) in f(x) = 3x^2 - x + 2</text>
+							<questionType>ShortAnswer</questionType>
+							<answers>
+								<Answer></Answer>
+							</answers>
+							<correct>3a^2 + 6ah + 3h^2 - a - h + 2</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>Chapter 2.2</unlockAfterCompletion>
+				</Assignment>
+				<Assignment>
+					<name>Chapter 2.2</name>
+					<description>Mathematical models: A catalog of essential functions</description>
+					<questions>
+						<Question timer="0">
+							<text>Classify function: f(x) = log2(x)</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Power</Answer>
+								<Answer>Root</Answer>
+								<Answer>Polynomial</Answer>
+							</answers>
+							<correct>Logarithmic</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: g(x) = sqrt4(x)</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Trigonometric</Answer>
+								<Answer>Exponential</Answer>
+								<Answer>Logarithmic</Answer>
+							</answers>
+							<correct>Root</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: h(x) = (2x^3)/(1-x^2)</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Power</Answer>
+								<Answer>Exponential</Answer>
+								<Answer>Logarithmic</Answer>
+							</answers>
+							<correct>Rational</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: u(x) = 1 - 1.1x + 2.54x^2</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Algebraic</Answer>
+								<Answer>Trigonometric</Answer>
+								<Answer>Logarithmic</Answer>
+							</answers>
+							<correct>Polynomial</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: v(x) = 5^x</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Power</Answer>
+								<Answer>Rational</Answer>
+								<Answer>Algebraic</Answer>
+							</answers>
+							<correct>Exponential</correct>
+						</Question>
+						<Question timer="0">
+							<text>Classify function: w(theta) = sin(theta)cos^2(theta)</text>
+							<questionType>MultipleChoice</questionType>
+							<answers>
+								<Answer>Power</Answer>
+								<Answer>Root</Answer>
+								<Answer>Logarithmic</Answer>
+							</answers>
+							<correct>Trigonometric</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>Test CH2</unlockAfterCompletion>
+				</Assignment>
+			</assignments>
+			<quizzes>
+				<Quiz>
+					<name>Garbage 2</name>
+					<description>So it works with andy 2</description>
+					<questions>
+						<Question timer="0">
+							<text>is the kelvin tree the anchor of the world?</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Quiz>
+			</quizzes>
+			<tests>
+				<Test timeLimit="150.0">
+					<name>Test CH2</name>
+					<description>End of chapter tests</description>
+					<questions>
+						<Question timer="150.0">
+							<text>Are yoi smart</text>
+							<questionType>TrueFalse</questionType>
+							<answers>
+								<Answer>False</Answer>
+							</answers>
+							<correct>True</correct>
+						</Question>
+					</questions>
+					<unlockAfterCompletion>None</unlockAfterCompletion>
+				</Test>
+			</tests>
+			<unlockAfterCompletion>None</unlockAfterCompletion>
+		</Module>
+	</modules>
+	<unlocked>Chapter 1</unlocked>
+</Expo>
