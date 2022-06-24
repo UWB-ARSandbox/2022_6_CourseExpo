@@ -2252,7 +2252,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iam: {fileID: 2627015981144515853}
   m_GhostPlayer: {fileID: 0}
-  audioManager: {fileID: 0}
   cube: {fileID: 4682228855201774726}
   movingBodyParts:
   - {fileID: 6822030213675842636}
