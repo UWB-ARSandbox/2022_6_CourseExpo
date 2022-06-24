@@ -381,32 +381,8 @@ public class PaintOnCanvas : MonoBehaviour
 				if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask) == true
 					&& raycastHit.transform.GetComponent<PaintOnCanvas>() != null)
 				{
-					Vector2 uv;
-					if ((int)transform.forward.z == -1)
-					{
-						uv = new Vector2((raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
-						(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
-					}
-					else if ((int)transform.forward.z == 1)
-					{
-						uv = new Vector2(1 - (raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
-						(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
-					}
-					else if ((int)transform.forward.x == -1)
-					{
-						uv = new Vector2(1 - (raycastHit.point.z - (transform.position.z - (transform.localScale.x / 2))) / (canvasWidth / 256),
-						(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
-					}
-					else if ((int)transform.forward.x == 1)
-					{
-						uv = new Vector2((raycastHit.point.z - (transform.position.z - (transform.localScale.x / 2))) / (canvasWidth / 256),
-						(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
-					}
-					else
-					{
-						Debug.Log("Bad canvas angle");
-						uv = new Vector2(0.5f, 0.5f);
-					}
+					Vector2 uv = raycastHit.textureCoord;
+					
 					//converts raycastHit point into a UV coordinate
 					//Vector2 uv = new Vector2((raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
 					//(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
@@ -640,8 +616,7 @@ public class PaintOnCanvas : MonoBehaviour
 		&& raycastHit.transform.GetComponent<PaintOnCanvas>() != null)
 		{
 			//converts raycastHit point into a UV coordinate
-			Vector2 uv = new Vector2((raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
-			(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
+			Vector2 uv = raycastHit.textureCoord;
 			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
 			if (brushSize > 1)
 			{
