@@ -1,6 +1,0 @@
-[submodule "Mumble-Unity"]
-	path = Mumble-Unity
-	url = https://github.com/BananaHemic/Mumble-Unity.git
-[submodule "Assets/Mumble-Unity"]
-	path = Assets/Mumble-Unity
-	url = https://github.com/BananaHemic/Mumble-Unity.git
