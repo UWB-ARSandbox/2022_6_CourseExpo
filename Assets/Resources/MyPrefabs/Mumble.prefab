@@ -46,15 +46,16 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   MyMumbleAudioPlayerPrefab: {fileID: 1000010552747926, guid: 66a0e01ce72c0c14ca680da28d8f9903, type: 3}
-  MyMumbleAudioPlayerPositionedPrefab: {fileID: 0}
+  MyMumbleAudioPlayerPositionedPrefab: {fileID: 1000010552747926, guid: 351999281f6c4a14d8830ff55c5e5f86, type: 3}
+  VoIP_UI: {fileID: 904956940003455872, guid: 47a4b1a766d8bf144bd2cd638ae53547, type: 3}
   MyMumbleMic: {fileID: 5398238950613745517}
   DebuggingVariables:
-    UseRandomUsername: 1
+    UseRandomUsername: 0
     UseLocalLoopback: 0
     UseSyntheticSource: 0
     EnableEditorIOGraph: 1
   ConnectAsyncronously: 1
-  SendPosition: 0
+  SendPosition: 1
   HostName: 50.35.25.58
   Port: 64738
   Username: MyUsername
@@ -119,6 +120,6 @@ MonoBehaviour:
   MicNumberToUse: 0
   MinAmplitude: 0.007
   VoiceHoldSeconds: 0.5
-  VoiceSendingType: 0
+  VoiceSendingType: 1
   TestingClipToUse: {fileID: 8300000, guid: 430bcfc356f10cd4892a3c8221a0a343, type: 3}
   PushToTalkKeycode: 32
