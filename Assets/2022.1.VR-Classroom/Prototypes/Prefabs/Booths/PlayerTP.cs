@@ -12,6 +12,11 @@ public class PlayerTP : MonoBehaviour
     {
         username = GetComponentInChildren<Text>().text;
         Player = GameObject.Find("FirstPersonPlayer(Clone)");
+        if (username == GameManager.players[GameManager.MyID])
+        {
+            GetComponent<Button>().interactable = false;
+            GetComponentInChildren<Text>().text += " (You)";
+        }
     }
 
     public void FindPlayer()
