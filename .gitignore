@@ -9,6 +9,7 @@
 /[Bb]uilds/
 /[Ll]ogs/
 /[Mm]emoryCaptures/
+/VoiceChat_Module/
 
 # Asset meta data should only be ignored when the corresponding asset is also ignored
 !/[Aa]ssets/**/*.meta
@@ -61,4 +62,4 @@ crashlytics-build.properties
 Assets/2022.1.VR-Classroom/Prototypes/Scenes/Week7Season2/LightingData.asset
 Assets/2022.1.VR-Classroom/Prototypes/Scenes/Week7Season2/LightingData.asset.meta
 Assets/2022.1.VR-Classroom/Prototypes/Scenes/Week7Season2/LightingData.asset.private.0
-Assets/2022.1.VR-Classroom/Prototypes/Scenes/Week7Season2/LightingData.asset.private.0.meta
+Assets/2022.1.VR-Classroom/Prototypes/Scenes/Week7Season2/LightingData.asset.private.0.met

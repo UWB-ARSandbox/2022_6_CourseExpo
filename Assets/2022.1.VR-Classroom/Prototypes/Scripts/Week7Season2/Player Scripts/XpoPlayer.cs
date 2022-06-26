@@ -17,7 +17,7 @@ public class XpoPlayer : MonoBehaviour {
     ASLObject m_ASLObject;
     //UserObject m_UserObject;
     public GhostPlayer m_GhostPlayer;
-    public SendAndPlayAudio audioManager;
+    //public SendAndPlayAudio audioManager;
     //public Text LocalUsername;
     public Renderer cube;
     public Transform[] movingBodyParts;
@@ -39,8 +39,8 @@ public class XpoPlayer : MonoBehaviour {
                 if (gp.IsOwner(GameManager.MyID/*m_UserObject.ownerID*/) && gp.ownerID != 0) {
                     Debug.Log("GHOST FOUND - ID:" + gp.ownerID);
                     m_GhostPlayer = gp;
-                    audioManager = gp.GetComponent<SendAndPlayAudio>();
-                    audioManager.SetupInput();
+                    //audioManager = gp.GetComponent<SendAndPlayAudio>();
+                    //audioManager.SetupInput();
                     gp.gameObject.SetActive(false);
                     StartCoroutine(NetworkedUpdate());
                     StartCoroutine(InputActionsRecalibrate());

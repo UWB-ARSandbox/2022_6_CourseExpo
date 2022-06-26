@@ -15,7 +15,7 @@ public class StudentEnable : MonoBehaviour
     GameLiftManager manager;
 
     GameObject StudentHolder;
-
+    public Object MumblePreFab;
     public int studentID;
 
     
@@ -81,6 +81,8 @@ public class StudentEnable : MonoBehaviour
                 {
                     studentCamera.GetComponent<FirstPersonCamera>().ReinitializeParent(studentBody.gameObject);
                 }
+                GameObject mumble = (GameObject)Instantiate(MumblePreFab, this.transform.position, Quaternion.identity, gameObject.transform);
+                mumble.SetActive(true);
                 this.transform.GetComponentInChildren<PlayerFace>().enabled = true;
                 this.transform.GetComponentInChildren<PaintOnCanvas>().enabled = true;
                 this.transform.GetComponentInChildren<Pavel_Player>().enabled = true;
