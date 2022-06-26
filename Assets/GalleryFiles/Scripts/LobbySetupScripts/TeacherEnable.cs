@@ -14,7 +14,7 @@ public class TeacherEnable : MonoBehaviour
     GameObject PlayerManagerObject;
     SpawnPlayer spawnComponent;
     GameLiftManager manager;
-
+    public GameObject MumblePreFab;
     
     public string playerManager;
     void Start()
@@ -61,7 +61,8 @@ public class TeacherEnable : MonoBehaviour
                 teacherCamera.GetComponent<FirstPersonCamera>().ReinitializeParent(teacherBody.gameObject);
             }
             
-
+            GameObject mumble = (GameObject)Instantiate(MumblePreFab, this.transform.position, Quaternion.identity, gameObject.transform);
+            mumble.SetActive(true);
             this.transform.GetComponentInChildren<Pavel_Player>().enabled = true;
             this.transform.GetComponentInChildren<PaintOnCanvas>().enabled = true;
             this.transform.GetComponentInChildren<PlayerFace>().enabled = true;

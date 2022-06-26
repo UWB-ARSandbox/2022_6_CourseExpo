@@ -2252,7 +2252,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   iam: {fileID: 2627015981144515853}
   m_GhostPlayer: {fileID: 0}
-  audioManager: {fileID: 0}
   cube: {fileID: 4682228855201774726}
   movingBodyParts:
   - {fileID: 6822030213675842636}
@@ -2286,6 +2285,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   selectedObject: {fileID: 0}
+  MumblePreFab: {fileID: 5071936630450333555, guid: e6b31c29522d7aa4aba4266cceaac8a3, type: 3}
 --- !u!114 &6540210646106856311
 MonoBehaviour:
   m_ObjectHideFlags: 0

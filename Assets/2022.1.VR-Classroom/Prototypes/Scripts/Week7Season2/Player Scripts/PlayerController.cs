@@ -37,6 +37,8 @@ public class PlayerController : MonoBehaviour {
     private MenuScreen PCmenuScreen = null;
     private MenuScreen VRmenuScreen = null;
 
+    public UnityEngine.Object MumblePreFab;
+
     //MouseLook replacement:
     //New input movement handling:
     private LineRenderer[] _lineRenderers;
@@ -199,6 +201,10 @@ public class PlayerController : MonoBehaviour {
         quit = playerInputActions.Player.Quit;
         quit.performed += TryQuit;
         quit.Enable();
+
+        //VoIP Controller
+        GameObject mumble = (GameObject)Instantiate(MumblePreFab, this.transform.position, Quaternion.identity, gameObject.transform);
+        mumble.SetActive(true);
     }
 
     private void TryQuit(InputAction.CallbackContext obj)

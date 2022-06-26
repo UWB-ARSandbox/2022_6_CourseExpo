@@ -1,0 +1,6 @@
+[submodule "Mumble-Unity"]
+	path = Mumble-Unity
+	url = https://github.com/paulwhite93/Mumble-Unity.git
+[submodule "Assets/Mumble-Unity"]
+	path = Assets/Mumble-Unity
+	url = https://github.com/paulwhite93/Mumble-Unity.git

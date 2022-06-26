@@ -8,6 +8,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/2022.1.VR-Classroom/Prototypes/Scenes/Week7Season2.unity
     guid: b138d589968050b4e9060cde7dae5e80
+  - enabled: 0
+    path: Assets/GalleryFiles/GalleryScene.unity
+    guid: b4b8aaac3a34f40488974e7f355e96ff
   - enabled: 1
     path: Assets/ASL/ASL_Scenes/ASL_LobbyScene.unity
     guid: 31f3bf0f357b60c4981e20725877fd45
