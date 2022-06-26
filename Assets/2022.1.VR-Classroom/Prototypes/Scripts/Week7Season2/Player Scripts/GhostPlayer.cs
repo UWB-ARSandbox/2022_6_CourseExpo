@@ -123,6 +123,7 @@ public class GhostPlayer : MonoBehaviour
                 Debug.Log("FloatReceive, Converted Username===============>" + username);
                 minimapUsername.text = username;
                 worldspaceUsername.text = username;
+                worldspaceUsername.transform.parent.name = username;
                 break;
             case 101:
                 Vector3[] newBodyPositions = new Vector3[movingBodyPartTransforms.Length];
