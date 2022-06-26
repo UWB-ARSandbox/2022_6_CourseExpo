@@ -7,7 +7,7 @@
  * The user is allowed to change the brush size and color. User can type
  * text in two sizes 7 pixels wide or 12 pixels wide.
 */
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +17,120 @@ using UnityEngine.EventSystems;
 
 public class PaintOnCanvas : MonoBehaviour
 {
+	//For getting the input information of other peers instead of sending over a texture
+	//IEquatable and IComparable sutff borrowed from https://stackoverflow.com/questions/59031994/how-to-implement-icomparabletime-in-my-struct
+	struct InputInformation : IEquatable<InputInformation>, IComparable<InputInformation>
+	{
+		int peerID;
+		Vector2 ClickLocation;
+
+		bool mouseDown;
+		bool previousMouseDown;
+		Vector2 previousMousePosition;
+
+		Color32 brushColor;
+		int brushSize;
+		
+		public override bool Equals(object other)
+        {
+			if (other == null || this.GetType() != other.GetType()) 
+			{
+				return false;
+			}
+            return this.peerID == ((InputInformation)other).peerID;
+        }
+		public override int GetHashCode()
+        {
+            return this.GetHashCode();
+        }
+		public bool Equals(InputInformation other)
+        {
+            return this.Equals((object)other);
+        }
+		public int CompareTo(InputInformation other)
+        {
+            if(peerID > (other.peerID))
+			{
+				return 1;
+			}
+			else if (peerID < (other.peerID))
+			{
+				return -1;
+			}
+			else 
+			{
+				return 0;
+			}
+
+            // Code that compares two variables
+        }
+		
+	}
+	//gotten from https://visualstudiomagazine.com/Articles/2012/11/01/Priority-Queues-with-C.aspx?Page=1
+	public class PriorityQueue <T> where T : IComparable <T>
+	{
+		private List <T> data;
+
+		public PriorityQueue()
+		{
+			this.data = new List <T>();
+		}
+		public void Enqueue(T item)
+		{
+			data.Add(item);
+			int ci = data.Count - 1;
+			while (ci  > 0)
+			{
+				int pi = (ci - 1) / 2;
+				if (data[ci].CompareTo(data[pi])  >= 0)
+				break;
+				T tmp = data[ci]; data[ci] = data[pi]; data[pi] = tmp;
+				ci = pi;
+			}
+		}
+		public T Dequeue()
+		{
+			// Assumes pq isn't empty
+			int li = data.Count - 1;
+			T frontItem = data[0];
+			data[0] = data[li];
+			data.RemoveAt(li);
+
+			--li;
+			int pi = 0;
+			while (true)
+			{
+				int ci = pi * 2 + 1;
+				if (ci  > li) break;
+				int rc = ci + 1;
+				if (rc  <= li && data[rc].CompareTo(data[ci])  < 0)
+				ci = rc;
+				if (data[pi].CompareTo(data[ci])  <= 0) break;
+				T tmp = data[pi]; data[pi] = data[ci]; data[ci] = tmp;
+				pi = ci;
+			}
+			return frontItem;
+		}
+		public override string ToString()
+		{
+			string s = "";
+			for (int i = 0; i  < data.Count; ++i)
+				s += data[i].ToString() + " ";
+			s += "count = " + data.Count;
+			return s;
+		}
+		public int Count()
+		{
+			return data.Count;
+		}
+		public T Peek()
+		{
+			T frontItem = data[0];
+			return frontItem;
+		}
+	}
+	PriorityQueue<InputInformation> myPriorityQueue;
+
 	//the canvas of the students
 	Texture2D studentCanvas;
 
@@ -126,6 +240,7 @@ public class PaintOnCanvas : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		myPriorityQueue = new PriorityQueue<InputInformation>();
 		// Allows students to resubmit work
 		handler = GameObject.Find("Resubmission").GetComponent<ResubmissionHandler>();
 
