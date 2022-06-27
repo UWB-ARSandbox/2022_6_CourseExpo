@@ -10,12 +10,12 @@ public class VoiceUI : MonoBehaviour
     public GameObject MicrophonePanel;
     public GameObject VoiceConnectionPanel;
     Mumble.MumbleMicrophone UserMicrophone;
-    MumbleTester myMumble;
+    MumbleActor myMumble;
 
     public void SetUserMicrophone(Mumble.MumbleMicrophone mumbleMic){
         UserMicrophone = mumbleMic;
     }
-    public void SetMumble(MumbleTester s){
+    public void SetMumble(MumbleActor s){
         myMumble = s;
     }
     void Start()

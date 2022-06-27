@@ -9,7 +9,7 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 2868809327266108857}
-  - component: {fileID: 3325798104480201893}
+  - component: {fileID: 1080000583841574009}
   - component: {fileID: 3653312144994284244}
   m_Layer: 0
   m_Name: Mumble
@@ -33,7 +33,7 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &3325798104480201893
+--- !u!114 &1080000583841574009
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -42,7 +42,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5071936630450333555}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 9b144e088fe99844ab62b024defdc34b, type: 3}
+  m_Script: {fileID: 11500000, guid: b3c88c7b43e6c054f93e433b7edc6f9a, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   MyMumbleAudioPlayerPrefab: {fileID: 1000010552747926, guid: 66a0e01ce72c0c14ca680da28d8f9903, type: 3}
