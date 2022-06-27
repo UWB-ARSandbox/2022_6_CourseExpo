@@ -52,7 +52,7 @@ public class AudioManager : MonoBehaviour
     public void moveChannel(string RoomName){
         if(_mumbleClient == null)
             _mumbleClient = mumble.getClient();
-        if(_mumbleClient.GetCurrentChannel != RoomName)
+        if(!_mumbleClient.GetCurrentChannel().Equals(RoomName))
             _mumbleClient.JoinChannel(RoomName);
         else
             Debug.Log("User is already in :" + RoomName);
@@ -65,7 +65,7 @@ public class AudioManager : MonoBehaviour
     /*
     Create channel by providing desired RoomName and desired Size
     */
-    public bool CreateChannels(string RoomName, string RoomSize){
+    public bool CreateChannels(string RoomName, uint RoomSize){
         if(_mumbleClient == null)
             _mumbleClient = mumble.getClient();
         if(_mumbleClient.IsChannelAvailable(RoomName)){
