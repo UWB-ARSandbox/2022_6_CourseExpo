@@ -7,7 +7,7 @@ public class AudioManager : MonoBehaviour
     public GameObject AudioUI;
     public GameObject TeacherAudioUI;
 
-    public string Username;
+    private string Username;
     public string HostName;
     public string Password;
 
@@ -18,20 +18,6 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {        
-        if(mumble == null){
-            mumble = GameObject.Find("Mumble").GetComponent<MumbleActor>();
-        }
-        if(mumbleMic == null){
-            mumbleMic = GameObject.Find("MumbleMicrophone").GetComponent<Mumble.MumbleMicrophone>();
-        }
-        if(GameObject.Find("GameManager")){
-            if(!GameManager.AmTeacher)
-                Username = GameManager.players[GameManager.MyID];
-            else{
-                SetAdmin();
-                _mumbleClient = mumble.getClient();
-            }
-        }
 
     }
 
@@ -41,7 +27,20 @@ public class AudioManager : MonoBehaviour
         
     }
 
-     
+    public void Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
+        mumble = mum;
+        mumbleMic = mumMic;
+        if(!GameManager.AmTeacher){
+            Username = GameManager.players[GameManager.MyID];
+            mumble.Username = Username;
+            if(HostName != null && Password != null){
+
+            }
+        }
+        else{
+            SetAdmin();
+        }
+    }
     //Teacher Functionality
     public void SetAdmin(){
         mumble.Username = "SuperUser";

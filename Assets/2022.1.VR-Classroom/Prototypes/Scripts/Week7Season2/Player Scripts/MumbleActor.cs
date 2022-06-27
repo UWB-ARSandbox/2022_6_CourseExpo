@@ -39,11 +39,7 @@ public class MumbleActor : MonoBehaviour {
 
 	void Start () {
 
-        if(HostName == "1.2.3.4")
-        {
-            Debug.LogError("Please set the mumble host name to your mumble server");
-            return;
-        }
+        GameObject.Find("GameManager").GetComponent<AudioManager>().Setup(this, MyMumbleMic);
         Application.runInBackground = true;
         // If SendPosition, we'll send three floats.
         // This is roughly the standard for Mumble, however it seems that
