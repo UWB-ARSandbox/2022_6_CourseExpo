@@ -6,6 +6,8 @@ using ASL;
 public class HelpRequestedUI : MonoBehaviour
 {
 
+    public GameObject scrollPanel;
+    public GameObject buttonPrefab;
     ASLObject m_ASLObject;
     float[] id = new float[1];
     GameObject requestHelpButton;
@@ -16,8 +18,8 @@ public class HelpRequestedUI : MonoBehaviour
         m_ASLObject = GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
 
-        // if (GameManager.AmTeacher)
-        //     requestHelpButton.SetActive(false);
+        if (GameManager.AmTeacher)
+            requestHelpButton.SetActive(false);
 
         id[0] = GameManager.MyID;
     }
@@ -31,6 +33,12 @@ public class HelpRequestedUI : MonoBehaviour
     void FloatReceive(string _id, float[] _f)
     {
         if (GameManager.AmTeacher)
+        {
             Debug.Log(GameManager.players[(int)_f[0]] + " has requested help");
+            GameObject newButton = Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            newButton.GetComponent<HelpRequestButton>().username = GameManager.players[(int)_f[0]];
+            newButton.transform.parent = scrollPanel.transform;
+            newButton.transform.localScale = new Vector3(1, 1, 1);
+        }
     }
 }
