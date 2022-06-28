@@ -109,7 +109,11 @@ public class MumbleActor : MonoBehaviour {
                 MyMumbleMic.SetPositionalDataFunction(WritePositionalData);
             MyMumbleMic.OnMicDisconnect += OnMicDisconnected;
         }
+        if (ConnectionEstablished != null)
+            ConnectionEstablished();
     }
+    public event System.Action ConnectionEstablished;
+
     private MumbleAudioPlayer CreateMumbleAudioPlayerFromPrefab(string username, uint session)
     {
         // Depending on your use case, you might want to add the prefab to an existing object (like someone's head)
@@ -120,7 +124,7 @@ public class MumbleActor : MonoBehaviour {
 
         newObj.name = username + "_MumbleAudioPlayer";
         MumbleAudioPlayer newPlayer = newObj.GetComponent<MumbleAudioPlayer>();
-        Debug.Log("Adding audio player for: " + username);
+        Debug.Log("Adding audio player for: " + username); 
         return newPlayer;
     }
     private void OnOtherUserStateChange(uint session, MumbleProto.UserState updatedDeltaState, MumbleProto.UserState fullUserState)

@@ -18,6 +18,7 @@ public class AudioManager : MonoBehaviour
     public string HostName;
     public string Password;
 
+    public List<string> ChannelList = new List<string>();
     private MumbleActor mumble;
     private Mumble.MumbleMicrophone mumbleMic;
     private Mumble.MumbleClient _mumbleClient;
@@ -25,6 +26,7 @@ public class AudioManager : MonoBehaviour
     private bool AudioAttached = false;
 
     public bool AdminFlag = false;
+    private string previousChannel;
     public void SetController(PlayerController cont){my_Controller = cont;}
     // Start is called before the first frame update
     void Start()
@@ -35,22 +37,22 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetKeyDown(KeyCode.I)){
-            ReconnectVoIP();
-        }
-        if(Input.GetKeyDown(KeyCode.V)){
-            AttachAudio();
-        }
-        // if(Input.GetKeyDown(KeyCode.V)){          
-        //     if(VoiceUI == null && !VoiceUIEnabled){
-        //         VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
-        //         VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
-        //         VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
-        //         setVoiceUIEnabled();
-        //     }
-        //     else
-        //         VoiceUI.GetComponent<VoiceUI>().Destroy();
+        // if(Input.GetKeyDown(KeyCode.I)){
+        //     ReconnectVoIP();
         // }
+        // if(Input.GetKeyDown(KeyCode.V)){
+        //     AttachAudio();
+        // }
+        if(Input.GetKeyDown(KeyCode.V)){          
+            if(VoiceUI == null && !VoiceUIEnabled){
+                VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
+                VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
+                VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
+                setVoiceUIEnabled();
+            }
+            else
+                VoiceUI.GetComponent<VoiceUI>().Destroy();
+        }
     }
     public void setVoiceUIEnabled(){
         VoiceUIEnabled = !VoiceUIEnabled;
@@ -59,6 +61,7 @@ public class AudioManager : MonoBehaviour
     public void Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
         mumble = mum;
         mumbleMic = mumMic;
+        mumble.ConnectionEstablished += CreateChannels;
         if(!GameManager.AmTeacher || AdminFlag){
 
             Username = GameManager.players[GameManager.MyID];
@@ -100,11 +103,25 @@ public class AudioManager : MonoBehaviour
     public void moveChannel(string RoomName){
         if(_mumbleClient == null)
             _mumbleClient = mumble.getClient();
-        if(!_mumbleClient.GetCurrentChannel().Equals(RoomName))
+        previousChannel = _mumbleClient.GetCurrentChannel();
+        if(!_mumbleClient.GetCurrentChannel().Equals(RoomName)){
             _mumbleClient.JoinChannel(RoomName);
+            Debug.Log("User Moved to: " +RoomName);
+        }
         else
             Debug.Log("User is already in :" + RoomName);
     }
+    //Return user to previous channel in mumble server
+    //Function should be called after the user is moved to a private room with the teacher following the help function
+    public void ReturnToPreviousChannel(){
+        if(_mumbleClient == null)
+            _mumbleClient = mumble.getClient();
+        if(!_mumbleClient.GetCurrentChannel().Equals(previousChannel))
+            _mumbleClient.JoinChannel(previousChannel);
+        else
+            Debug.Log("User is already in :" + previousChannel);
+    }
+
     public bool GetAdminFlag(){
         return AdminFlag;
     }
@@ -124,18 +141,34 @@ public class AudioManager : MonoBehaviour
         mumble.Disconnect();
         my_Controller.CreateMumbleObject();
     }
+    public void ChannelToBeCreated(string channelName){
+        ChannelList.Add(channelName);
+    }
+    public void CreateChannels(){
+        if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
+            foreach(string s in ChannelList){
+                Debug.Log(s);
+                if(CreateChannel(s,10)){
+                    Debug.Log("Channel Created successfully for: "+s);
+                }
+                else
+                Debug.Log("Failed to create channel for booth: " +s);
+            }
+            ReconnectVoIP();   
+        }
+        AttachAudio();
+        mumble.ConnectionEstablished -= CreateChannels;
+    }
     //Channels to be created each quiz room needs a channel,
     //one private channel for help functionality
-    public bool CreateChannels(string RoomName, uint RoomSize){
+    public bool CreateChannel(string RoomName, uint RoomSize){
+        Debug.Log("Attempting to Create Channel: " +RoomName);
         if(_mumbleClient == null)
             _mumbleClient = mumble.getClient();
         if(_mumbleClient.IsChannelAvailable(RoomName)){
             _mumbleClient.DestroyChannel(RoomName);  
         }
-        _mumbleClient.CreateChannel(RoomName,true,0,"QuizRoom: with room allocation for n+1",RoomSize);
+        _mumbleClient.CreateChannel(RoomName,false,0,"",RoomSize);
         return _mumbleClient.IsChannelAvailable(RoomName);
-    }
-    public void MoveUser(){
-
     }
 }
