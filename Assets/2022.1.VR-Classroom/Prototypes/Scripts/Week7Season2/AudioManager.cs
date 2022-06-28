@@ -22,6 +22,8 @@ public class AudioManager : MonoBehaviour
     private Mumble.MumbleMicrophone mumbleMic;
     private Mumble.MumbleClient _mumbleClient;
 
+    private bool AudioAttached = false;
+
     public bool AdminFlag = false;
     public void SetController(PlayerController cont){my_Controller = cont;}
     // Start is called before the first frame update
@@ -36,16 +38,19 @@ public class AudioManager : MonoBehaviour
         if(Input.GetKeyDown(KeyCode.I)){
             ReconnectVoIP();
         }
-        if(Input.GetKeyDown(KeyCode.V)){          
-            if(VoiceUI == null && !VoiceUIEnabled){
-                VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
-                VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
-                VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
-                setVoiceUIEnabled();
-            }
-            else
-                VoiceUI.GetComponent<VoiceUI>().Destroy();
+        if(Input.GetKeyDown(KeyCode.V)){
+            AttachAudio();
         }
+        // if(Input.GetKeyDown(KeyCode.V)){          
+        //     if(VoiceUI == null && !VoiceUIEnabled){
+        //         VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
+        //         VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
+        //         VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
+        //         setVoiceUIEnabled();
+        //     }
+        //     else
+        //         VoiceUI.GetComponent<VoiceUI>().Destroy();
+        // }
     }
     public void setVoiceUIEnabled(){
         VoiceUIEnabled = !VoiceUIEnabled;
@@ -66,6 +71,28 @@ public class AudioManager : MonoBehaviour
             SetAdmin();
         }
         
+    }
+                    //connecting VoIP Prefabs to ghostplayer
+    public void AttachAudio(){
+        if(!AudioAttached){
+            Debug.Log("Attempting to Attach AudioOutputs to Ghosts");
+            GhostPlayer[] GhostPlayers = (GhostPlayer[])GameObject.FindObjectsOfType(typeof(GhostPlayer));
+            foreach(GhostPlayer i in GhostPlayers){
+                Debug.Log("Found GhostPlayer: " + i.worldspaceUsername.transform.parent.name +" attempting to find AudioPlayer");
+                GameObject Ghosts_AudioPlayer = GameObject.Find(i.worldspaceUsername.transform.parent.name + "_MumbleAudioPlayer");
+                
+                if(Ghosts_AudioPlayer != null){
+                    Debug.Log("Successfully Found AudioPlayer for: "+ i.worldspaceUsername.transform.parent.name);
+                    Ghosts_AudioPlayer.transform.parent = i.gameObject.transform;  
+                }
+                else{
+                    Debug.Log("Failed to find AudioPlayer for: " + i.worldspaceUsername.transform.parent.name);
+                }
+            }
+            AudioAttached = true;
+        }
+        else
+            Debug.Log("Audio already attached to ghosts");
     }
     //Call the moveChannel function when user is in desired area and needs to move VoIP channels
     //maybe subscribe to C# actions so when Action X happens user is moved
