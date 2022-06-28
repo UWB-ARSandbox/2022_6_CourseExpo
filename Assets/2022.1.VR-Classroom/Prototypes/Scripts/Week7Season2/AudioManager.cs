@@ -4,8 +4,15 @@ using UnityEngine;
 
 public class AudioManager : MonoBehaviour
 {
-    public GameObject AudioUI;
-    public GameObject TeacherAudioUI;
+    public GameObject VoiceUI;
+    
+    //prefab
+    public GameObject PrefabVoIP_UI;
+
+    public GameObject PrefabTeacherAudioUI;
+    public PlayerController my_Controller;
+
+    private bool VoiceUIEnabled = false;
 
     private string Username;
     public string HostName;
@@ -15,6 +22,8 @@ public class AudioManager : MonoBehaviour
     private Mumble.MumbleMicrophone mumbleMic;
     private Mumble.MumbleClient _mumbleClient;
 
+    public bool AdminFlag = false;
+    public void SetController(PlayerController cont){my_Controller = cont;}
     // Start is called before the first frame update
     void Start()
     {        
@@ -24,17 +33,29 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        // if(Input.GetKeyDown(KeyCode.I)){
-        //     _mumbleClient = mumble.getClient();
-        //     CreateChannels("QuizRoom_1",3);
-        // }
+        if(Input.GetKeyDown(KeyCode.I)){
+            ReconnectVoIP();
+        }
+        if(Input.GetKeyDown(KeyCode.V)){          
+            if(VoiceUI == null && !VoiceUIEnabled){
+                VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
+                VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
+                VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
+                setVoiceUIEnabled();
+            }
+            else
+                VoiceUI.GetComponent<VoiceUI>().Destroy();
+        }
     }
-
+    public void setVoiceUIEnabled(){
+        VoiceUIEnabled = !VoiceUIEnabled;
+    }
     //called by the mumble actor to setup the actor and the Audio Manager.
     public void Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
         mumble = mum;
         mumbleMic = mumMic;
-        if(!GameManager.AmTeacher){
+        if(!GameManager.AmTeacher || AdminFlag){
+
             Username = GameManager.players[GameManager.MyID];
             mumble.Username = Username;
             if(HostName != null && Password != null){
@@ -57,14 +78,27 @@ public class AudioManager : MonoBehaviour
         else
             Debug.Log("User is already in :" + RoomName);
     }
+    public bool GetAdminFlag(){
+        return AdminFlag;
+    }
     //Teacher Functionality
+    //SuperUser cannot talk so we want to instantiate the super user, then create required channels and disconnect the super user
+    //Teacher should connect as well so the teacher should have two instances of mumble active.
+    //SuperUser instance needs to be deafened
     public void SetAdmin(){
         mumble.Username = "SuperUser";
         mumble.Password = "Admin";
+        AdminFlag = true;
     }
     /*
     Create channel by providing desired RoomName and desired Size
     */
+    public void ReconnectVoIP(){
+        mumble.Disconnect();
+        my_Controller.CreateMumbleObject();
+    }
+    //Channels to be created each quiz room needs a channel,
+    //one private channel for help functionality
     public bool CreateChannels(string RoomName, uint RoomSize){
         if(_mumbleClient == null)
             _mumbleClient = mumble.getClient();

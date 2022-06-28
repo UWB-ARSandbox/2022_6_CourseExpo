@@ -11,12 +11,17 @@ public class VoiceUI : MonoBehaviour
     public GameObject VoiceConnectionPanel;
     Mumble.MumbleMicrophone UserMicrophone;
     MumbleActor myMumble;
+    AudioManager _AudioManager;
 
     public void SetUserMicrophone(Mumble.MumbleMicrophone mumbleMic){
         UserMicrophone = mumbleMic;
     }
     public void SetMumble(MumbleActor s){
         myMumble = s;
+    }
+    private void Awake() {
+        _AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
+        Debug.Assert(_AudioManager != null);
     }
     void Start()
     {
@@ -74,7 +79,7 @@ public class VoiceUI : MonoBehaviour
                 UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.MethodBased,User_Microphones.value);
                 break;
        }
-        myMumble.setVoiceUIEnabled();
+        _AudioManager.setVoiceUIEnabled();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }

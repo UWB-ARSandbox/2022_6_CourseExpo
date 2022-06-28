@@ -19,14 +19,8 @@ public class MumbleActor : MonoBehaviour {
     // Mumble audio player that also receives position commands
     public GameObject MyMumbleAudioPlayerPositionedPrefab;
 
-    public GameObject VoIP_UI;
-
-    private bool VoiceUIEnabled = false;
-
     public MumbleMicrophone MyMumbleMic;
     public DebugValues DebuggingVariables;
-
-    private GameObject VoiceUI;
 
     private MumbleClient _mumbleClient;
     public bool ConnectAsyncronously = true;
@@ -196,24 +190,22 @@ public class MumbleActor : MonoBehaviour {
             numPacketsLost += numLostThisSample;
         }
     }
-    public void setVoiceUIEnabled(){
-        VoiceUIEnabled = !VoiceUIEnabled;
+
+    public void Disconnect(){
+        Debug.LogWarning("Shutting down connections");
+        if(_mumbleClient != null){
+            _mumbleClient.Close();
+            //cleanup operation
+            MumbleAudioPlayer[] ObjectsToDestroy = (MumbleAudioPlayer[])GameObject.FindObjectsOfType(typeof(MumbleAudioPlayer));
+            foreach(MumbleAudioPlayer i in ObjectsToDestroy){
+                Destroy(i.gameObject);
+            }
+            Destroy(gameObject);
+        }
     }
 	void Update () {
-        if (!_mumbleClient.ReadyToConnect)
+        if (!_mumbleClient.ReadyToConnect) 
             return;
-        if(Input.GetKeyDown(KeyCode.V)){          
-            if(VoiceUI == null && !VoiceUIEnabled){
-                VoiceUI = GameObject.Instantiate(VoIP_UI);
-                VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(MyMumbleMic);
-                VoiceUI.GetComponent<VoiceUI>().SetMumble(this);
-                setVoiceUIEnabled();
-            }
-            else
-                VoiceUI.GetComponent<VoiceUI>().Destroy();
-            
-
-        }
         // if (Input.GetKeyDown(KeyCode.S))
         // {
         //     _mumbleClient.SendTextMessage("This is an example message from Unity");

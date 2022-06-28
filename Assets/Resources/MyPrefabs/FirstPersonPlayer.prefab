@@ -2286,6 +2286,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   selectedObject: {fileID: 0}
   MumblePreFab: {fileID: 5071936630450333555, guid: e6b31c29522d7aa4aba4266cceaac8a3, type: 3}
+  _AudioManager: {fileID: 0}
 --- !u!114 &6540210646106856311
 MonoBehaviour:
   m_ObjectHideFlags: 0
