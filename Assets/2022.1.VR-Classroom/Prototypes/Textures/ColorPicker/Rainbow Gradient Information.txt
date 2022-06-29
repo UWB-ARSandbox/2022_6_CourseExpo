@@ -1,0 +1,24 @@
+Image Source:
+https://commons.wikimedia.org/wiki/File:Rainbow-gradient-fully-saturated.svg
+
+Licensing information from Wikimedia:
+
+This work is labeled as Kopimi, meaning that the copyright holder of this 
+work specifically requests that this work be used and copied for any purpose, including unlimited commercial use and redistribution. It is believed in good faith that a work classified as Kopimi is free to 
+use in any way, including modification and the creation of derivative works.
+
+This file is made available under the Creative Commons CC0 1.0 Universal 
+Public Domain Dedication. The person who associated a work with this deed 
+has dedicated the work to the public domain by waiving all of their rights 
+to the work worldwide under copyright law, including all related and 
+neighboring rights, to the extent allowed by law. You can copy, modify, 
+distribute and perform the work, even for commercial purposes, all without 
+asking permission.
+
+-----------------------------------------------------------------------------
+
+In the modified version, I applied a white-to-alpha gradient from the top to
+the midpoint of the image, and am alpha-to-black gradient from that point to
+the bottom of the image.
+
+-Talon Martin

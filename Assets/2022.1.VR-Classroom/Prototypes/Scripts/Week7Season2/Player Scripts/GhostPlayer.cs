@@ -79,6 +79,14 @@ public class GhostPlayer : MonoBehaviour
         });
     }
 
+    public void SendUserColor(Color color)
+    {
+        float[] sendColor = new float[4] { 103, color.r, color.g, color.b };
+        m_ASLObject.SendAndSetClaim(() => {
+            m_ASLObject.SendFloatArray(sendColor);
+        });
+    }
+
     public void SetFaceTexture()
     {
         var extensions = new[] {
@@ -148,6 +156,10 @@ public class GhostPlayer : MonoBehaviour
             case 103:
                 //Set Host Color
                 body.material.color = Color.yellow;
+                break;
+            case 104:
+                // Set new user color
+                body.material.color = new Color(_f[1], _f[2], _f[3]);
                 break;
         }
     }
