@@ -81,7 +81,7 @@ public class GhostPlayer : MonoBehaviour
 
     public void SendUserColor(Color color)
     {
-        float[] sendColor = new float[4] { 103, color.r, color.g, color.b };
+        float[] sendColor = new float[4] { 104, color.r, color.g, color.b };
         m_ASLObject.SendAndSetClaim(() => {
             m_ASLObject.SendFloatArray(sendColor);
         });
