@@ -17,7 +17,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 0
+  m_IsActive: 1
 --- !u!4 &2868809327266108857
 Transform:
   m_ObjectHideFlags: 0
@@ -28,8 +28,7 @@ Transform:
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
   m_LocalPosition: {x: 0.013515159, y: 0.1741513, z: 2.288086}
   m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children:
-  - {fileID: 1316995952492143385}
+  m_Children: []
   m_Father: {fileID: 0}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -47,13 +46,13 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   MyMumbleAudioPlayerPrefab: {fileID: 1000010552747926, guid: 66a0e01ce72c0c14ca680da28d8f9903, type: 3}
   MyMumbleAudioPlayerPositionedPrefab: {fileID: 1000010552747926, guid: 351999281f6c4a14d8830ff55c5e5f86, type: 3}
-  VoIP_UI: {fileID: 904956940003455872, guid: 47a4b1a766d8bf144bd2cd638ae53547, type: 3}
-  MyMumbleMic: {fileID: 5398238950613745517}
+  MyMumbleMic: {fileID: 2351755377079087113, guid: d4a77e78e537e5848987eb06d37b3e43, type: 3}
   DebuggingVariables:
     UseRandomUsername: 0
     UseLocalLoopback: 0
     UseSyntheticSource: 0
     EnableEditorIOGraph: 1
+  MumbleMicrophone: {fileID: 971975365549943597, guid: d4a77e78e537e5848987eb06d37b3e43, type: 3}
   ConnectAsyncronously: 1
   SendPosition: 1
   HostName: 50.35.25.58
@@ -73,53 +72,3 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 3e8068be741528849bbbd40ba0bbcd3b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
---- !u!1 &7436673092067484745
-GameObject:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  serializedVersion: 6
-  m_Component:
-  - component: {fileID: 1316995952492143385}
-  - component: {fileID: 5398238950613745517}
-  m_Layer: 0
-  m_Name: MumbleMicrophone
-  m_TagString: Untagged
-  m_Icon: {fileID: 0}
-  m_NavMeshLayer: 0
-  m_StaticEditorFlags: 0
-  m_IsActive: 1
---- !u!4 &1316995952492143385
-Transform:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7436673092067484745}
-  m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 0, y: 0, z: 0}
-  m_LocalScale: {x: 1, y: 1, z: 1}
-  m_Children: []
-  m_Father: {fileID: 2868809327266108857}
-  m_RootOrder: 0
-  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
---- !u!114 &5398238950613745517
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7436673092067484745}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 15a64d227e2b00b428e8cf26c1d1aae9, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  SendAudioOnStart: 1
-  MicNumberToUse: 0
-  MinAmplitude: 0.007
-  VoiceHoldSeconds: 0.5
-  VoiceSendingType: 1
-  TestingClipToUse: {fileID: 8300000, guid: 430bcfc356f10cd4892a3c8221a0a343, type: 3}
-  PushToTalkKeycode: 32

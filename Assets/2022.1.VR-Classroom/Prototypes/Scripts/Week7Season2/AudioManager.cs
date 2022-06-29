@@ -61,9 +61,8 @@ public class AudioManager : MonoBehaviour
     public void Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
         mumble = mum;
         mumbleMic = mumMic;
-        mumble.ConnectionEstablished += CreateChannels;
+        mumble.ConnectionEstablished += startChannelCreation;
         if(!GameManager.AmTeacher || AdminFlag){
-
             Username = GameManager.players[GameManager.MyID];
             mumble.Username = Username;
             if(HostName != null && Password != null){
@@ -73,7 +72,14 @@ public class AudioManager : MonoBehaviour
         else{
             SetAdmin();
         }
-        
+    }
+    public void startChannelCreation(){
+        if(GameManager.AmTeacher && AdminFlag && !AudioAttached)
+            StartCoroutine(CreateChannels());
+        else{
+            AttachAudio();
+            mumble.ConnectionEstablished -= startChannelCreation;
+        }
     }
                     //connecting VoIP Prefabs to ghostplayer
     public void AttachAudio(){
@@ -144,21 +150,21 @@ public class AudioManager : MonoBehaviour
     public void ChannelToBeCreated(string channelName){
         ChannelList.Add(channelName);
     }
-    public void CreateChannels(){
-        if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
-            foreach(string s in ChannelList){
-                Debug.Log(s);
-                if(CreateChannel(s,10)){
-                    Debug.Log("Channel Created successfully for: "+s);
-                }
-                else
-                Debug.Log("Failed to create channel for booth: " +s);
-            }
-            ReconnectVoIP();   
-        }
-        AttachAudio();
-        mumble.ConnectionEstablished -= CreateChannels;
-    }
+    // public void CreateChannels(){
+    //     if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
+    //         foreach(string s in ChannelList){
+    //             Debug.Log(s);
+    //             if(CreateChannel(s,10)){
+    //                 Debug.Log("Channel Created successfully for: "+s);
+    //             }
+    //             else
+    //             Debug.Log("Failed to create channel for booth: " +s);
+    //         }
+    //         ReconnectVoIP();   
+    //     }
+    //     AttachAudio();
+    //     mumble.ConnectionEstablished -= CreateChannels;
+    // }
     //Channels to be created each quiz room needs a channel,
     //one private channel for help functionality
     public bool CreateChannel(string RoomName, uint RoomSize){
@@ -171,4 +177,24 @@ public class AudioManager : MonoBehaviour
         _mumbleClient.CreateChannel(RoomName,false,0,"",RoomSize);
         return _mumbleClient.IsChannelAvailable(RoomName);
     }
+IEnumerator CreateChannels(){
+if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
+            foreach(string s in ChannelList){
+                Debug.Log(s);
+                CreateChannel(s,10);
+                yield return new WaitForSeconds(.6f);
+                if(_mumbleClient.IsChannelAvailable(s))
+                    Debug.Log("Channel Created successfully for: "+s);
+                else
+                    Debug.LogError("Failed to create channel for booth: " +s);
+                yield return new WaitForSeconds(.5f);
+            }
+            mumble.ConnectionEstablished -= startChannelCreation;
+            yield return new WaitForSeconds(2f);
+            ReconnectVoIP();
+            
+        }
+        AttachAudio();
+}
+
 }

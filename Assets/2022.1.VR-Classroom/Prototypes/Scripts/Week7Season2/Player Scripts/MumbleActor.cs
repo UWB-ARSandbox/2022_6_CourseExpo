@@ -22,6 +22,8 @@ public class MumbleActor : MonoBehaviour {
     public MumbleMicrophone MyMumbleMic;
     public DebugValues DebuggingVariables;
 
+    public GameObject MumbleMicrophone;
+
     private MumbleClient _mumbleClient;
     public bool ConnectAsyncronously = true;
     public bool SendPosition = false;
@@ -32,7 +34,23 @@ public class MumbleActor : MonoBehaviour {
     public string ChannelToJoin = "";
 
 	void Start () {
-
+        MyMumbleMic = null;
+        if(MyMumbleMic == null){
+            Debug.Log("Attempting to find microphone object");
+            MumbleMicrophone myMic = (MumbleMicrophone)GameObject.FindObjectOfType(typeof(MumbleMicrophone));
+            if(myMic != null){
+                Debug.Log("Microphone object Found");
+                MyMumbleMic = myMic;
+            }
+            else{
+                Debug.Log("No Microphone object found attempting to create one");
+                GameObject myMicObject = (GameObject)Instantiate(MumbleMicrophone, this.transform.position, Quaternion.identity, gameObject.transform.parent);
+                MyMumbleMic = myMicObject.GetComponent<MumbleMicrophone>(); 
+                myMicObject.SetActive(true);
+            }
+            Debug.Assert(MyMumbleMic != null);
+           
+        }
         GameObject.Find("GameManager").GetComponent<AudioManager>().Setup(this, MyMumbleMic);
         Application.runInBackground = true;
         // If SendPosition, we'll send three floats.
@@ -198,12 +216,15 @@ public class MumbleActor : MonoBehaviour {
     public void Disconnect(){
         Debug.LogWarning("Shutting down connections");
         if(_mumbleClient != null){
+            _mumbleClient.OnDisconnected();
             _mumbleClient.Close();
+
             //cleanup operation
             MumbleAudioPlayer[] ObjectsToDestroy = (MumbleAudioPlayer[])GameObject.FindObjectsOfType(typeof(MumbleAudioPlayer));
             foreach(MumbleAudioPlayer i in ObjectsToDestroy){
                 Destroy(i.gameObject);
             }
+            //Destroy(MyMumbleMic.gameObject);
             Destroy(gameObject);
         }
     }
