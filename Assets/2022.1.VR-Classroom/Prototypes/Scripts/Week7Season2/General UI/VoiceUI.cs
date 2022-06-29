@@ -78,7 +78,9 @@ public class VoiceUI : MonoBehaviour
             case 3:
                 UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.MethodBased,User_Microphones.value);
                 break;
-       }
+        }                
+        UserMicrophone.StopSendingAudio();
+        UserMicrophone.StartSendingAudio(myMumble.getClient().EncoderSampleRate);
         _AudioManager.setVoiceUIEnabled();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;

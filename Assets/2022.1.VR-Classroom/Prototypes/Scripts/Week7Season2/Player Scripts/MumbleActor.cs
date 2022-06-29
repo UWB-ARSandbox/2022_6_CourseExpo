@@ -69,9 +69,10 @@ public class MumbleActor : MonoBehaviour {
         else
         {
             _mumbleClient.Connect(Username, Password);
-            if(MyMumbleMic != null)
+            if(MyMumbleMic != null && (!GameManager.AmTeacher || GameObject.Find("GameManager").GetComponent<AudioManager>().AdminFlag))
             {
                 _mumbleClient.AddMumbleMic(MyMumbleMic);
+                MyMumbleMic.StartSendingAudio(_mumbleClient.EncoderSampleRate);
                 if (SendPosition)
                     MyMumbleMic.SetPositionalDataFunction(WritePositionalData);
             }
@@ -120,12 +121,13 @@ public class MumbleActor : MonoBehaviour {
         Debug.Log("Will now connect");
         _mumbleClient.Connect(Username, Password);
         yield return null;
-        if(MyMumbleMic != null)
+        if(MyMumbleMic != null && (!GameManager.AmTeacher || GameObject.Find("GameManager").GetComponent<AudioManager>().AdminFlag))
         {
             _mumbleClient.AddMumbleMic(MyMumbleMic);
             if (SendPosition)
                 MyMumbleMic.SetPositionalDataFunction(WritePositionalData);
             MyMumbleMic.OnMicDisconnect += OnMicDisconnected;
+            MyMumbleMic.StartSendingAudio(_mumbleClient.EncoderSampleRate);
         }
         if (ConnectionEstablished != null)
             ConnectionEstablished();
@@ -216,7 +218,8 @@ public class MumbleActor : MonoBehaviour {
     public void Disconnect(){
         Debug.LogWarning("Shutting down connections");
         if(_mumbleClient != null){
-            _mumbleClient.OnDisconnected();
+            //_mumbleClient.OnDisconnected();
+            MyMumbleMic.StopSendingAudio();
             _mumbleClient.Close();
 
             //cleanup operation

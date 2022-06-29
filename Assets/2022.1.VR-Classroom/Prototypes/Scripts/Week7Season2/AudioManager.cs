@@ -177,24 +177,23 @@ public class AudioManager : MonoBehaviour
         _mumbleClient.CreateChannel(RoomName,false,0,"",RoomSize);
         return _mumbleClient.IsChannelAvailable(RoomName);
     }
-IEnumerator CreateChannels(){
-if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
+    IEnumerator CreateChannels(){
+        if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
             foreach(string s in ChannelList){
                 Debug.Log(s);
                 CreateChannel(s,10);
-                yield return new WaitForSeconds(.6f);
+                yield return new WaitForSeconds(.66f);
                 if(_mumbleClient.IsChannelAvailable(s))
                     Debug.Log("Channel Created successfully for: "+s);
                 else
                     Debug.LogError("Failed to create channel for booth: " +s);
-                yield return new WaitForSeconds(.5f);
+                yield return new WaitForSeconds(.55f);
             }
             mumble.ConnectionEstablished -= startChannelCreation;
             yield return new WaitForSeconds(2f);
             ReconnectVoIP();
-            
         }
         AttachAudio();
-}
+    }
 
 }

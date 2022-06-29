@@ -43,7 +43,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 15a64d227e2b00b428e8cf26c1d1aae9, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  SendAudioOnStart: 1
+  SendAudioOnStart: 0
   MicNumberToUse: 0
   MinAmplitude: 0.007
   VoiceHoldSeconds: 0.5
