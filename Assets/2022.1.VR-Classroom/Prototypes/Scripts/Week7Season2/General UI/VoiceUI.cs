@@ -68,19 +68,21 @@ public class VoiceUI : MonoBehaviour
         switch(User_MicType.value){
             case 0:
                 UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.AlwaysSend,User_Microphones.value);
+                UserMicrophone.StartSendingAudio(myMumble.getClient().EncoderSampleRate);
                 break;
             case 1:
                 UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.Amplitude,User_Microphones.value);
+                UserMicrophone.StartSendingAudio(myMumble.getClient().EncoderSampleRate);
                 break;
             case 2:
                 UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.PushToTalk,User_Microphones.value);
+                UserMicrophone.StopSendingAudio();
                 break;
             case 3:
                 UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.MethodBased,User_Microphones.value);
+                UserMicrophone.StopSendingAudio();
                 break;
         }                
-        UserMicrophone.StopSendingAudio();
-        UserMicrophone.StartSendingAudio(myMumble.getClient().EncoderSampleRate);
         _AudioManager.setVoiceUIEnabled();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
