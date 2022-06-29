@@ -31,8 +31,7 @@ public class AudioManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {        
-        VoiceUI = (GameObject)Resources.Load("MyPrefabs/VoIP UI");
-        PrefabVoIP_UI = (GameObject)Resources.Load("MyPrefabs/VoIP UI");
+        PrefabVoIP_UI = (GameObject)Resources.Load("MyPrefabs/VoIP_UI");
     }
 
     // Update is called once per frame
