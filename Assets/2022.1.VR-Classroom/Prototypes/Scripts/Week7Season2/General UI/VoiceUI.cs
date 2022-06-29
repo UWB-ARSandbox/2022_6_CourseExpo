@@ -9,9 +9,19 @@ public class VoiceUI : MonoBehaviour
     public Dropdown User_MicType;
     public GameObject MicrophonePanel;
     public GameObject VoiceConnectionPanel;
+
+    public Button User_PTTalkBind;
+    public Text PushToTalkText;
+    public Toggle MuteSelf;
+    public Slider MicrophoneSensitivity;
+
     Mumble.MumbleMicrophone UserMicrophone;
     MumbleActor myMumble;
     AudioManager _AudioManager;
+
+    Event keyEvent;
+    KeyCode newKey;
+    bool waitingForKey = false;
 
     public void SetUserMicrophone(Mumble.MumbleMicrophone mumbleMic){
         UserMicrophone = mumbleMic;
@@ -40,6 +50,8 @@ public class VoiceUI : MonoBehaviour
             case Mumble.MumbleMicrophone.MicType.MethodBased:{User_MicType.value = 3;break;}
         }
         User_Microphones.value = UserMicrophone.MicNumberToUse;
+        MicrophoneSensitivity.value = UserMicrophone.MinAmplitude;
+        UpdatePushToTalkText();
     }
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){
@@ -50,21 +62,33 @@ public class VoiceUI : MonoBehaviour
         User_Microphones.ClearOptions();
         User_Microphones.AddOptions(options);
     }
-
-    public void ShowConnectionPanel(){
-        MicrophonePanel.SetActive(false);
-        VoiceConnectionPanel.SetActive(true);
+    void OnGUI() {
+        keyEvent = Event.current;
+        if(keyEvent.isKey && waitingForKey){
+            newKey = keyEvent.keyCode;
+            waitingForKey = false;
+        }
     }
-    public void HideConnectionPanel(){
-        VoiceConnectionPanel.SetActive(false);
-        MicrophonePanel.SetActive(true);
+    public void GetPushToTalkBinding(){
+        if(!waitingForKey)
+            StartCoroutine(AssignKey());
     }
-
-    public void Destroy(){
-        Destroy(gameObject);
+    IEnumerator WaitForKey(){
+        while(!keyEvent.isKey)
+            yield return null;
     }
-    //On destroy update Microphone settings
-    private void OnDestroy() {
+    public IEnumerator AssignKey(){
+        waitingForKey = true;
+        yield return WaitForKey();
+        UserMicrophone.PushToTalkKeycode = newKey;
+        UpdatePushToTalkText();
+        yield return null;
+    }
+    public void UpdatePushToTalkText(){
+        string inputText = UserMicrophone.PushToTalkKeycode.ToString();
+        PushToTalkText.text = inputText;
+    }
+    public void ChangeVoiceSetting(){
         switch(User_MicType.value){
             case 0:
                 UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.AlwaysSend,User_Microphones.value);
@@ -83,6 +107,31 @@ public class VoiceUI : MonoBehaviour
                 UserMicrophone.StopSendingAudio();
                 break;
         }                
+    }
+    public void UpdateVoiceSensitivity(){
+        UserMicrophone.MinAmplitude = MicrophoneSensitivity.value;
+    }
+    public void ToggleMute(){
+        if(myMumble.getClient().IsSelfMuted())
+            myMumble.getClient().SetSelfMute(false);
+        else
+            myMumble.getClient().SetSelfMute(true);
+    }
+
+    public void ShowConnectionPanel(){
+        MicrophonePanel.SetActive(false);
+        VoiceConnectionPanel.SetActive(true);
+    }
+    public void HideConnectionPanel(){
+        VoiceConnectionPanel.SetActive(false);
+        MicrophonePanel.SetActive(true);
+    }
+
+    public void Destroy(){
+        Destroy(gameObject);
+    }
+    //On destroy update Microphone settings
+    private void OnDestroy() { 
         _AudioManager.setVoiceUIEnabled();
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
