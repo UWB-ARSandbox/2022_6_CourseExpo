@@ -148,7 +148,8 @@ public class AudioManager : MonoBehaviour
         my_Controller.CreateMumbleObject();
     }
     public void ChannelToBeCreated(string channelName){
-        ChannelList.Add(channelName);
+        if(channelName.Contains("Quiz") || channelName.Contains("Test"))
+            ChannelList.Add(channelName);
     }
     // public void CreateChannels(){
     //     if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
@@ -189,6 +190,8 @@ public class AudioManager : MonoBehaviour
                     Debug.LogError("Failed to create channel for booth: " +s);
                 yield return new WaitForSeconds(.55f);
             }
+            CreateChannel("Private",2);
+            yield return new WaitForSeconds(1f);
             mumble.ConnectionEstablished -= startChannelCreation;
             yield return new WaitForSeconds(2f);
             ReconnectVoIP();
