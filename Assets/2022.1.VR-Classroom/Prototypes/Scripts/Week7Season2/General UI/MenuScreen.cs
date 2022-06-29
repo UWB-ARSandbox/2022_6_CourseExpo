@@ -8,6 +8,7 @@ public class MenuScreen : MonoBehaviour
     public GameObject Stats;
     public GameObject Announcement;
     public GameObject Controls;
+    public GameObject ChangeColor;
     public GameObject Quit;
     public GameObject PlayerList;
     public Button Refresh;
@@ -28,6 +29,7 @@ public class MenuScreen : MonoBehaviour
             Stats.SetActive(false);
             Announcement.SetActive(false);
             Controls.SetActive(false);
+            ChangeColor.SetActive(false);
             Quit.SetActive(false);
             PlayerList.SetActive(true);
             if (PlayerList.GetComponent<PlayerListScreen>().GenerateType)
@@ -53,6 +55,7 @@ public class MenuScreen : MonoBehaviour
             Stats.SetActive(false);
             Announcement.SetActive(false);
             Controls.SetActive(false);
+            ChangeColor.SetActive(false);
             Quit.SetActive(false);
             PlayerList.SetActive(false);
             gameObject.SetActive(false);
