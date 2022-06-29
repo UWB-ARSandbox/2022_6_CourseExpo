@@ -38,6 +38,7 @@ public class PlayerController : MonoBehaviour {
     private MenuScreen VRmenuScreen = null;
 
     public UnityEngine.Object MumblePreFab;
+    public AudioManager _AudioManager;
 
     //MouseLook replacement:
     //New input movement handling:
@@ -58,6 +59,8 @@ public class PlayerController : MonoBehaviour {
     private void Awake() {
         playerInputActions = new PlayerInputActions();
         _lineRenderers = FindObjectsOfType<LineRenderer>();
+        _AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
+        Debug.Assert(_AudioManager != null);
     }
 
     private void Start()
@@ -202,9 +205,13 @@ public class PlayerController : MonoBehaviour {
         quit.performed += TryQuit;
         quit.Enable();
 
-        //VoIP Controller
-        GameObject mumble = (GameObject)Instantiate(MumblePreFab, this.transform.position, Quaternion.identity, gameObject.transform);
-        mumble.SetActive(true);
+        //VoIP Controller        
+        _AudioManager.SetController(this); 
+        CreateMumbleObject();
+    }
+    public void CreateMumbleObject(){
+            GameObject mumble = (GameObject)Instantiate(MumblePreFab, this.transform.position, Quaternion.identity, gameObject.transform);
+            mumble.SetActive(true);
     }
 
     private void TryQuit(InputAction.CallbackContext obj)
