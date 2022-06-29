@@ -53,13 +53,14 @@ public class GameManager : MonoBehaviour {
     #region Setup
     private void Awake() {
         _asl = GetComponent<ASLObject>();
+        gameObject.AddComponent<AudioManager>();
     }
 
     // Start is called before the first frame update
     private void Start() {
         players = GameLiftManager.GetInstance().m_Players;
         ASL_PhysicsMasterSingleton.Instance.SetUpPhysicsMaster();
-
+        
         _asl._LocallySetFloatCallback(FloatReceive);
 
         if (AmTeacher) {
@@ -86,7 +87,7 @@ public class GameManager : MonoBehaviour {
         }
 
         StartCoroutine(AlignBoothNames());
-        gameObject.AddComponent<AudioManager>();
+        
     }
 
     private IEnumerator SendGhostIDs() {
