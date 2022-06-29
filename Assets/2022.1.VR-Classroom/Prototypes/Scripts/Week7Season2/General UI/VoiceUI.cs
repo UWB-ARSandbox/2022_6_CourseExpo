@@ -57,6 +57,7 @@ public class VoiceUI : MonoBehaviour
         User_Microphones.value = UserMicrophone.MicNumberToUse;
         MicrophoneSensitivity.value = UserMicrophone.MinAmplitude;
         UpdatePushToTalkText();
+        MuteSelf.isOn = myMumble.getClient().IsSelfMuted();
     }
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){

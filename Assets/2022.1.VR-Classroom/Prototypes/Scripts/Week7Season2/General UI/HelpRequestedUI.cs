@@ -38,6 +38,7 @@ public class HelpRequestedUI : MonoBehaviour
         m_ASLObject.SendAndSetClaim(() => {
             m_ASLObject.SendFloatArray(id);
         });
+        GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
     }
 
     void FloatReceive(string _id, float[] _f)
