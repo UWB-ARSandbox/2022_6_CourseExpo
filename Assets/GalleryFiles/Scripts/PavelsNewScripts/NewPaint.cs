@@ -20,6 +20,8 @@ public class NewPaint : MonoBehaviour
 
     struct InputInformation //: IEquatable<InputInformation>, IComparable<InputInformation>
 	{
+
+
 		//public int peerID;
 		public Vector2 canvasClick;
 
@@ -138,9 +140,41 @@ public class NewPaint : MonoBehaviour
 
     InputInformation inputInfo;
 
+
+    // UI field listeners
+	Slider rSlider, gSlider, bSlider;
+	InputField rInput, gInput, bInput;
+	InputField aField = null;
+
+	InputField slField = null;
+	InputField textField = null;
+	InputField brushSizeInput = null;
+	Slider brushSizeSlider = null;
+
+	// UI button listeners
+	Button loadB = null;
+	Button saveB = null;
+	Button deleteB = null;
+	Button controlsB = null;
+
+	Button subGalB = null;
+	Button subStuB = null;
+
+	// UI toggle listeners
+	Toggle eraseTog = null;
+	Toggle textTog = null;
+	Toggle lineTog = null;
+
+	//UI dropdown listeners
+	Dropdown textSizeDrop = null;
+
+    GameObject brushColorUI;
+
     // Start is called before the first frame update
     void Start()
     {
+
+        
         GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(recieveInput);
         myQueue = new Queue<InputInformation>();
         brushSize = 10;
@@ -163,6 +197,11 @@ public class NewPaint : MonoBehaviour
 
         alphabetUsed = alphabet;
 
+        GameObject brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+
+
+        //Texture stuff
         studentCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 		maskCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 
@@ -179,6 +218,48 @@ public class NewPaint : MonoBehaviour
 
         gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
 		maskRenderer.material.mainTexture = maskCanvas;
+
+        //UI stuff
+
+		// UI field code
+		rSlider = GameObject.Find("RedSlider").GetComponent<Slider>();
+		gSlider = GameObject.Find("GreenSlider").GetComponent<Slider>();
+		bSlider = GameObject.Find("BlueSlider").GetComponent<Slider>();
+		//aField = GameObject.Find("AlphaInputField").GetComponent<InputField>();
+
+		rInput = GameObject.Find("RedInputField").GetComponent<InputField>();
+		gInput = GameObject.Find("GreenInputField").GetComponent<InputField>();
+		bInput = GameObject.Find("BlueInputField").GetComponent<InputField>();
+
+		//slField = GameObject.Find("SaveField").GetComponent<InputField>();
+		textField = GameObject.Find("TextInput").GetComponent<InputField>();
+		brushSizeInput = GameObject.Find("SizeInputField").GetComponent<InputField>();
+		brushSizeSlider = GameObject.Find("BrushSizeSlider").GetComponent<Slider>();
+
+		textSizeDrop = GameObject.Find("TextSizeDropdown").GetComponent<Dropdown>();
+
+        // Adding Listeners to all relevant objects.
+
+		textSizeDrop.onValueChanged.AddListener(ChangeTextSize);
+
+		rSlider.onValueChanged.AddListener(delegate { ChangeRed(rSlider.value); });
+		gSlider.onValueChanged.AddListener(delegate { ChangeGreen(gSlider.value); });
+		bSlider.onValueChanged.AddListener(delegate { ChangeBlue(bSlider.value); });
+		//aField.onEndEdit.AddListener(ChangeAlpha);
+
+		rInput.onEndEdit.AddListener(ChangeRed);
+		gInput.onEndEdit.AddListener(ChangeGreen);
+		bInput.onEndEdit.AddListener(ChangeBlue);
+
+		//slField.onEndEdit.AddListener(SaveOrLoadToPNG);
+		//slField.onValueChanged.AddListener(ChangeToWhite);
+		textField.onEndEdit.AddListener(SetTextOnType);
+		brushSizeInput.onEndEdit.AddListener(SetBrushSize);
+		brushSizeSlider.onValueChanged.AddListener(delegate { SetBrushSize(brushSizeSlider.value); });
+
+
+        
+
         StartCoroutine(UpdateCanvas());
     }
 
@@ -412,6 +493,200 @@ public class NewPaint : MonoBehaviour
     {
 
     }
+
+    //Methods for UI stuff
+    public void ChangeToWhite(string s)
+	{
+		GameObject.Find("SaveField").GetComponent<Image>().color = Color.white;
+	}
+    public void SetErase(bool erase)
+	{
+		eraseMode = erase;
+		if (eraseMode == true)
+		{
+			textMode = false;
+			lineMode = false;
+
+			textTog.isOn = false;
+			lineTog.isOn = false;
+
+			GameObject.Find("TextInput").GetComponent<InputField>().interactable = false;
+		}
+	}
+    public void SetText(bool text)
+	{
+		textMode = text;
+		if (textMode == true)
+		{
+			// Turning Modes off 
+			eraseMode = false;
+			lineMode = false;
+
+			// Turning toggles off
+			lineTog.isOn = false;
+			eraseTog.isOn = false;
+
+			GameObject.Find("TextInput").GetComponent<InputField>().interactable = true;
+			//GameObject.Find("SaveField").GetComponent<InputField>().interactable = false;
+
+			canLoad = false;
+			canSave = false;
+		}
+		else
+		{
+			GameObject.Find("TextInput").GetComponent<InputField>().interactable = false;
+		}
+	}
+    public void SetLine(bool line)
+	{
+		lineMode = line;
+		if (line)
+		{
+			// Properly set the apprioate modes
+			eraseMode = false;
+			textMode = false;
+
+			// Set other toggles to off
+			textTog.isOn = false;
+			eraseTog.isOn = false;
+		}
+	}
+
+    public void SetTextOnType(string output)
+	{
+		textOnType = output;
+	}
+	public void SetBrushSize(string size)
+	{
+		int.TryParse(size, out brushSize);
+		brushSizeSlider.value = brushSize;
+	}
+
+	public void SetBrushSize(float size)
+	{
+		brushSize = (int)size;
+	}
+
+	public void ChangeRed(string r)
+	{
+		float red;
+		float.TryParse(r, out red);
+		brushColor = new Color(red, brushColor.g, brushColor.b, brushColor.a);
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+
+		rSlider.value = red;
+	}
+
+	public void ChangeRed(float r)
+	{
+		//float red;
+		//float.TryParse(r, out red);
+		brushColor = new Color(r, brushColor.g, brushColor.b, brushColor.a);
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+	}
+
+	public void ChangeGreen(string g)
+	{
+		float green;
+		float.TryParse(g, out green);
+		brushColor = new Color(brushColor.r, green, brushColor.b, brushColor.a);
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+
+		gSlider.value = green;
+	}
+
+	public void ChangeGreen(float g)
+	{
+		//float green;
+		//float.TryParse(g, out green);
+		brushColor = new Color(brushColor.r, g, brushColor.b, brushColor.a);
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+	}
+
+	public void ChangeBlue(string b)
+	{
+		float blue;
+		float.TryParse(b, out blue);
+		brushColor = new Color(brushColor.b, brushColor.g, blue, brushColor.a);
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+
+		bSlider.value = blue;
+	}
+
+	public void ChangeBlue(float b)
+	{
+		//float blue;
+		//float.TryParse(b, out blue);
+		brushColor = new Color(brushColor.r, brushColor.g, b, brushColor.a);
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+	}
+	public void ChangeAlpha(string a)
+	{
+		float alpha;
+		float.TryParse(a, out alpha);
+		brushColor = new Color(brushColor.r, brushColor.g, brushColor.b, alpha);
+		GameObject brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+	}
+    /*DetermineCharacter
+	* Description: converts the character value (bascially an int)
+	* to where it is in the alphabet.png or alphabet2.png. Due to functionality
+	* issues with some of the ascii values (NUL, carriage return, etc.) 
+	* the alphabet.png and alphabet2.png do not follow ascii and if changed
+	* must reflect in this function.
+	* Parameter: char c, which character to pull from the alphabet.
+	* Return: int, modified spot in ascii inside of the png. -1 is a 
+	* character that does not currently exist in the png.
+	*/
+	int DetermineCharacter(char c)
+	{
+		int modifiedVal = -1;
+		if (c >= 97 && c < 123)
+		{
+			modifiedVal = c - 97;
+		}
+		else if (c >= 48 && c < 58)
+		{
+			modifiedVal = c - 48 + 26;
+		}
+		else if (c >= 32 && c < 48)
+		{
+			modifiedVal = c + 30;
+		}
+		else if (c >= 65 && c < 91)
+		{
+			modifiedVal = c - 29;
+		}
+		else if (c >= 58 && c < 65)
+		{
+			modifiedVal = c + 20;
+		}
+		return modifiedVal;
+	}
+	public void ChangeTextSize(int option)
+	{
+		if (option == 0)
+		{
+			textWidth = 7;
+			textHeight = 14;
+			alphabetUsed = alphabet;
+		}
+		else if (option == 1)
+		{
+			textWidth = 12;
+			textHeight = 28;
+			alphabetUsed = alphabet2;
+		}
+	}
+
+
+    //Methods for sending/receiving input
     void SendInput(InputInformation i)
     {
         var fArray = ConstructFloatsFromInput(i);
@@ -479,6 +754,7 @@ public class NewPaint : MonoBehaviour
         return inputInfoNew;
 
     }
+    
 
     List<float> stringToFloats(string toConvert) {
         var floats = new List<float>();
