@@ -19,18 +19,24 @@ public class PaintOnCanvas : MonoBehaviour
 {
 	//For getting the input information of other peers instead of sending over a texture
 	//IEquatable and IComparable sutff borrowed from https://stackoverflow.com/questions/59031994/how-to-implement-icomparabletime-in-my-struct
-	struct InputInformation : IEquatable<InputInformation>, IComparable<InputInformation>
+	struct InputInformation //: IEquatable<InputInformation>, IComparable<InputInformation>
 	{
-		int peerID;
-		Vector2 ClickLocation;
+		//public int peerID;
+		public Vector2 canvasClick;
 
-		bool mouseDown;
-		bool previousMouseDown;
-		Vector2 previousMousePosition;
+		public bool mouseDown;
+		public bool previousMouseDown;
+		public Vector2 previousCanvasClick;
 
-		Color32 brushColor;
-		int brushSize;
-		
+		public Color32 brushColor;
+		public int brushSize;
+
+		public bool eraseMode;
+		public bool textMode;
+		public bool lineMode;
+
+		public string textInput;
+		/*
 		public override bool Equals(object other)
         {
 			if (other == null || this.GetType() != other.GetType()) 
@@ -64,6 +70,7 @@ public class PaintOnCanvas : MonoBehaviour
 
             // Code that compares two variables
         }
+		*/
 		
 	}
 	//gotten from https://visualstudiomagazine.com/Articles/2012/11/01/Priority-Queues-with-C.aspx?Page=1
@@ -129,7 +136,7 @@ public class PaintOnCanvas : MonoBehaviour
 			return frontItem;
 		}
 	}
-	PriorityQueue<InputInformation> myPriorityQueue;
+	Queue<InputInformation> myQueue;
 
 	//the canvas of the students
 	Texture2D studentCanvas;
@@ -240,7 +247,8 @@ public class PaintOnCanvas : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
-		myPriorityQueue = new PriorityQueue<InputInformation>();
+		//myQueue = new Queue<InputInformation>();
+		
 		// Allows students to resubmit work
 		handler = GameObject.Find("Resubmission").GetComponent<ResubmissionHandler>();
 
@@ -410,7 +418,11 @@ public class PaintOnCanvas : MonoBehaviour
 		}
 	}
 
+	
+
+	
 	// Update is called once per frame
+
 	void Update()
 	{
 		// Makes sure that the paint brush mask is not applied every frame
@@ -498,10 +510,17 @@ public class PaintOnCanvas : MonoBehaviour
 				{
 					Vector2 uv = raycastHit.textureCoord;
 					
-					//converts raycastHit point into a UV coordinate
-					//Vector2 uv = new Vector2((raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
-					//(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
 					Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+					InputInformation inputInfo;
+					
+					inputInfo.canvasClick = pixelCoord;
+					inputInfo.textMode = this.textMode;
+					inputInfo.eraseMode = this.eraseMode;
+					inputInfo.lineMode = this.lineMode;
+					inputInfo.previousCanvasClick = this.previousCoord;
+					inputInfo.previousMouseDown = this.previousMouseDown;
+
 					dirPath = Application.dataPath;
 
 					//If the mouse wasn't down, don't interpolate
