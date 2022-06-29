@@ -86,6 +86,7 @@ public class GameManager : MonoBehaviour {
         }
 
         StartCoroutine(AlignBoothNames());
+        gameObject.AddComponent<AudioManager>();
     }
 
     private IEnumerator SendGhostIDs() {
