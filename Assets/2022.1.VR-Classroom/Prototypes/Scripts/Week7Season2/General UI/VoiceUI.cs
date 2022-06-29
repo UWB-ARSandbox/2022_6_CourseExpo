@@ -15,6 +15,11 @@ public class VoiceUI : MonoBehaviour
     public Toggle MuteSelf;
     public Slider MicrophoneSensitivity;
 
+    public InputField HostName;
+    public InputField Password;
+
+    public Button ConnectUsers;
+
     Mumble.MumbleMicrophone UserMicrophone;
     MumbleActor myMumble;
     AudioManager _AudioManager;
@@ -136,4 +141,6 @@ public class VoiceUI : MonoBehaviour
         Cursor.lockState = CursorLockMode.Locked;
         Cursor.visible = false;
     }
+
+
 }

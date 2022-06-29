@@ -37,6 +37,7 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+
         // if(Input.GetKeyDown(KeyCode.I)){
         //     ReconnectVoIP();
         // }
@@ -81,7 +82,8 @@ public class AudioManager : MonoBehaviour
             mumble.ConnectionEstablished -= startChannelCreation;
         }
     }
-                    //connecting VoIP Prefabs to ghostplayer
+    //connecting VoIP Prefabs to ghostplayers
+    //Note your individual ghostplayer will not have a prefab attached to it
     public void AttachAudio(){
         if(!AudioAttached){
             Debug.Log("Attempting to Attach AudioOutputs to Ghosts");
@@ -92,12 +94,15 @@ public class AudioManager : MonoBehaviour
                 
                 if(Ghosts_AudioPlayer != null){
                     Debug.Log("Successfully Found AudioPlayer for: "+ i.worldspaceUsername.transform.parent.name);
-                    Ghosts_AudioPlayer.transform.parent = i.gameObject.transform;  
+                    Ghosts_AudioPlayer.transform.parent = i.gameObject.transform;
+                    Ghosts_AudioPlayer.transform.position = i.gameObject.transform.position;
                 }
                 else{
                     Debug.Log("Failed to find AudioPlayer for: " + i.worldspaceUsername.transform.parent.name);
                 }
             }
+            //Attach your ghost prefab to yourself
+            GameObject.Find(Username + "_MumbleAudioPlayer").transform.parent = my_Controller.gameObject.transform;
             AudioAttached = true;
         }
         else
@@ -112,10 +117,10 @@ public class AudioManager : MonoBehaviour
         previousChannel = _mumbleClient.GetCurrentChannel();
         if(!_mumbleClient.GetCurrentChannel().Equals(RoomName)){
             _mumbleClient.JoinChannel(RoomName);
-            Debug.Log("User Moved to: " +RoomName);
+            Debug.Log(Username+ " Moved to: " +RoomName);
         }
         else
-            Debug.Log("User is already in :" + RoomName);
+            Debug.Log(Username+ " is already in :" + RoomName);
     }
     //Return user to previous channel in mumble server
     //Function should be called after the user is moved to a private room with the teacher following the help function
@@ -133,8 +138,7 @@ public class AudioManager : MonoBehaviour
     }
     //Teacher Functionality
     //SuperUser cannot talk so we want to instantiate the super user, then create required channels and disconnect the super user
-    //Teacher should connect as well so the teacher should have two instances of mumble active.
-    //SuperUser instance needs to be deafened
+    //and connect the teacher
     public void SetAdmin(){
         mumble.Username = "SuperUser";
         mumble.Password = "Admin";
@@ -183,18 +187,19 @@ public class AudioManager : MonoBehaviour
             foreach(string s in ChannelList){
                 Debug.Log(s);
                 CreateChannel(s,10);
-                yield return new WaitForSeconds(.66f);
+                yield return new WaitForSeconds(.8f);
                 if(_mumbleClient.IsChannelAvailable(s))
                     Debug.Log("Channel Created successfully for: "+s);
                 else
                     Debug.LogError("Failed to create channel for booth: " +s);
-                yield return new WaitForSeconds(.55f);
+                yield return new WaitForSeconds(.6f);
             }
             CreateChannel("Private",2);
             yield return new WaitForSeconds(1f);
             mumble.ConnectionEstablished -= startChannelCreation;
             yield return new WaitForSeconds(2f);
             ReconnectVoIP();
+            yield return new WaitForSeconds(2f);
         }
         AttachAudio();
     }

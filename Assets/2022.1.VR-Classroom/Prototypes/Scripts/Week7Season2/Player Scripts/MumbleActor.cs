@@ -26,7 +26,7 @@ public class MumbleActor : MonoBehaviour {
 
     private MumbleClient _mumbleClient;
     public bool ConnectAsyncronously = true;
-    public bool SendPosition = false;
+    public bool SendPosition = true;
     public string HostName = "1.2.3.4";
     public int Port = 64738;
     public string Username = "ExampleUser";
@@ -60,7 +60,7 @@ public class MumbleActor : MonoBehaviour {
         _mumbleClient = new MumbleClient(HostName, Port, CreateMumbleAudioPlayerFromPrefab,
             DestroyMumbleAudioPlayer, OnOtherUserStateChange, ConnectAsyncronously,
             SpeakerCreationMode.ALL, DebuggingVariables, posLength);
-
+        Debug.Log("posLength: " + posLength);
         if (DebuggingVariables.UseRandomUsername)
             Username += UnityEngine.Random.Range(0, 100f);
 
@@ -124,8 +124,10 @@ public class MumbleActor : MonoBehaviour {
         if(MyMumbleMic != null && (!GameManager.AmTeacher || GameObject.Find("GameManager").GetComponent<AudioManager>().AdminFlag))
         {
             _mumbleClient.AddMumbleMic(MyMumbleMic);
-            if (SendPosition)
+            if (SendPosition){
                 MyMumbleMic.SetPositionalDataFunction(WritePositionalData);
+                Debug.Log("Sending Positional Data to Microphone Script");
+            }
             MyMumbleMic.OnMicDisconnect += OnMicDisconnected;
             MyMumbleMic.StartSendingAudio(_mumbleClient.EncoderSampleRate);
         }
