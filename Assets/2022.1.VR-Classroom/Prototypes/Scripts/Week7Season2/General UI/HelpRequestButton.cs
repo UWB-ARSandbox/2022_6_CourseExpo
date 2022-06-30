@@ -29,7 +29,7 @@ public class HelpRequestButton : MonoBehaviour
     public void TeleportToStudent()
     {
         if(id != 1){
-            GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
+            
             Player.transform.GetComponent<CharacterController>().enabled = false;
             Player.transform.position = GameObject.Find(username).transform.position + (Vector3.up);
             Player.transform.GetComponent<CharacterController>().enabled = true;
@@ -41,6 +41,7 @@ public class HelpRequestButton : MonoBehaviour
             }
             transform.parent.parent.parent.GetComponent<HelpRequestedUI>().ReenableButton(id);
             transform.parent.parent.parent.GetComponent<HelpRequestedUI>().SpawnHelpFinishedButton();
+            GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
             Destroy(gameObject);
         }
         else{
