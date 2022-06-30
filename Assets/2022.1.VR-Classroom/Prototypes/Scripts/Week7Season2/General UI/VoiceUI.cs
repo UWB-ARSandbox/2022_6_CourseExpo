@@ -40,6 +40,7 @@ public class VoiceUI : MonoBehaviour
     }
     void Start()
     {
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         // Get list of Microphone devices and print the names to the log
@@ -58,6 +59,13 @@ public class VoiceUI : MonoBehaviour
         MicrophoneSensitivity.value = UserMicrophone.MinAmplitude;
         UpdatePushToTalkText();
         MuteSelf.isOn = myMumble.getClient().IsSelfMuted();
+        HideConnectionPanel();
+        if(!GameManager.AmTeacher){
+            HostName.interactable = false;
+            Password.interactable = false;
+        }
+        Password.text = _AudioManager.Password;
+        HostName.text = _AudioManager.HostName;
     }
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){
