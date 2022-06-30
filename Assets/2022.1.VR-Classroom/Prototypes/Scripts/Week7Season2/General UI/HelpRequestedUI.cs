@@ -52,16 +52,19 @@ public class HelpRequestedUI : MonoBehaviour
         if(HelpingFinishedButton != null){
             Destroy(HelpingFinishedButton);
         }
-        CurrentlyHelping = false;
         id[0] = CurrentlyHelping_id;
         id[1] = 102;
-        CurrentlyHelping_id = -1;
         m_ASLObject.SendAndSetClaim(() => {
             m_ASLObject.SendFloatArray(id);
         });
+        CurrentlyHelping = false;
+        CurrentlyHelping_id = -1;
     }
     public void SpawnHelpFinishedButton(){
-        GameObject HelpingFinishedButton = Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+        if(HelpingFinishedButton != null){
+            Destroy(HelpingFinishedButton);
+        }
+        HelpingFinishedButton = Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as GameObject;
         HelpingFinishedButton.GetComponent<HelpRequestButton>().username = GameManager.players[(int)CurrentlyHelping_id];
         HelpingFinishedButton.GetComponent<HelpRequestButton>().id = GameManager.MyID;
         HelpingFinishedButton.transform.parent = scrollPanel.transform;

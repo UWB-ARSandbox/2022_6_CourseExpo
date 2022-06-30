@@ -223,6 +223,7 @@ public class MumbleActor : MonoBehaviour {
             //_mumbleClient.OnDisconnected();
             MyMumbleMic.StopSendingAudio();
             _mumbleClient.Close();
+            _mumbleClient = null;
 
             //cleanup operation
             MumbleAudioPlayer[] ObjectsToDestroy = (MumbleAudioPlayer[])GameObject.FindObjectsOfType(typeof(MumbleAudioPlayer));

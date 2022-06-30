@@ -30,6 +30,7 @@ public class AudioManager : MonoBehaviour
     public bool AdminFlag = false;
     private string previousChannel;
     public void SetController(PlayerController cont){my_Controller = cont;}
+    bool RunOnce = false;
     
     private void Awake() {
         if(PrefabTeacherVoiceUI == null){
@@ -46,9 +47,8 @@ public class AudioManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-
         // if(Input.GetKeyDown(KeyCode.I)){
-        //     ReconnectVoIP();
+        //     moveChannel("Private");
         // }
         // if(Input.GetKeyDown(KeyCode.V)){
         //     AttachAudio();
@@ -170,10 +170,15 @@ public class AudioManager : MonoBehaviour
     /*
     Create channel by providing desired RoomName and desired Size
     */
-    public void ReconnectVoIP(){
+    IEnumerator ReconnectVoIP(){
         mumble.Disconnect();
+        yield return new WaitForSeconds(2f);
+        _mumbleClient = null;
+        mumble.ConnectionEstablished -= startChannelCreation;
         my_Controller.CreateMumbleObject();
+        yield return new WaitForSeconds(2f);
     }
+
     public void ChannelToBeCreated(string channelName){
         if(channelName.Contains("Quiz") || channelName.Contains("Test"))
             ChannelList.Add(channelName);
@@ -206,25 +211,28 @@ public class AudioManager : MonoBehaviour
         return _mumbleClient.IsChannelAvailable(RoomName);
     }
     IEnumerator CreateChannels(){
-        if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
-            foreach(string s in ChannelList){
-                Debug.Log(s);
-                CreateChannel(s,10);
-                yield return new WaitForSeconds(.8f);
-                if(_mumbleClient.IsChannelAvailable(s))
-                    Debug.Log("Channel Created successfully for: "+s);
-                else
-                    Debug.LogError("Failed to create channel for booth: " +s);
-                yield return new WaitForSeconds(.6f);
+        if(!RunOnce){
+            RunOnce = true;
+            if(GameManager.AmTeacher && AdminFlag && !AudioAttached){
+                foreach(string s in ChannelList){
+                    Debug.Log(s);
+                    CreateChannel(s,10);
+                    yield return new WaitForSeconds(.8f);
+                    if(_mumbleClient.IsChannelAvailable(s))
+                        Debug.Log("Channel Created successfully for: "+s);
+                    else
+                        Debug.LogError("Failed to create channel for booth: " +s);
+                    yield return new WaitForSeconds(.6f);
+                }
+                CreateChannel("Private",2);
+                yield return new WaitForSeconds(1f);
+                mumble.ConnectionEstablished -= startChannelCreation;
+                yield return new WaitForSeconds(2f);
+                StartCoroutine(ReconnectVoIP());
+                yield return new WaitForSeconds(6f);
             }
-            CreateChannel("Private",2);
-            yield return new WaitForSeconds(1f);
-            mumble.ConnectionEstablished -= startChannelCreation;
-            yield return new WaitForSeconds(2f);
-            ReconnectVoIP();
-            yield return new WaitForSeconds(2f);
+            AttachAudio();
         }
-        AttachAudio();
     }
 
 }
