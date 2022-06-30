@@ -10,6 +10,7 @@ public class VoiceUI : MonoBehaviour
     public GameObject MicrophonePanel;
     public GameObject VoiceConnectionPanel;
 
+    public Button VoiceConnectionSettings;
     public Button User_PTTalkBind;
     public Text PushToTalkText;
     public Toggle MuteSelf;
@@ -63,9 +64,13 @@ public class VoiceUI : MonoBehaviour
         if(!GameManager.AmTeacher){
             HostName.interactable = false;
             Password.interactable = false;
+            VoiceConnectionSettings.enabled = false;
         }
         Password.text = _AudioManager.Password;
         HostName.text = _AudioManager.HostName;
+        if(_AudioManager.VoiceChatEnabled){
+            ConnectUsers.enabled = false;
+        }
     }
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){
@@ -140,7 +145,11 @@ public class VoiceUI : MonoBehaviour
         VoiceConnectionPanel.SetActive(false);
         MicrophonePanel.SetActive(true);
     }
-
+    public void EnableVoiceChat(){
+        _AudioManager.SetConnectionInfo(HostName.text,Password.text);
+        _AudioManager.EnableVoiceChat();
+        ConnectUsers.enabled = false;
+    }
     public void Destroy(){
         Destroy(gameObject);
     }

@@ -1,6 +1,7 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using ASL;
 
 public class AudioManager : MonoBehaviour
 {
@@ -15,6 +16,8 @@ public class AudioManager : MonoBehaviour
     public bool VoiceChatEnabled = false;
 
     private bool VoiceUIEnabled = false;
+
+    public ASLObject ASL_GameManager;
 
     private string Username;
     public string HostName;
@@ -37,6 +40,7 @@ public class AudioManager : MonoBehaviour
             //debug line until Teacher voiceChat enable is in
             VoiceChatEnabled = true;
         }
+        ASL_GameManager = gameObject.GetComponent<ASLObject>();
     }
     // Start is called before the first frame update
     void Start()
@@ -71,16 +75,26 @@ public class AudioManager : MonoBehaviour
                 VoiceUI.GetComponent<VoiceUI>().Destroy();
         }
     }
+
     public void EnableVoiceChat(){
-        VoiceChatEnabled = true;
+        my_Controller.CreateMumbleObject();
+        //Need to trigger a cascade across all clients to  
+        //enable voice chat and send connection info
+
+    }
+    public void RecieveConnectionInfo(string H, string P){
+        HostName = H;
+        Password = P;
         my_Controller.CreateMumbleObject();
     }
+
     public void setVoiceUIEnabled(){
         VoiceUIEnabled = !VoiceUIEnabled;
     }
     //called by the mumble actor to setup the actor and the Audio Manager.
     public void Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
         mumble = mum;
+        //current Debugging variables taken from mumble.Hostname and mumble.Password
         HostName = mumble.HostName;
         Password = mumble.Password;
         mumbleMic = mumMic;
@@ -97,12 +111,17 @@ public class AudioManager : MonoBehaviour
         }
     }
     public void startChannelCreation(){
+        VoiceChatEnabled = true;
         if(GameManager.AmTeacher && AdminFlag && !AudioAttached)
             StartCoroutine(CreateChannels());
         else{
             AttachAudio();
             mumble.ConnectionEstablished -= startChannelCreation;
         }
+    }
+    public void SetConnectionInfo(string hostname, string password){
+        HostName = hostname;
+        Password = password;
     }
     //Audio Attachment happens on prefab creation time instead of a script
     //connecting VoIP Prefabs to ghostplayers
