@@ -9,8 +9,10 @@ public class AudioManager : MonoBehaviour
     //prefab
     public GameObject PrefabVoIP_UI;
 
-    public GameObject PrefabTeacherAudioUI;
+    public GameObject PrefabTeacherVoiceUI;
     public PlayerController my_Controller;
+    
+    public bool VoiceChatEnabled = false;
 
     private bool VoiceUIEnabled = false;
 
@@ -28,6 +30,13 @@ public class AudioManager : MonoBehaviour
     public bool AdminFlag = false;
     private string previousChannel;
     public void SetController(PlayerController cont){my_Controller = cont;}
+    
+    private void Awake() {
+        if(PrefabTeacherVoiceUI == null){
+            //debug line until Teacher voiceChat enable is in
+            VoiceChatEnabled = true;
+        }
+    }
     // Start is called before the first frame update
     void Start()
     {        
@@ -46,14 +55,24 @@ public class AudioManager : MonoBehaviour
         // }
         if(Input.GetKeyDown(KeyCode.V)){          
             if(VoiceUI == null && !VoiceUIEnabled){
-                VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
-                VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
-                VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
-                setVoiceUIEnabled();
+                if(VoiceChatEnabled){
+                    VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
+                    VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
+                    VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
+                    setVoiceUIEnabled();
+                }
+                if(GameManager.AmTeacher && !VoiceChatEnabled){
+                    VoiceUI = GameObject.Instantiate(PrefabTeacherVoiceUI);
+                    setVoiceUIEnabled();
+                }
             }
             else
                 VoiceUI.GetComponent<VoiceUI>().Destroy();
         }
+    }
+    public void EnableVoiceChat(){
+        VoiceChatEnabled = true;
+        my_Controller.CreateMumbleObject();
     }
     public void setVoiceUIEnabled(){
         VoiceUIEnabled = !VoiceUIEnabled;
@@ -112,25 +131,29 @@ public class AudioManager : MonoBehaviour
     //maybe subscribe to C# actions so when Action X happens user is moved
     //default room is always "root"
     public void moveChannel(string RoomName){
-        if(_mumbleClient == null)
-            _mumbleClient = mumble.getClient();
-        previousChannel = _mumbleClient.GetCurrentChannel();
-        if(!_mumbleClient.GetCurrentChannel().Equals(RoomName)){
-            _mumbleClient.JoinChannel(RoomName);
-            Debug.Log(Username+ " Moved to: " +RoomName);
+        if(VoiceChatEnabled){
+            if(_mumbleClient == null)
+                _mumbleClient = mumble.getClient();
+            previousChannel = _mumbleClient.GetCurrentChannel();
+            if(!_mumbleClient.GetCurrentChannel().Equals(RoomName)){
+                _mumbleClient.JoinChannel(RoomName);
+                Debug.Log(Username+ " Moved to: " +RoomName);
+            }
+            else
+                Debug.Log(Username+ " is already in :" + RoomName);
         }
-        else
-            Debug.Log(Username+ " is already in :" + RoomName);
     }
     //Return user to previous channel in mumble server
     //Function should be called after the user is moved to a private room with the teacher following the help function
     public void ReturnToPreviousChannel(){
-        if(_mumbleClient == null)
-            _mumbleClient = mumble.getClient();
-        if(!_mumbleClient.GetCurrentChannel().Equals(previousChannel))
-            _mumbleClient.JoinChannel(previousChannel);
-        else
-            Debug.Log("User is already in :" + previousChannel);
+        if(VoiceChatEnabled){
+            if(_mumbleClient == null)
+                _mumbleClient = mumble.getClient();
+            if(!_mumbleClient.GetCurrentChannel().Equals(previousChannel))
+                _mumbleClient.JoinChannel(previousChannel);
+            else
+                Debug.Log("User is already in :" + previousChannel);
+        }
     }
 
     public bool GetAdminFlag(){

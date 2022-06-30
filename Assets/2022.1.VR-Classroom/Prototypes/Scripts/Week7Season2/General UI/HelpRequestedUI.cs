@@ -13,6 +13,11 @@ public class HelpRequestedUI : MonoBehaviour
     float[] id = new float[2];
     GameObject requestHelpButton;
 
+    public bool CurrentlyHelping = false;
+    public float CurrentlyHelping_id = -1;
+    //public GameObject HelpingFinishedPrefab;
+    GameObject HelpingFinishedButton;
+
     void Start()
     {
         requestHelpButton = GameObject.Find("RequestHelpButton");
@@ -33,20 +38,45 @@ public class HelpRequestedUI : MonoBehaviour
     }
 
     public void ReenableButton(float _id) {
+        CurrentlyHelping = true;
+        CurrentlyHelping_id = _id;
         id[0] = _id;
         id[1] = 101;
         m_ASLObject.SendAndSetClaim(() => {
             m_ASLObject.SendFloatArray(id);
         });
-        GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
+    }
+    //call the HelpFinished function when the teacher clicks the done helping button-> should return the user being helped and the teacher to their previous channels
+    public void HelpFinished(){
+        GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
+        if(HelpingFinishedButton != null){
+            Destroy(HelpingFinishedButton);
+        }
+        CurrentlyHelping = false;
+        id[0] = CurrentlyHelping_id;
+        id[1] = 102;
+        CurrentlyHelping_id = -1;
+        m_ASLObject.SendAndSetClaim(() => {
+            m_ASLObject.SendFloatArray(id);
+        });
+    }
+    public void SpawnHelpFinishedButton(){
+        GameObject HelpingFinishedButton = Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+        HelpingFinishedButton.GetComponent<HelpRequestButton>().username = GameManager.players[(int)CurrentlyHelping_id];
+        HelpingFinishedButton.GetComponent<HelpRequestButton>().id = GameManager.MyID;
+        HelpingFinishedButton.transform.parent = scrollPanel.transform;
+        HelpingFinishedButton.transform.localScale = new Vector3(1, 1, 1);
     }
 
     void FloatReceive(string _id, float[] _f)
     {
         if ((int)_f[1] == 101 && !GameManager.AmTeacher)
         {
-            if ((int)_f[0] == GameManager.MyID)
+            if ((int)_f[0] == GameManager.MyID){
                 requestHelpButton.GetComponent<Button>().enabled = true;
+                //move user to private voice channel when teacher teleports to them
+                GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
+            }
         }
         else if ((int)_f[1] == 100 && GameManager.AmTeacher)
         {
@@ -57,5 +87,11 @@ public class HelpRequestedUI : MonoBehaviour
             newButton.transform.parent = scrollPanel.transform;
             newButton.transform.localScale = new Vector3(1, 1, 1);
         }
+        else if((int)_f[1] == 102 && !GameManager.AmTeacher){
+        //Move User back to their original channel
+            if ((int)_f[0] == GameManager.MyID)
+               GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
+        }
+        
     }
 }

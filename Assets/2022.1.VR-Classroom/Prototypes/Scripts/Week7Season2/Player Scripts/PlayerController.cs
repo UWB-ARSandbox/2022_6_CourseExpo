@@ -207,7 +207,8 @@ public class PlayerController : MonoBehaviour {
 
         //VoIP Controller        
         _AudioManager.SetController(this); 
-        CreateMumbleObject();
+        if(_AudioManager.VoiceChatEnabled)
+            CreateMumbleObject();
     }
     public void CreateMumbleObject(){
             GameObject mumble = (GameObject)Instantiate(MumblePreFab, this.transform.position, Quaternion.identity, gameObject.transform);
