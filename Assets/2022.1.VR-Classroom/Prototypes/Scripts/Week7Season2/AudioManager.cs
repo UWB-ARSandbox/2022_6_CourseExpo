@@ -40,8 +40,9 @@ public class AudioManager : MonoBehaviour
     }
     // Start is called before the first frame update
     void Start()
-    {        
+    {
         PrefabVoIP_UI = (GameObject)Resources.Load("MyPrefabs/VoIP_UI");
+        Username = GameManager.players[GameManager.MyID];
     }
 
     // Update is called once per frame
@@ -104,7 +105,6 @@ public class AudioManager : MonoBehaviour
     //connecting VoIP Prefabs to ghostplayers
     //Note your individual ghostplayer will not have a prefab attached to it
     public void AttachAudio(){
-        if(!AudioAttached){
             Debug.Log("Attempting to Attach AudioOutputs to Ghosts");
             GhostPlayer[] GhostPlayers = (GhostPlayer[])GameObject.FindObjectsOfType(typeof(GhostPlayer));
             foreach(GhostPlayer i in GhostPlayers){
@@ -119,13 +119,24 @@ public class AudioManager : MonoBehaviour
                 else{
                     Debug.Log("Failed to find AudioPlayer for: " + i.worldspaceUsername.transform.parent.name);
                 }
-            }
             //Attach your ghost prefab to yourself
             GameObject.Find(Username + "_MumbleAudioPlayer").transform.parent = my_Controller.gameObject.transform;
             AudioAttached = true;
         }
-        else
-            Debug.Log("Audio already attached to ghosts");
+    }
+    public void AttachIndividualAudio(GameObject audioPlayer){
+        if(audioPlayer.name == (Username + "_MumbleAudioPlayer")){
+            audioPlayer.transform.SetParent(my_Controller.gameObject.transform);
+        }
+        else{
+            string temp = audioPlayer.name;
+            string target = temp.Substring(0, audioPlayer.name.Length - "_MumbleAudioPlayer".Length);
+            GameObject targetObj = GameObject.Find(target);
+            if(targetObj != null)
+                audioPlayer.transform.SetParent(targetObj.transform);
+            else
+                Debug.Log("Failed to find target Object");
+        }
     }
     //Call the moveChannel function when user is in desired area and needs to move VoIP channels
     //maybe subscribe to C# actions so when Action X happens user is moved
