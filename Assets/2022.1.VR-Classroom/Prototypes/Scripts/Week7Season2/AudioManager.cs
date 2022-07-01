@@ -36,10 +36,10 @@ public class AudioManager : MonoBehaviour
     bool RunOnce = false;
     
     private void Awake() {
-        if(PrefabTeacherVoiceUI == null){
-            //debug line until Teacher voiceChat enable is in
-            VoiceChatEnabled = true;
-        }
+        // if(PrefabTeacherVoiceUI == null){
+        //     //debug line until Teacher voiceChat enable is in
+        //     VoiceChatEnabled = true;
+        // }
         ASL_GameManager = gameObject.GetComponent<ASLObject>();
     }
     // Start is called before the first frame update
@@ -60,7 +60,7 @@ public class AudioManager : MonoBehaviour
         // }
         if(Input.GetKeyDown(KeyCode.V)){          
             if(VoiceUI == null && !VoiceUIEnabled){
-                if(VoiceChatEnabled){
+                if(VoiceChatEnabled || GameManager.AmTeacher){
                     VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
                     VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
                     VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
@@ -82,10 +82,24 @@ public class AudioManager : MonoBehaviour
         //enable voice chat and send connection info
 
     }
-    public void RecieveConnectionInfo(string H, string P){
+
+    public void RecieveConnectionInfo_FromGamemanager(float[] _f){
+        //Get length of string
+        Debug.Log("Password and HostName Recieved");
+        int length = (int)_f[1];
+        string announcementText = "";
+        for (int i = 2; i <= length + 1; i++) {
+            announcementText += (char)(int)_f[i];
+        }
+        string[] temp = announcementText.Split(':');        
+        string H = temp[0];
+        string P = temp[1];
+        Debug.Log("Password Set to: " +P);
+        Debug.Log("HostName Set to: " +H);
         HostName = H;
         Password = P;
         my_Controller.CreateMumbleObject();
+
     }
 
     public void setVoiceUIEnabled(){
@@ -95,15 +109,19 @@ public class AudioManager : MonoBehaviour
     public void Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
         mumble = mum;
         //current Debugging variables taken from mumble.Hostname and mumble.Password
-        HostName = mumble.HostName;
-        Password = mumble.Password;
+
         mumbleMic = mumMic;
         mumble.ConnectionEstablished += startChannelCreation;
         if(!GameManager.AmTeacher || AdminFlag){
             Username = GameManager.players[GameManager.MyID];
             mumble.Username = Username;
             if(HostName != null && Password != null){
-
+                mumble.HostName = HostName;
+                mumble.Password = Password;
+            }
+            else{
+                HostName = mumble.HostName;
+                Password = mumble.Password;
             }
         }
         else{
@@ -122,6 +140,7 @@ public class AudioManager : MonoBehaviour
     public void SetConnectionInfo(string hostname, string password){
         HostName = hostname;
         Password = password;
+        GameManager.SendEnableMessage(hostname + ":" + password);
     }
     //Audio Attachment happens on prefab creation time instead of a script
     //connecting VoIP Prefabs to ghostplayers

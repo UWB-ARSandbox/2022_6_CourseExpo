@@ -131,8 +131,10 @@ public class MumbleActor : MonoBehaviour {
             MyMumbleMic.OnMicDisconnect += OnMicDisconnected;
             MyMumbleMic.StartSendingAudio(_mumbleClient.EncoderSampleRate);
         }
-        if (ConnectionEstablished != null)
+        if (ConnectionEstablished != null){
+            GameObject.Find("GameManager").GetComponent<AudioManager>().VoiceChatEnabled = true;
             ConnectionEstablished();
+        }
     }
     public event System.Action ConnectionEstablished;
 

@@ -50,16 +50,20 @@ public class VoiceUI : MonoBehaviour
             Debug.Log("Name: " + device);
             PopulateMicrophoneDropDown();
         }
-        switch(UserMicrophone.GetMicType()){
-            case Mumble.MumbleMicrophone.MicType.AlwaysSend:{User_MicType.value = 0;break;}
-            case Mumble.MumbleMicrophone.MicType.Amplitude:{User_MicType.value = 1;break;}
-            case Mumble.MumbleMicrophone.MicType.PushToTalk:{User_MicType.value = 2;break;}
-            case Mumble.MumbleMicrophone.MicType.MethodBased:{User_MicType.value = 3;break;}
+        if(UserMicrophone != null){
+            switch(UserMicrophone.GetMicType()){
+                case Mumble.MumbleMicrophone.MicType.AlwaysSend:{User_MicType.value = 0;break;}
+                case Mumble.MumbleMicrophone.MicType.Amplitude:{User_MicType.value = 1;break;}
+                case Mumble.MumbleMicrophone.MicType.PushToTalk:{User_MicType.value = 2;break;}
+                case Mumble.MumbleMicrophone.MicType.MethodBased:{User_MicType.value = 3;break;}
+            }
+            User_Microphones.value = UserMicrophone.MicNumberToUse;
+            MicrophoneSensitivity.value = UserMicrophone.MinAmplitude;
         }
-        User_Microphones.value = UserMicrophone.MicNumberToUse;
-        MicrophoneSensitivity.value = UserMicrophone.MinAmplitude;
         UpdatePushToTalkText();
-        MuteSelf.isOn = myMumble.getClient().IsSelfMuted();
+        if(myMumble != null){
+            MuteSelf.isOn = myMumble.getClient().IsSelfMuted();
+        }
         HideConnectionPanel();
         if(!GameManager.AmTeacher){
             HostName.interactable = false;
