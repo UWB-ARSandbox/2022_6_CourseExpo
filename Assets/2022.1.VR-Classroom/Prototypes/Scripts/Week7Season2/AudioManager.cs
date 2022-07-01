@@ -101,6 +101,10 @@ public class AudioManager : MonoBehaviour
         HostName = H;
         Password = P;
         my_Controller.CreateMumbleObject();
+        if(VoiceUIEnabled){
+            VoiceUI.GetComponent<VoiceUI>().Destroy();
+            VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
+        }
 
     }
 
