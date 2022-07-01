@@ -62,14 +62,16 @@ public class AudioManager : MonoBehaviour
             if(VoiceUI == null && !VoiceUIEnabled){
                 if(VoiceChatEnabled || GameManager.AmTeacher){
                     VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
-                    VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
-                    VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
+                    if(VoiceChatEnabled){
+                        VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
+                        VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
+                    }
                     setVoiceUIEnabled();
                 }
-                if(GameManager.AmTeacher && !VoiceChatEnabled){
-                    VoiceUI = GameObject.Instantiate(PrefabTeacherVoiceUI);
-                    setVoiceUIEnabled();
-                }
+                // if(GameManager.AmTeacher && !VoiceChatEnabled){
+                //     VoiceUI = GameObject.Instantiate(PrefabTeacherVoiceUI);
+                //     setVoiceUIEnabled();
+                // }
             }
             else
                 VoiceUI.GetComponent<VoiceUI>().Destroy();
@@ -77,7 +79,7 @@ public class AudioManager : MonoBehaviour
     }
 
     public void EnableVoiceChat(){
-        my_Controller.CreateMumbleObject();
+        //my_Controller.CreateMumbleObject();
         //Need to trigger a cascade across all clients to  
         //enable voice chat and send connection info
 

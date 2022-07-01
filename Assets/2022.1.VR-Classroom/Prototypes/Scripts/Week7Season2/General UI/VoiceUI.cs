@@ -70,8 +70,10 @@ public class VoiceUI : MonoBehaviour
             Password.interactable = false;
             VoiceConnectionSettings.enabled = false;
         }
-        Password.text = _AudioManager.Password;
-        HostName.text = _AudioManager.HostName;
+        // Password.text = _AudioManager.Password;
+        // HostName.text = _AudioManager.HostName;
+        HostName.text = "50.35.25.58";
+        Password.text = "test";
         if(_AudioManager.VoiceChatEnabled){
             ConnectUsers.enabled = false;
         }
@@ -108,8 +110,10 @@ public class VoiceUI : MonoBehaviour
         yield return null;
     }
     public void UpdatePushToTalkText(){
-        string inputText = UserMicrophone.PushToTalkKeycode.ToString();
-        PushToTalkText.text = inputText;
+        if(UserMicrophone != null){
+            string inputText = UserMicrophone.PushToTalkKeycode.ToString();
+            PushToTalkText.text = inputText;
+        }
     }
     public void ChangeVoiceSetting(){
         switch(User_MicType.value){
