@@ -64,7 +64,12 @@ public class VoiceUI : MonoBehaviour
         if(myMumble != null){
             MuteSelf.isOn = myMumble.getClient().IsSelfMuted();
         }
-        HideConnectionPanel();
+
+        if(_AudioManager.VoiceChatEnabled)
+            HideConnectionPanel();
+        else
+            ShowConnectionPanel();
+
         if(!GameManager.AmTeacher){
             HostName.interactable = false;
             Password.interactable = false;
