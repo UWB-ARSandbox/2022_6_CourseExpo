@@ -398,6 +398,9 @@ public class PlayerController : MonoBehaviour {
             else
             {
                 PCmenuScreen.flipScreen();
+                if(_AudioManager.VoiceUI != null){
+                    Destroy(_AudioManager.VoiceUI);
+                }
             }
         }
     }

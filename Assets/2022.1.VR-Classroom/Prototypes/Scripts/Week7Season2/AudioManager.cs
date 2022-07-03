@@ -81,14 +81,14 @@ public class AudioManager : MonoBehaviour
         Password = P;
         my_Controller.CreateMumbleObject();
 
-            setVoiceUIEnabled();
+        if(VoiceUI != null)
+            VoiceUI.GetComponent<VoiceUI>().Destroy();
             //VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
     }
 
 
     public void setVoiceUIEnabled(){
         if(VoiceUIEnabled){
-            VoiceUI.GetComponent<VoiceUI>().Destroy();
             PCMenu.flipScreen();
         }
         else{
@@ -96,7 +96,7 @@ public class AudioManager : MonoBehaviour
             if(VoiceChatEnabled){
                 VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
                 VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
-            }
+            }  
         }
         VoiceUIEnabled = !VoiceUIEnabled;
     }

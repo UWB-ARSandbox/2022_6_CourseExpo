@@ -123,19 +123,23 @@ public class VoiceUI : MonoBehaviour
     public void ChangeVoiceSetting(){
         switch(User_MicType.value){
             case 0:
-                UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.AlwaysSend,User_Microphones.value);
+                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.AlwaysSend;
+                UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StartSendingAudio(myMumble.getClient().EncoderSampleRate);
                 break;
             case 1:
-                UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.Amplitude,User_Microphones.value);
+                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.Amplitude;
+                UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StartSendingAudio(myMumble.getClient().EncoderSampleRate);
                 break;
             case 2:
-                UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.PushToTalk,User_Microphones.value);
+                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.PushToTalk;
+                UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StopSendingAudio();
                 break;
             case 3:
-                UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.MethodBased,User_Microphones.value);
+                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.MethodBased;
+                UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StopSendingAudio();
                 break;
         }                
@@ -169,8 +173,8 @@ public class VoiceUI : MonoBehaviour
     //On destroy update Microphone settings
     private void OnDestroy() { 
         _AudioManager.setVoiceUIEnabled();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
 
 
