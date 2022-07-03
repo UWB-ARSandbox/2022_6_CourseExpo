@@ -20,6 +20,9 @@ public class AssessmentManager : MonoBehaviour {
     //Assessment Walls
     public AssessmentWalls walls;
 
+    //used for establishing the max amount of characters that can enter the booth
+    public int UnitCounter = 0;
+
     //Assignment + Quiz = Show answers immediately
     //Test = Show result at end
     private Sprite BAR_BLUE;

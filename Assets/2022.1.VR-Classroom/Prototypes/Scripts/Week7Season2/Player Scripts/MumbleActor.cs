@@ -131,8 +131,10 @@ public class MumbleActor : MonoBehaviour {
             MyMumbleMic.OnMicDisconnect += OnMicDisconnected;
             MyMumbleMic.StartSendingAudio(_mumbleClient.EncoderSampleRate);
         }
-        if (ConnectionEstablished != null)
+        if (ConnectionEstablished != null){
+            GameObject.Find("GameManager").GetComponent<AudioManager>().VoiceChatEnabled = true;
             ConnectionEstablished();
+        }
     }
     public event System.Action ConnectionEstablished;
 
@@ -140,13 +142,28 @@ public class MumbleActor : MonoBehaviour {
     {
         // Depending on your use case, you might want to add the prefab to an existing object (like someone's head)
         // If you have users entering and leaving frequently, you might want to implement an object pool
-        GameObject newObj = SendPosition
-            ? GameObject.Instantiate(MyMumbleAudioPlayerPositionedPrefab)
-            : GameObject.Instantiate(MyMumbleAudioPlayerPrefab);
-
+        GameObject parent;
+        if(username == GameManager.players[GameManager.MyID]){
+            parent = GameObject.Find("GameManager").GetComponent<AudioManager>().my_Controller.gameObject;
+        }
+        else{
+            parent = GameObject.Find(username);
+        }
+        GameObject newObj;
+        if(parent != null){
+            newObj = SendPosition
+                ? GameObject.Instantiate(MyMumbleAudioPlayerPositionedPrefab,parent.transform.position, Quaternion.identity, parent.transform)
+                : GameObject.Instantiate(MyMumbleAudioPlayerPrefab,parent.transform.position, Quaternion.identity, parent.transform);
+        }
+        else{
+            newObj = SendPosition
+                ? GameObject.Instantiate(MyMumbleAudioPlayerPositionedPrefab)
+                : GameObject.Instantiate(MyMumbleAudioPlayerPrefab);
+        }
         newObj.name = username + "_MumbleAudioPlayer";
         MumbleAudioPlayer newPlayer = newObj.GetComponent<MumbleAudioPlayer>();
-        Debug.Log("Adding audio player for: " + username); 
+        Debug.Log("Adding audio player for: " + username);
+        //AudioManager.AttachIndividualAudio(newObj); 
         return newPlayer;
     }
     private void OnOtherUserStateChange(uint session, MumbleProto.UserState updatedDeltaState, MumbleProto.UserState fullUserState)
@@ -223,6 +240,7 @@ public class MumbleActor : MonoBehaviour {
             //_mumbleClient.OnDisconnected();
             MyMumbleMic.StopSendingAudio();
             _mumbleClient.Close();
+            _mumbleClient = null;
 
             //cleanup operation
             MumbleAudioPlayer[] ObjectsToDestroy = (MumbleAudioPlayer[])GameObject.FindObjectsOfType(typeof(MumbleAudioPlayer));

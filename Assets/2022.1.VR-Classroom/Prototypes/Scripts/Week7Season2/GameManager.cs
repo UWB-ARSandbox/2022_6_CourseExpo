@@ -34,6 +34,8 @@ public class GameManager : MonoBehaviour {
 
     public static bool isTakingAssessment = false;
 
+    public AudioManager _myAudioManager;
+
     public static bool PlayersVisible => arePlayersVisible;
     private static bool arePlayersVisible = true;
 
@@ -43,6 +45,7 @@ public class GameManager : MonoBehaviour {
     private const float ASMT = 2768;
     private const float CONT = 2960;
     private const float ANCMT = 26268;
+    private const float CNNCT = 26628;
     private const float QUIT = 101;
 
     public void Quit()
@@ -65,7 +68,13 @@ public class GameManager : MonoBehaviour {
     #region Setup
     private void Awake() {
         _asl = GetComponent<ASLObject>();
-        gameObject.AddComponent<AudioManager>();
+        if(_myAudioManager == null){
+            _myAudioManager = gameObject.GetComponent<AudioManager>();
+            if(_myAudioManager == null){
+                _myAudioManager = gameObject.AddComponent<AudioManager>();
+            } 
+        }
+        
     }
 
     // Start is called before the first frame update
@@ -929,6 +938,19 @@ public class GameManager : MonoBehaviour {
         _asl.SendAndSetClaim(() => { _asl.SendFloatArray(announcementFloatsArray); }, -1);
 
     }
+
+    public static void SendEnableMessage(string HostName_Password){
+        List<float> ConnectionFloats = new List<float>();
+        var header = new List<float>(){
+            CNNCT,                                  //_f[0]: CNNCT = Enable Voice Chat Header Response
+            HostName_Password.Length,
+        };
+        ConnectionFloats.AddRange(header);
+        ConnectionFloats.AddRange(stringToFloats(HostName_Password));
+        var ConnectionFloatsArray = ConnectionFloats.ToArray();
+        _asl.SendAndSetClaim(() => {_asl.SendFloatArray(ConnectionFloatsArray); }, -1);
+
+    }
     #endregion
 
     public void FloatReceive(string _id, float[] _f) {
@@ -955,6 +977,9 @@ public class GameManager : MonoBehaviour {
                 break;
             case ANCMT: //26268
                 AnnouncementManager.ReceiveAnnouncement(_f);
+                break;
+            case CNNCT: //26628
+                _myAudioManager.RecieveConnectionInfo_FromGamemanager(_f);
                 break;
         }
 
