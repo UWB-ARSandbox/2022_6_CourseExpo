@@ -10,6 +10,7 @@ public class VoiceUI : MonoBehaviour
     public GameObject MicrophonePanel;
     public GameObject VoiceConnectionPanel;
 
+    public Button VoiceConnectionSettings;
     public Button User_PTTalkBind;
     public Text PushToTalkText;
     public Toggle MuteSelf;
@@ -40,6 +41,7 @@ public class VoiceUI : MonoBehaviour
     }
     void Start()
     {
+
         Cursor.lockState = CursorLockMode.None;
         Cursor.visible = true;
         // Get list of Microphone devices and print the names to the log
@@ -48,15 +50,38 @@ public class VoiceUI : MonoBehaviour
             Debug.Log("Name: " + device);
             PopulateMicrophoneDropDown();
         }
-        switch(UserMicrophone.GetMicType()){
-            case Mumble.MumbleMicrophone.MicType.AlwaysSend:{User_MicType.value = 0;break;}
-            case Mumble.MumbleMicrophone.MicType.Amplitude:{User_MicType.value = 1;break;}
-            case Mumble.MumbleMicrophone.MicType.PushToTalk:{User_MicType.value = 2;break;}
-            case Mumble.MumbleMicrophone.MicType.MethodBased:{User_MicType.value = 3;break;}
+        if(UserMicrophone != null){
+            switch(UserMicrophone.GetMicType()){
+                case Mumble.MumbleMicrophone.MicType.AlwaysSend:{User_MicType.value = 0;break;}
+                case Mumble.MumbleMicrophone.MicType.Amplitude:{User_MicType.value = 1;break;}
+                case Mumble.MumbleMicrophone.MicType.PushToTalk:{User_MicType.value = 2;break;}
+                case Mumble.MumbleMicrophone.MicType.MethodBased:{User_MicType.value = 3;break;}
+            }
+            User_Microphones.value = UserMicrophone.MicNumberToUse;
+            MicrophoneSensitivity.value = UserMicrophone.MinAmplitude;
         }
-        User_Microphones.value = UserMicrophone.MicNumberToUse;
-        MicrophoneSensitivity.value = UserMicrophone.MinAmplitude;
         UpdatePushToTalkText();
+        if(myMumble != null){
+            MuteSelf.isOn = myMumble.getClient().IsSelfMuted();
+        }
+
+        if(_AudioManager.VoiceChatEnabled)
+            HideConnectionPanel();
+        else
+            ShowConnectionPanel();
+
+        if(!GameManager.AmTeacher){
+            HostName.interactable = false;
+            Password.interactable = false;
+            VoiceConnectionSettings.enabled = false;
+        }
+        // Password.text = _AudioManager.Password;
+        // HostName.text = _AudioManager.HostName;
+        HostName.text = "50.35.25.58";
+        Password.text = "test";
+        if(_AudioManager.VoiceChatEnabled){
+            ConnectUsers.enabled = false;
+        }
     }
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){
@@ -90,25 +115,31 @@ public class VoiceUI : MonoBehaviour
         yield return null;
     }
     public void UpdatePushToTalkText(){
-        string inputText = UserMicrophone.PushToTalkKeycode.ToString();
-        PushToTalkText.text = inputText;
+        if(UserMicrophone != null){
+            string inputText = UserMicrophone.PushToTalkKeycode.ToString();
+            PushToTalkText.text = inputText;
+        }
     }
     public void ChangeVoiceSetting(){
         switch(User_MicType.value){
             case 0:
-                UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.AlwaysSend,User_Microphones.value);
+                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.AlwaysSend;
+                UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StartSendingAudio(myMumble.getClient().EncoderSampleRate);
                 break;
             case 1:
-                UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.Amplitude,User_Microphones.value);
+                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.Amplitude;
+                UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StartSendingAudio(myMumble.getClient().EncoderSampleRate);
                 break;
             case 2:
-                UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.PushToTalk,User_Microphones.value);
+                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.PushToTalk;
+                UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StopSendingAudio();
                 break;
             case 3:
-                UserMicrophone.setSettings(Mumble.MumbleMicrophone.MicType.MethodBased,User_Microphones.value);
+                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.MethodBased;
+                UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StopSendingAudio();
                 break;
         }                
@@ -131,15 +162,19 @@ public class VoiceUI : MonoBehaviour
         VoiceConnectionPanel.SetActive(false);
         MicrophonePanel.SetActive(true);
     }
-
+    public void EnableVoiceChat(){
+        _AudioManager.SetConnectionInfo(HostName.text,Password.text);
+        _AudioManager.EnableVoiceChat();
+        ConnectUsers.enabled = false;
+    }
     public void Destroy(){
         Destroy(gameObject);
     }
     //On destroy update Microphone settings
     private void OnDestroy() { 
         _AudioManager.setVoiceUIEnabled();
-        Cursor.lockState = CursorLockMode.Locked;
-        Cursor.visible = false;
+        //Cursor.lockState = CursorLockMode.Locked;
+        //Cursor.visible = false;
     }
 
 
