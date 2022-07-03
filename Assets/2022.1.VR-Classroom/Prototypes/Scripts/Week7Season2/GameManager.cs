@@ -43,8 +43,20 @@ public class GameManager : MonoBehaviour {
     private const float ASMT = 2768;
     private const float CONT = 2960;
     private const float ANCMT = 26268;
+    private const float QUIT = 101;
 
-    public static void Quit() { Application.Quit(); }
+    public void Quit()
+    {
+        StartCoroutine("QuitHelper");
+    }
+
+    IEnumerator QuitHelper()
+    {
+        float[] m_myFloatArray = new float[2] { QUIT, GameManager.MyID};
+        _asl.SendAndSetClaim(() => { _asl.SendFloatArray(m_myFloatArray); });
+        yield return new WaitForSeconds(1f);
+        Application.Quit();
+    }
 
     public static bool AmTeacher => (MyID == 1);
     private static ASLObject _asl;
@@ -921,6 +933,10 @@ public class GameManager : MonoBehaviour {
 
     public void FloatReceive(string _id, float[] _f) {
         switch(_f[0]) {
+            case QUIT:
+                Debug.Log(GameManager.players[(int)_f[1]] + " has left the game");
+                GameObject.Find(GameManager.players[(int)_f[1]]).transform.parent.gameObject.SetActive(false);
+                break;
             case XML + 1: // XML Response header
                 //Receive the # of intended sent booth infos
                 countVerify = (int)_f[1];
