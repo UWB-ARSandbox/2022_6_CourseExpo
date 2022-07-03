@@ -56,7 +56,13 @@ public class GameManager : MonoBehaviour {
     #region Setup
     private void Awake() {
         _asl = GetComponent<ASLObject>();
-        _myAudioManager = gameObject.AddComponent<AudioManager>();
+        if(_myAudioManager == null){
+            _myAudioManager = gameObject.GetComponent<AudioManager>();
+            if(_myAudioManager == null){
+                _myAudioManager = gameObject.AddComponent<AudioManager>();
+            } 
+        }
+        
     }
 
     // Start is called before the first frame update
