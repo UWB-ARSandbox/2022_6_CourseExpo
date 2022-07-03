@@ -9,6 +9,7 @@ public class AudioManager : MonoBehaviour
     
     //prefab
     public GameObject PrefabVoIP_UI;
+    public GameObject PrefabVRVoIP_UI;
 
     public GameObject PrefabTeacherVoiceUI;
     public PlayerController my_Controller;
@@ -18,6 +19,7 @@ public class AudioManager : MonoBehaviour
     private bool VoiceUIEnabled = false;
 
     public MenuScreen PCMenu;
+    public MenuScreen VRMenu;
 
     public ASLObject ASL_GameManager;
 
@@ -86,7 +88,19 @@ public class AudioManager : MonoBehaviour
             //VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
     }
 
-
+    public void setVRVoiceUIEnabled(){
+            if(VoiceUIEnabled){
+            VRMenu.flipScreen();
+        }
+        else{
+            VoiceUI = GameObject.Instantiate(PrefabVRVoIP_UI);
+            if(VoiceChatEnabled){
+                VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
+                VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);
+            }  
+        }
+        VoiceUIEnabled = !VoiceUIEnabled;
+    }
     public void setVoiceUIEnabled(){
         if(VoiceUIEnabled){
             PCMenu.flipScreen();
@@ -123,6 +137,7 @@ public class AudioManager : MonoBehaviour
             SetAdmin();
         }
     }
+
     public void startChannelCreation(){
         VoiceChatEnabled = true;
         if(GameManager.AmTeacher && AdminFlag && !AudioAttached)
@@ -131,6 +146,7 @@ public class AudioManager : MonoBehaviour
             mumble.ConnectionEstablished -= startChannelCreation;
         }
     }
+
     public void SetConnectionInfo(string hostname, string password){
         HostName = hostname;
         Password = password;
