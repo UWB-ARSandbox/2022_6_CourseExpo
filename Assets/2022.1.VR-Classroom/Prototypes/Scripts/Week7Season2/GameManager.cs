@@ -935,7 +935,7 @@ public class GameManager : MonoBehaviour {
         switch(_f[0]) {
             case QUIT:
                 Debug.Log(GameManager.players[(int)_f[1]] + " has left the game");
-                Destroy(GameObject.Find(GameManager.players[(int)_f[1]]).transform.parent.gameObject);
+                GameObject.Find(GameManager.players[(int)_f[1]]).transform.parent.gameObject.SetActive(false);
                 break;
             case XML + 1: // XML Response header
                 //Receive the # of intended sent booth infos
