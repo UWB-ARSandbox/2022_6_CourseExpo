@@ -145,7 +145,26 @@ public class AudioManager : MonoBehaviour
             mumble.ConnectionEstablished -= startChannelCreation;
         }
     }
+    #region Test Connection
+    //Test connection functionality required to ensure the Teacher is not giving the students bad information
+    //upon test success send the enable message to the other clients
+    //To Do: Write Test functionality so that it does not interfere with normal connection functionality
+    //
+    public void TestConnection(){
 
+        //if test fails initiate error message, lock Enable Voice Chat button
+        if(true){
+            
+        }
+        //Upon test success terminate test connection & unlock enable voice chat button
+        else{
+
+        }
+        mumble.disconnect();
+        _mumbleClient = null;
+
+    }
+    #region 
     public void SetConnectionInfo(string hostname, string password){
         HostName = hostname;
         Password = password;
