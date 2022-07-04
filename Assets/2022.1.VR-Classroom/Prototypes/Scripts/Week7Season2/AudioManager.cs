@@ -47,10 +47,6 @@ public class AudioManager : MonoBehaviour
     bool RunOnce = false;
     
     private void Awake() {
-        // if(PrefabTeacherVoiceUI == null){
-        //     //debug line until Teacher voiceChat enable is in
-        //     VoiceChatEnabled = true;
-        // }
         ASL_GameManager = gameObject.GetComponent<ASLObject>();
     }
     // Start is called before the first frame update
