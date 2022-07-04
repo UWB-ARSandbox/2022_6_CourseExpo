@@ -4,10 +4,17 @@ using UnityEngine;
 using ASL;
 
 public class AudioManager : MonoBehaviour
-{
+{ 
+    /*  AudioManager
+        Intent: The AudioManager is intended to facilitate the configuration and communcation between the Mumble Actor 
+        and the course Expo. The AudioManager contains VoiceUI configuration settings and facilitates the creation of the Voice UI prefabs
+        using calls from the MenuScreen.
+           
+    */
+
     public GameObject VoiceUI;
-    
-    //prefab
+   
+    //prefabs
     public GameObject PrefabVoIP_UI;
     public GameObject PrefabVRVoIP_UI;
 
@@ -55,17 +62,16 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update(){
-
-    }
-
+    //Old function needs to be dereferenced and deleted
     public void EnableVoiceChat(){
         //my_Controller.CreateMumbleObject();
         //Need to trigger a cascade across all clients to  
         //enable voice chat and send connection info
     }
 
+    //Intended to be called by the GameManager upon recieving the CNNCT command from the Teacher
+    //float[] _f should contain such information such as HostName and Password where password must match exactly
+    //And hostname shall match the hostname indicated in the Voice Chat Setup guide
     public void RecieveConnectionInfo_FromGamemanager(float[] _f){
         //Get length of string
         Debug.Log("Password and HostName Recieved");
@@ -88,6 +94,8 @@ public class AudioManager : MonoBehaviour
             //VoiceUI = GameObject.Instantiate(PrefabVoIP_UI);
     }
 
+    //setVRVoiceUIEnabled and setVoiceUIEnabled are both intended to be called by their requisite buttons
+    //or upon the deletion of the VoiceUI object they should not be called from within other functions
     public void setVRVoiceUIEnabled(){
             if(VoiceUIEnabled){
             VRMenu.flipScreen();
@@ -114,6 +122,7 @@ public class AudioManager : MonoBehaviour
         }
         VoiceUIEnabled = !VoiceUIEnabled;
     }
+
     //called by the mumble actor to setup the actor and the Audio Manager.
     public void Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
         mumble = mum;
@@ -138,6 +147,7 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    //Intended to be called by the Mumble Actor upon successful connection
     public void startChannelCreation(){
         VoiceChatEnabled = true;
         if(GameManager.AmTeacher && AdminFlag && !AudioAttached)
@@ -189,6 +199,7 @@ public class AudioManager : MonoBehaviour
         //         Debug.Log("Failed to find target Object");
         // }
     }
+
     //Call the moveChannel function when user is in desired area and needs to move VoIP channels
     //maybe subscribe to C# actions so when Action X happens user is moved
     //default room is always "root"
@@ -205,6 +216,7 @@ public class AudioManager : MonoBehaviour
                 Debug.Log(Username+ " is already in :" + RoomName);
         }
     }
+
     //Return user to previous channel in mumble server
     //Function should be called after the user is moved to a private room with the teacher following the help function
     public void ReturnToPreviousChannel(){
@@ -215,6 +227,19 @@ public class AudioManager : MonoBehaviour
                 _mumbleClient.JoinChannel(previousChannel);
             else
                 Debug.Log("User is already in :" + previousChannel);
+        }
+    }
+
+    //Move user to root channel in mumble server
+    //Function should be called when the user moves from a booth boundry back into the general boundry.
+    public void ReturnToRootChannel(){
+        if(VoiceChatEnabled){
+            if(_mumbleClient == null)
+                _mumbleClient = mumble.getClient();
+            if(!_mumbleClient.GetCurrentChannel().Equals("root"))
+                _mumbleClient.JoinChannel("root");
+            else
+                Debug.Log("User is already in root");
         }
     }
 
@@ -229,9 +254,11 @@ public class AudioManager : MonoBehaviour
         mumble.Password = "Admin";
         AdminFlag = true;
     }
-    /*
-    Create channel by providing desired RoomName and desired Size
-    */
+
+    //Reconnection functionality Intent is to be used to facilitate the disconnection of the SuperUser and reconnection of the teacher user
+    //Potential Use: could be used to facilitate the reconnection of any user if they disconnect from the server, although it is unknown
+    //if the user needs this functionality since it is likely that if the general user disconnects from the voice server they are disconnected
+    //from the actual lobby in itself.
     IEnumerator ReconnectVoIP(){
         mumble.Disconnect();
         yield return new WaitForSeconds(2f);
@@ -241,6 +268,7 @@ public class AudioManager : MonoBehaviour
         yield return new WaitForSeconds(2f);
     }
 
+    //Intent is to create a list of channels that meet a specific criteria to reduce the amount of channels to be created
     public void ChannelToBeCreated(string channelName){
         if(channelName.Contains("Quiz") || channelName.Contains("Test"))
             ChannelList.Add(channelName);
@@ -248,6 +276,8 @@ public class AudioManager : MonoBehaviour
 
     //Channels to be created each quiz room needs a channel,
     //one private channel for help functionality
+    //User must have administrative rights within the server to create a channel
+    //This function should only be called while the teacher is the SuperUser
     public bool CreateChannel(string RoomName, uint RoomSize){
         Debug.Log("Attempting to Create Channel: " +RoomName);
         if(_mumbleClient == null)
@@ -258,6 +288,12 @@ public class AudioManager : MonoBehaviour
         _mumbleClient.CreateChannel(RoomName,false,0,"",RoomSize);
         return _mumbleClient.IsChannelAvailable(RoomName);
     }
+
+    //Create Channels Coroutine
+    //Should only be called while the teacher is the SuperUser
+    //WaitForSeconds function calls are intended to slow down the coroutine
+    //Due to mumble server calls taking time to complete it is critical that channel creation be slowed down
+    //so that channel creation happens while the user is still the SuperUser and not before the user is reconnected.
     IEnumerator CreateChannels(){
         if(!RunOnce){
             RunOnce = true;
