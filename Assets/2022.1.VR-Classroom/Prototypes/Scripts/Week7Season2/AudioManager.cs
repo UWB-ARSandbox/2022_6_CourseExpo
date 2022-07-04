@@ -62,13 +62,6 @@ public class AudioManager : MonoBehaviour
         }
     }
 
-    //Old function needs to be dereferenced and deleted
-    public void EnableVoiceChat(){
-        //my_Controller.CreateMumbleObject();
-        //Need to trigger a cascade across all clients to  
-        //enable voice chat and send connection info
-    }
-
     //Intended to be called by the GameManager upon recieving the CNNCT command from the Teacher
     //float[] _f should contain such information such as HostName and Password where password must match exactly
     //And hostname shall match the hostname indicated in the Voice Chat Setup guide
@@ -161,43 +154,6 @@ public class AudioManager : MonoBehaviour
         HostName = hostname;
         Password = password;
         GameManager.SendEnableMessage(hostname + ":" + password);
-    }
-    //Audio Attachment happens on prefab creation time instead of a script
-    //connecting VoIP Prefabs to ghostplayers
-    //Note your individual ghostplayer will not have a prefab attached to it
-    public void AttachAudio(){
-        //     Debug.Log("Attempting to Attach AudioOutputs to Ghosts");
-        //     GhostPlayer[] GhostPlayers = (GhostPlayer[])GameObject.FindObjectsOfType(typeof(GhostPlayer));
-        //     foreach(GhostPlayer i in GhostPlayers){
-        //         Debug.Log("Found GhostPlayer: " + i.worldspaceUsername.transform.parent.name +" attempting to find AudioPlayer");
-        //         GameObject Ghosts_AudioPlayer = GameObject.Find(i.worldspaceUsername.transform.parent.name + "_MumbleAudioPlayer");
-                
-        //         if(Ghosts_AudioPlayer != null){
-        //             Debug.Log("Successfully Found AudioPlayer for: "+ i.worldspaceUsername.transform.parent.name);
-        //             Ghosts_AudioPlayer.transform.parent = i.gameObject.transform;
-        //             Ghosts_AudioPlayer.transform.position = i.gameObject.transform.position;
-        //         }
-        //         else{
-        //             Debug.Log("Failed to find AudioPlayer for: " + i.worldspaceUsername.transform.parent.name);
-        //         }
-        //     //Attach your ghost prefab to yourself
-        //     GameObject.Find(Username + "_MumbleAudioPlayer").transform.parent = my_Controller.gameObject.transform;
-        //     AudioAttached = true;
-        // }
-    }
-    public void AttachIndividualAudio(GameObject audioPlayer){
-        // if(audioPlayer.name == (Username + "_MumbleAudioPlayer")){
-        //     audioPlayer.transform.SetParent(my_Controller.gameObject.transform);
-        // }
-        // else{
-        //     string temp = audioPlayer.name;
-        //     string target = temp.Substring(0, audioPlayer.name.Length - "_MumbleAudioPlayer".Length);
-        //     GameObject targetObj = GameObject.Find(target);
-        //     if(targetObj != null)
-        //         audioPlayer.transform.SetParent(targetObj.transform);
-        //     else
-        //         Debug.Log("Failed to find target Object");
-        // }
     }
 
     //Call the moveChannel function when user is in desired area and needs to move VoIP channels

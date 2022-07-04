@@ -92,6 +92,9 @@ public class VoiceUI : MonoBehaviour
         User_Microphones.ClearOptions();
         User_Microphones.AddOptions(options);
     }
+    #region Input Assignment
+    //Current limitation no check to see if the keybind conflicts with existing keybinds
+    //Potential fix is to create an interactable controls menu to allow the user to rebind all keys
     void OnGUI() {
         keyEvent = Event.current;
         if(keyEvent.isKey && waitingForKey){
@@ -120,6 +123,8 @@ public class VoiceUI : MonoBehaviour
             PushToTalkText.text = inputText;
         }
     }
+    #endregion
+
     public void ChangeVoiceSetting(){
         switch(User_MicType.value){
             case 0:
@@ -162,9 +167,11 @@ public class VoiceUI : MonoBehaviour
         VoiceConnectionPanel.SetActive(false);
         MicrophonePanel.SetActive(true);
     }
+    
+    //To Do: Create error handling for bad input/test input before sending to everyone else
+    //IE only send connection info if the teacher is able to successfully connect to the server
     public void EnableVoiceChat(){
         _AudioManager.SetConnectionInfo(HostName.text,Password.text);
-        _AudioManager.EnableVoiceChat();
         ConnectUsers.enabled = false;
     }
     public void Destroy(){
@@ -173,8 +180,6 @@ public class VoiceUI : MonoBehaviour
     //On destroy update Microphone settings
     private void OnDestroy() { 
         _AudioManager.setVoiceUIEnabled();
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
     }
 
 
