@@ -1035,6 +1035,7 @@ MonoBehaviour:
   - {fileID: 6481868662338571485}
   - {fileID: 1122064709967387767}
   body: {fileID: 8968093548781286499}
+  curFaceTexture: {fileID: 2800000, guid: 02be341d33b852845a7cd13affd7f243, type: 3}
 --- !u!82 &1264016806572578556
 AudioSource:
   m_ObjectHideFlags: 0

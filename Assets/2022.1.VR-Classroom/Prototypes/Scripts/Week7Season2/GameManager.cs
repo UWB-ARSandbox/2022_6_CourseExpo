@@ -224,6 +224,11 @@ public class GameManager : MonoBehaviour {
         FindObjectOfType<XpoPlayer>().SetFaceTexture();
     }
 
+    public XpoPlayer GetXpoPlayer()
+    {
+        return FindObjectOfType<XpoPlayer>();
+    }
+
     public static void LoadExpoFile()
     {
         nameAndDesc = new Dictionary<string, string>();

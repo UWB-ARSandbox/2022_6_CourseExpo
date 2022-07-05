@@ -16,6 +16,8 @@ public class GhostPlayer : MonoBehaviour
     public Transform[] movingBodyPartTransforms;
     public Renderer body;
 
+    public Texture2D curFaceTexture; // initialized to the basic clipart face in the Unity editor
+
     // Start is called before the first frame update
     void Start()
     {
@@ -108,6 +110,9 @@ public class GhostPlayer : MonoBehaviour
             textureToSend = new Texture2D(1024, 1024);
             textureToSend.LoadImage(fileData); 
         }
+
+        // Save these textures for future use (such as in avatar preview)
+        curFaceTexture = textureToSend;
 
         m_ASLObject.SendAndSetTexture2D(textureToSend, ChangeSpriteTexture, true);
     }
