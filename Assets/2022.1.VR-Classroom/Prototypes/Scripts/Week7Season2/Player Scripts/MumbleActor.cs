@@ -49,7 +49,6 @@ public class MumbleActor : MonoBehaviour {
                 myMicObject.SetActive(true);
             }
             Debug.Assert(MyMumbleMic != null);
-           
         }
         GameObject.Find("GameManager").GetComponent<AudioManager>().Setup(this, MyMumbleMic);
         Application.runInBackground = true;
@@ -131,6 +130,8 @@ public class MumbleActor : MonoBehaviour {
             MyMumbleMic.OnMicDisconnect += OnMicDisconnected;
             MyMumbleMic.StartSendingAudio(_mumbleClient.EncoderSampleRate);
         }
+        Debug.Log("Ready to Connect: "+_mumbleClient.ReadyToConnect);
+        Debug.Log("Setup Finished: "+_mumbleClient.ConnectionSetupFinished);
         if (ConnectionEstablished != null){
             GameObject.Find("GameManager").GetComponent<AudioManager>().VoiceChatEnabled = true;
             ConnectionEstablished();
@@ -238,7 +239,8 @@ public class MumbleActor : MonoBehaviour {
         Debug.LogWarning("Shutting down connections");
         if(_mumbleClient != null){
             //_mumbleClient.OnDisconnected();
-            MyMumbleMic.StopSendingAudio();
+            if(!GameObject.Find("GameManager").GetComponent<AudioManager>().runningTest)
+                MyMumbleMic.StopSendingAudio();
             _mumbleClient.Close();
             _mumbleClient = null;
 

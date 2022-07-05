@@ -19,7 +19,10 @@ public class VoiceUI : MonoBehaviour
     public InputField HostName;
     public InputField Password;
 
+    public Button TestConnection;
     public Button ConnectUsers;
+
+    public Text ErrorOutput;
 
     Mumble.MumbleMicrophone UserMicrophone;
     MumbleActor myMumble;
@@ -36,6 +39,7 @@ public class VoiceUI : MonoBehaviour
         myMumble = s;
     }
     private void Awake() {
+        ConnectUsers.enabled = false;
         _AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
         Debug.Assert(_AudioManager != null);
     }
@@ -81,6 +85,11 @@ public class VoiceUI : MonoBehaviour
         Password.text = "test";
         if(_AudioManager.VoiceChatEnabled){
             ConnectUsers.enabled = false;
+        }
+        if(_AudioManager.TestSuccess_bool){
+            ConnectUsers.enabled = true;
+            TestConnection.enabled = false;
+            ErrorOutput.text = "SUCCESS";
         }
     }
     //populate dropdown with list of microphone devices
@@ -167,7 +176,29 @@ public class VoiceUI : MonoBehaviour
         VoiceConnectionPanel.SetActive(false);
         MicrophonePanel.SetActive(true);
     }
-    
+    //Create test function/button to test connection settings
+    #region TestConnection
+    public void RunTestConnection(){
+        _AudioManager.TestConnection(HostName.text,Password.text);
+        TestConnection.enabled = false;
+    }
+    public void TestConnectionSuccess(){
+        //lock inputfields
+        HostName.interactable = false;
+        Password.interactable = false;
+        //unlock EnableVoiceChat button
+        ErrorOutput.text = "SUCCESS";
+        ConnectUsers.enabled = true;
+        TestConnection.enabled = false;
+        
+    }
+    public void TestConnectionFailure(){
+        Debug.LogError("Test Connection Failed");
+        //spawn debug output
+        TestConnection.enabled = true;
+        ErrorOutput.text = "ERROR: Test Connection Failed";
+    }
+    #endregion
     //To Do: Create error handling for bad input/test input before sending to everyone else
     //IE only send connection info if the teacher is able to successfully connect to the server
     public void EnableVoiceChat(){

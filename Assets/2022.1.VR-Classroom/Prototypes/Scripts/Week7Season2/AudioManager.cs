@@ -45,7 +45,9 @@ public class AudioManager : MonoBehaviour
     private string previousChannel;
     public void SetController(PlayerController cont){my_Controller = cont;}
     bool RunOnce = false;
-    
+    public bool runningTest = false;
+    public bool TestSuccess_bool = false;
+
     private void Awake() {
         ASL_GameManager = gameObject.GetComponent<ASLObject>();
     }
@@ -114,9 +116,12 @@ public class AudioManager : MonoBehaviour
 
     //called by the mumble actor to setup the actor and the Audio Manager.
     public void Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
+        if(runningTest){
+            ConnectionTest_Setup(mum, mumMic);
+            return;
+        }
         mumble = mum;
         //current Debugging variables taken from mumble.Hostname and mumble.Password
-
         mumbleMic = mumMic;
         mumble.ConnectionEstablished += startChannelCreation;
         if(!GameManager.AmTeacher || AdminFlag){
@@ -145,26 +150,7 @@ public class AudioManager : MonoBehaviour
             mumble.ConnectionEstablished -= startChannelCreation;
         }
     }
-    #region Test Connection
-    //Test connection functionality required to ensure the Teacher is not giving the students bad information
-    //upon test success send the enable message to the other clients
-    //To Do: Write Test functionality so that it does not interfere with normal connection functionality
-    //
-    public void TestConnection(){
 
-        //if test fails initiate error message, lock Enable Voice Chat button
-        if(true){
-            
-        }
-        //Upon test success terminate test connection & unlock enable voice chat button
-        else{
-
-        }
-        mumble.disconnect();
-        _mumbleClient = null;
-
-    }
-    #region 
     public void SetConnectionInfo(string hostname, string password){
         HostName = hostname;
         Password = password;
@@ -288,5 +274,56 @@ public class AudioManager : MonoBehaviour
             }
         }
     }
+    #region Test Connection
+    //Test connection functionality required to ensure the Teacher is not giving the students bad information
+    //upon test success send the enable message to the other clients
+    //To Do: Write Test functionality so that it does not interfere with normal connection functionality
+    //
+    public void TestConnection(string host, string pass){
+        HostName = host;
+        Password = pass;
+        StartCoroutine(StartConnectionTest());
+    }
+
+    IEnumerator StartConnectionTest(){
+        runningTest = true;
+        my_Controller.CreateMumbleObject();
+        yield return new WaitForSeconds(4f);
+        yield return new WaitForSeconds(2f);
+        if(mumble.getClient().ConnectionSetupFinished){
+            //Debug.Log("Test Successful?");
+            TestSuccess();
+        }
+        else{
+            //Debug.Log("Test Unsuccessful?");
+            TestFailure();
+        }
+    }
+
+    void ConnectionTest_Setup(MumbleActor mum, Mumble.MumbleMicrophone mumMic){
+        mumble = mum;
+        mumbleMic = mumMic;
+        mumble.HostName = HostName;
+        mumble.Password = Password;
+    }
+    //Upon test success terminate test connection & unlock enable voice chat button
+    public void TestSuccess(){
+    //lock inputfields so the teacher cannot modify the successful connection information
+        mumble.Disconnect();
+        if(_mumbleClient != null)
+            _mumbleClient = null;
+        runningTest = false;
+        TestSuccess_bool = true;
+        VoiceUI.GetComponent<VoiceUI>().TestConnectionSuccess();
+    }
+    //if test fails initiate error message, lock Enable Voice Chat button
+    public void TestFailure(){
+        mumble.Disconnect();
+        if(_mumbleClient != null)
+            _mumbleClient = null;
+        runningTest = false;
+        VoiceUI.GetComponent<VoiceUI>().TestConnectionFailure();
+    }
+    #endregion 
 
 }
