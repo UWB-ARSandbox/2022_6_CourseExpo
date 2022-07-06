@@ -88,7 +88,7 @@ public class AudioManager : MonoBehaviour
     //setVRVoiceUIEnabled and setVoiceUIEnabled are both intended to be called by their requisite buttons
     //or upon the deletion of the VoiceUI object they should not be called from within other functions
     public void setVRVoiceUIEnabled(){
-            if(VoiceUIEnabled){
+        if(VoiceUIEnabled){
             VRMenu.flipScreen();
         }
         else{

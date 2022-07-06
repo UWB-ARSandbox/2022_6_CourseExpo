@@ -75,6 +75,7 @@ public class VoiceUI : MonoBehaviour
             ShowConnectionPanel();
 
         if(!GameManager.AmTeacher){
+            TestConnection.enabled = false;
             HostName.interactable = false;
             Password.interactable = false;
             VoiceConnectionSettings.enabled = false;
