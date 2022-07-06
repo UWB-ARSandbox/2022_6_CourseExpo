@@ -15,7 +15,6 @@ public class PlayerTP : MonoBehaviour
         if (username == GameManager.players[GameManager.MyID])
         {
             GetComponent<Button>().interactable = false;
-            GetComponentInChildren<Text>().text += " (You)";
         }
     }
 
