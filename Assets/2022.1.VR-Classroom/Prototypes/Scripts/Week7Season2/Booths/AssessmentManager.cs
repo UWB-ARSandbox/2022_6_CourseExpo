@@ -871,7 +871,7 @@ public class AssessmentManager : MonoBehaviour {
 
         //Show Players
         GameManager.isTakingAssessment = false;
-        GameManager.TogglePlayerVisibility(true);
+        // GameManager.TogglePlayerVisibility(true);
 
         //Update Stats
         personalStats.SetPercentageScore(boothManager.boothName, finalScorePercentage);
