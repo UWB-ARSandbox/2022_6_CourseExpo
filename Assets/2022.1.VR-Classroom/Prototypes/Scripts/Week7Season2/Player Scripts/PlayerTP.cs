@@ -21,7 +21,9 @@ public class PlayerTP : MonoBehaviour
 
     public void FindPlayer()
     {
-        if (Player != null)
+        // if the player exists and is not taking a test then teleport
+        // them to the selected user
+        if (Player != null && !GameManager.isTakingAssessment)
         {
             Player.transform.GetComponent<CharacterController>().enabled = false;
             Player.transform.position = GameObject.Find(username).transform.position + (Vector3.up);
