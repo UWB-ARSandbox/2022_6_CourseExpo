@@ -6,6 +6,9 @@ EditorBuildSettings:
   serializedVersion: 2
   m_Scenes:
   - enabled: 1
+    path: Assets/GalleryFiles/PavelScene.unity
+    guid: 7251584646f15db49b4cf6b2b751112e
+  - enabled: 0
     path: Assets/2022.1.VR-Classroom/Prototypes/Scenes/Week7Season2.unity
     guid: b138d589968050b4e9060cde7dae5e80
   - enabled: 0
