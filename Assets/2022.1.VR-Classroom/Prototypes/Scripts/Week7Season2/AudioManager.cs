@@ -53,7 +53,6 @@ public class AudioManager : MonoBehaviour
     }
     // Start is called before the first frame update
     void Start(){
-        PrefabVoIP_UI = (GameObject)Resources.Load("MyPrefabs/VoIP_UI");
         Username = GameManager.players[GameManager.MyID];
         if(PCMenu == null){
             PCMenu = GameObject.Find("PC Menu").GetComponent<MenuScreen>();

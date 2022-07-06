@@ -571,6 +571,7 @@ GameObject:
   - component: {fileID: 5960872198262912235}
   - component: {fileID: 2008766858443796873}
   - component: {fileID: 1809345411351457431}
+  - component: {fileID: -8236308438355415477}
   m_Layer: 5
   m_Name: VoIP_UI
   m_TagString: Untagged
@@ -686,6 +687,18 @@ MonoBehaviour:
   TestConnection: {fileID: 6691248609491282424}
   ConnectUsers: {fileID: 3848270136949693156}
   ErrorOutput: {fileID: 2397136055843319350}
+--- !u!114 &-8236308438355415477
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 904956940003455872}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: eef5c4837a2439b428cb623db7852adb, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1017544360543643766
 GameObject:
   m_ObjectHideFlags: 0

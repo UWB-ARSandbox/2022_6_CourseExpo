@@ -35,14 +35,17 @@ public class VoiceUI : MonoBehaviour
     public void SetUserMicrophone(Mumble.MumbleMicrophone mumbleMic){
         UserMicrophone = mumbleMic;
     }
+
     public void SetMumble(MumbleActor s){
         myMumble = s;
     }
+
     private void Awake() {
         ConnectUsers.enabled = false;
         _AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
         Debug.Assert(_AudioManager != null);
     }
+
     void Start()
     {
 
@@ -93,6 +96,11 @@ public class VoiceUI : MonoBehaviour
             ErrorOutput.text = "SUCCESS";
         }
     }
+    
+    void VRConfiguration(){
+
+    }
+
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){
         List<string> options = new List<string> ();
@@ -102,6 +110,7 @@ public class VoiceUI : MonoBehaviour
         User_Microphones.ClearOptions();
         User_Microphones.AddOptions(options);
     }
+
     #region Input Assignment
     //Current limitation no check to see if the keybind conflicts with existing keybinds
     //Potential fix is to create an interactable controls menu to allow the user to rebind all keys
@@ -159,9 +168,11 @@ public class VoiceUI : MonoBehaviour
                 break;
         }                
     }
+
     public void UpdateVoiceSensitivity(){
         UserMicrophone.MinAmplitude = MicrophoneSensitivity.value;
     }
+
     public void ToggleMute(){
         if(myMumble.getClient().IsSelfMuted())
             myMumble.getClient().SetSelfMute(false);
@@ -173,10 +184,12 @@ public class VoiceUI : MonoBehaviour
         MicrophonePanel.SetActive(false);
         VoiceConnectionPanel.SetActive(true);
     }
+
     public void HideConnectionPanel(){
         VoiceConnectionPanel.SetActive(false);
         MicrophonePanel.SetActive(true);
     }
+
     //Create test function/button to test connection settings
     #region TestConnection
     public void RunTestConnection(){
@@ -200,6 +213,7 @@ public class VoiceUI : MonoBehaviour
         ErrorOutput.text = "ERROR: Test Connection Failed";
     }
     #endregion
+
     //To Do: Create error handling for bad input/test input before sending to everyone else
     //IE only send connection info if the teacher is able to successfully connect to the server
     public void EnableVoiceChat(){
