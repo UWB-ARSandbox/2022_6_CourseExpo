@@ -92,6 +92,7 @@ public class AudioManager : MonoBehaviour
         }
         else{
             VoiceUI = GameObject.Instantiate(PrefabVRVoIP_UI);
+            VoiceUI.transform.SetParent(Camera.main.transform, false);
             if(VoiceChatEnabled){
                 VoiceUI.GetComponent<VoiceUI>().SetUserMicrophone(mumbleMic);
                 VoiceUI.GetComponent<VoiceUI>().SetMumble(mumble);

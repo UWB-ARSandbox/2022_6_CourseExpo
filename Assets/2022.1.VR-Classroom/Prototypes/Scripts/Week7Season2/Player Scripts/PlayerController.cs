@@ -394,6 +394,9 @@ public class PlayerController : MonoBehaviour {
             if (isXRActive)
             {
                 VRmenuScreen.flipScreen();
+                if(_AudioManager.VoiceUI != null){
+                    Destroy(_AudioManager.VoiceUI);
+                }
             }
             else
             {
