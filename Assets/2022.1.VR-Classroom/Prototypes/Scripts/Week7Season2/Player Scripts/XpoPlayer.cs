@@ -39,8 +39,6 @@ public class XpoPlayer : MonoBehaviour {
                 if (gp.IsOwner(GameManager.MyID/*m_UserObject.ownerID*/) && gp.ownerID != 0) {
                     Debug.Log("GHOST FOUND - ID:" + gp.ownerID);
                     m_GhostPlayer = gp;
-                    //audioManager = gp.GetComponent<SendAndPlayAudio>();
-                    //audioManager.SetupInput();
                     gp.gameObject.SetActive(false);
                     StartCoroutine(NetworkedUpdate());
                     StartCoroutine(InputActionsRecalibrate());

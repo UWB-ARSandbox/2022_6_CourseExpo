@@ -96,10 +96,6 @@ public class VoiceUI : MonoBehaviour
             ErrorOutput.text = "SUCCESS";
         }
     }
-    
-    void VRConfiguration(){
-
-    }
 
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){
