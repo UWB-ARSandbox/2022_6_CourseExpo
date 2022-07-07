@@ -60,6 +60,12 @@ public class XpoPlayer : MonoBehaviour {
         cube.material.color = Color.yellow;
     }
 
+    public void ColorUser(Color color)
+    {
+        m_GhostPlayer.SendUserColor(color);
+        cube.material.color = color;
+    }
+
     void Update() {
 
         if (Camera.main) {

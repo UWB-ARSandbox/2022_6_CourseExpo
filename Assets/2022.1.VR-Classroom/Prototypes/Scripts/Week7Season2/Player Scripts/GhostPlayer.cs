@@ -16,6 +16,8 @@ public class GhostPlayer : MonoBehaviour
     public Transform[] movingBodyPartTransforms;
     public Renderer body;
 
+    public Texture2D curFaceTexture; // initialized to the basic clipart face in the Unity editor
+
     // Start is called before the first frame update
     void Start()
     {
@@ -79,6 +81,14 @@ public class GhostPlayer : MonoBehaviour
         });
     }
 
+    public void SendUserColor(Color color)
+    {
+        float[] sendColor = new float[4] { 104, color.r, color.g, color.b };
+        m_ASLObject.SendAndSetClaim(() => {
+            m_ASLObject.SendFloatArray(sendColor);
+        });
+    }
+
     public void SetFaceTexture()
     {
         var extensions = new[] {
@@ -100,6 +110,9 @@ public class GhostPlayer : MonoBehaviour
             textureToSend = new Texture2D(1024, 1024);
             textureToSend.LoadImage(fileData); 
         }
+
+        // Save these textures for future use (such as in avatar preview)
+        curFaceTexture = textureToSend;
 
         m_ASLObject.SendAndSetTexture2D(textureToSend, ChangeSpriteTexture, true);
     }
@@ -124,6 +137,7 @@ public class GhostPlayer : MonoBehaviour
                 minimapUsername.text = username;
                 worldspaceUsername.text = username;
                 worldspaceUsername.transform.parent.name = username;
+                gameObject.name = username;
                 break;
             case 101:
                 Vector3[] newBodyPositions = new Vector3[movingBodyPartTransforms.Length];
@@ -148,6 +162,10 @@ public class GhostPlayer : MonoBehaviour
             case 103:
                 //Set Host Color
                 body.material.color = Color.yellow;
+                break;
+            case 104:
+                // Set new user color
+                body.material.color = new Color(_f[1], _f[2], _f[3]);
                 break;
         }
     }
