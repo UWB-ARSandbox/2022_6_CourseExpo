@@ -37,7 +37,7 @@ public class NewPaint : MonoBehaviour
 		public bool previousMouseDown;
 		public Vector2 previousCanvasClick;
 
-		public Color32 brushColor;
+		public Color brushColor;
 		public int brushSize;
 
 		public bool eraseMode;
@@ -47,6 +47,8 @@ public class NewPaint : MonoBehaviour
 		public string textInput;
 
 		public int alphabetNumber;
+
+		
 		
 		
 	}
@@ -85,6 +87,9 @@ public class NewPaint : MonoBehaviour
 
 	//Has the player clicked load canvas button
 	bool canLoad;
+	
+	//Whether the canvas is selected
+	bool selected;
 
     //string for typed text
     string textOnType;
@@ -152,6 +157,8 @@ public class NewPaint : MonoBehaviour
 
 	bool doneLoading;
 
+	bool OnCanvas;
+
 	
 	
     // Start is called before the first frame update
@@ -182,6 +189,8 @@ public class NewPaint : MonoBehaviour
 		canSave = false;
 		canLoad = false;
 		doneLoading = true;
+		selected = false;
+		OnCanvas = false;
 		textOnType = "";
 		brushColor = Color.black;
 		pixelToDraw = new Vector2(0, 0);
@@ -279,32 +288,7 @@ public class NewPaint : MonoBehaviour
     void Update()
     {
         // Makes sure that the paint brush mask is not applied every frame
-        if (maskClock <= 0)
-		{
-			RaycastHit raycastHit;
-			Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-			int layerMask = 1 << 30;
-			if (clicked)
-			{
-				layerMask = (1 << LayerMask.NameToLayer("DoNotRenderCanavas")) |
-				(1 << LayerMask.NameToLayer("DoNotRenderTCan"));
-
-				// Set canvas to render to screen
-				layerMask |= (1 << 10);
-				// Set canvas to render to screen
-				layerMask |= (1 << 11);
-			}
-			layerMask = ~layerMask;
-
-			// If mouse is not over the canvas and canvas is rendered, do not draw mask
-			if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask) == true
-			&& raycastHit.transform.GetComponent<NewPaint>() != null)
-			{
-				UpdateMask();
-				maskClock = 0.1f;
-			}
-		}
+        UpdateMask();
 
         //Get inputs to send over for the canvas
 		int playerID = ASL.GameLiftManager.GetInstance().m_PeerId;
@@ -317,115 +301,113 @@ public class NewPaint : MonoBehaviour
 				if (Input.GetMouseButton(0) == true && !textMode)
 				{
 					
-					RaycastHit raycastHit;
-					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-
-					int layerMask = 1 << 30;
-					if (clicked)
+					
+					if(CanvasInput.Instance.getRaycastHitObject())
 					{
-						layerMask = (1 << LayerMask.NameToLayer("DoNotRenderCanavas")) |
-						(1 << LayerMask.NameToLayer("DoNotRenderTCan"));
-
-						// Set canvas to render to screen
-						layerMask |= (1 << 10);
-						// Set canvas to render to screen
-						layerMask |= (1 << 11);
-					}
-					layerMask = ~layerMask;
-
-					if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask) == true
-						&& raycastHit.transform == this.transform)
-					{
-						Vector2 uv = raycastHit.textureCoord;
 						
-						Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+						RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHit();
 
-						
-						
-						inputInfo.canvasClick = pixelCoord;
-						inputInfo.textMode = this.textMode;
-						inputInfo.eraseMode = this.eraseMode;
-						inputInfo.lineMode = this.lineMode;
-						inputInfo.previousCanvasClick = this.previousCoord;
-						inputInfo.previousMouseDown = this.previousMouseDown;
-						inputInfo.brushColor = this.brushColor;
-						inputInfo.textInput = textOnType;
-						inputInfo.brushSize = this.brushSize;
-						inputInfo.alphabetNumber = alphabetNumber;
-						
-
-						if(lineMode)
+						if (raycastHit.transform == this.transform)
 						{
-							if(!previousMouseDown)
+							selected = true;
+							Vector2 uv = raycastHit.textureCoord;
+							
+							Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+							
+							
+							inputInfo.canvasClick = pixelCoord;
+							inputInfo.textMode = this.textMode;
+							inputInfo.eraseMode = this.eraseMode;
+							inputInfo.lineMode = this.lineMode;
+							inputInfo.previousCanvasClick = this.previousCoord;
+							inputInfo.previousMouseDown = this.previousMouseDown;
+							inputInfo.brushColor = this.brushColor;
+							inputInfo.textInput = textOnType;
+							inputInfo.brushSize = this.brushSize;
+							inputInfo.alphabetNumber = alphabetNumber;
+							
+
+							if(lineMode)
+							{
+								if(!previousMouseDown)
+								{
+									previousCoord = pixelCoord;
+								}
+							}
+							else 
 							{
 								previousCoord = pixelCoord;
 							}
+							previousMouseDown = true;
+							if(!lineMode && !textMode)
+							{
+								SendInput(inputInfo);
+							}
+							
 						}
-						else 
+						else
 						{
-							previousCoord = pixelCoord;
+							
+							selected = false;
+							previousMouseDown = false;
 						}
-						previousMouseDown = true;
-						if(!lineMode)
-						{
-							SendInput(inputInfo);
-						}
-						
 					}
+					
 				}
-			}
-			if(Input.GetMouseButtonUp(0))
-			{
-				if(textMode || lineMode)
+				if(Input.GetMouseButtonUp(0))
 				{
-					RaycastHit raycastHit;
-					Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
-
-
-					int layerMask = 1 << 30;
-					if (clicked)
+					if(textMode || lineMode)
 					{
-						layerMask = (1 << LayerMask.NameToLayer("DoNotRenderCanavas")) |
-						(1 << LayerMask.NameToLayer("DoNotRenderTCan"));
+						if(CanvasInput.Instance.getRaycastHitObject())
+						{
+							
+							RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHit();
+							
+							
+							
 
-						// Set canvas to render to screen
-						layerMask |= (1 << 10);
-						// Set canvas to render to screen
-						layerMask |= (1 << 11);
+
+
+							if (raycastHit.transform == this.transform)
+							{
+								selected = true;
+								Vector2 uv = raycastHit.textureCoord;
+								
+								Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+								inputInfo.canvasClick = pixelCoord;
+								inputInfo.textMode = this.textMode;
+								inputInfo.eraseMode = this.eraseMode;
+								inputInfo.lineMode = this.lineMode;
+								inputInfo.previousCanvasClick = this.previousCoord;
+								inputInfo.previousMouseDown = this.previousMouseDown;
+								inputInfo.brushColor = this.brushColor;
+								inputInfo.textInput = textOnType;
+								inputInfo.brushSize = this.brushSize;
+								inputInfo.alphabetNumber = alphabetNumber;
+								
+
+								SendInput(inputInfo);
+								
+								
+								
+								
+							}
+							else
+							{
+								selected = false;
+							}
+						}
+						
+
 					}
-					layerMask = ~layerMask;
-
-					if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask) == true
-						&& raycastHit.transform == this.transform)
-					{
-						Vector2 uv = raycastHit.textureCoord;
-						
-						Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
-
-						inputInfo.canvasClick = pixelCoord;
-						inputInfo.textMode = this.textMode;
-						inputInfo.eraseMode = this.eraseMode;
-						inputInfo.lineMode = this.lineMode;
-						inputInfo.previousCanvasClick = this.previousCoord;
-						inputInfo.previousMouseDown = this.previousMouseDown;
-						inputInfo.brushColor = this.brushColor;
-						inputInfo.textInput = textOnType;
-						inputInfo.brushSize = this.brushSize;
-						inputInfo.alphabetNumber = alphabetNumber;
-						
-
-						SendInput(inputInfo);
-						
-						
-						
-						
-					}
-
+					previousMouseDown = false;
+					
 				}
-				previousMouseDown = false;
 				
 			}
+			
 		}
 
     }
@@ -470,7 +452,7 @@ public class NewPaint : MonoBehaviour
             yield return null;
 		}
 	}
-    void Draw(InputInformation inp, Color32 brush)
+    void Draw(InputInformation inp, Color brush)
 	{
         if (!inp.previousMouseDown)
         {
@@ -692,20 +674,156 @@ public class NewPaint : MonoBehaviour
 	
     void UpdateMask()
     {
+		
+		if(CanvasInput.Instance.getRaycastHitObject() && CanvasInput.Instance.GetRaycastHit().transform == this.transform)
+		{
+			RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHit();
+			
+			
+			OnCanvas = true;
+			Vector2 uv = raycastHit.textureCoord;
+			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+			for (int x = 0; x < canvasWidth; x++)
+			{
+				for (int y = 0; y < canvasHeight; y++)
+				{
+					maskCanvas.SetPixel(x, y, Color.clear);
+				}
+			}
+			if(lineMode)
+			{
+				lineMask();
+			}
+			else if(textMode)
+			{
+				textMask(pixelCoord);
+			}
+			else if(eraseMode)
+			{
+				drawMask(pixelCoord, Color.white);
+			}
+			else{
+				
+				drawMask(pixelCoord, brushColor);
+			}
+			
+			
+		}
+		else
+		{
+			if(OnCanvas)
+			{
+				for (int x = 0; x < canvasWidth; x++)
+				{
+					for (int y = 0; y < canvasHeight; y++)
+					{
+						maskCanvas.SetPixel(x, y, Color.clear);
+					}
+				}
+				maskCanvas.Apply();
 
+			}
+			OnCanvas = false;
+			
+		}
+		
     }
-    void drawMask()
+    void drawMask(Vector2 canvasClick, Color brush)
     {
+		Color clearBrush = brush;
+		clearBrush.a = 0.5f;
+		
+		if (brushSize > 1)
+		{
+			
 
+
+			for (int x = (int)(canvasClick.x - (brushSize / 2)); x < (int)(canvasClick.x + (brushSize / 2)); x++)
+			{
+				if (x >= canvasWidth || x < 0)
+				{
+					continue;
+				}
+				for (int y = (int)(canvasClick.y - (brushSize / 2)); y < (int)(canvasClick.y + (brushSize / 2)); y++)
+				{
+					if (y >= canvasHeight || y < 0)
+					{
+						continue;
+					}
+					// Set pixel on canvas to the current brush color
+					
+					maskCanvas.SetPixel(x, y, clearBrush);
+					
+					
+				}
+			}
+			
+		}
+		else{
+			int x = (int)canvasClick.x;
+			int y = (int)canvasClick.y;
+			maskCanvas.SetPixel(x, y, clearBrush);
+		}
+		maskCanvas.Apply();
     }
-    void textMask()
+    void textMask(Vector2 pixelCoord)
     {
+		if (textOnType.Equals("") == false && textMode == true)
+		{
+			Vector2 startChar = new Vector2(pixelCoord.x, pixelCoord.y);
+			for (int i = 0; i < textOnType.Length; i++)
+			{
 
-    }
-    void eraseMask()
-    {
+				int spot = DetermineCharacter(textOnType[i]);
+				if (spot != -1)
+				{
+					DrawCharacterMask(startChar, spot);
+					startChar.x += textWidth * brushSize;
+					startChar.x += 1;
+				}
+			}
 
+		}
     }
+	void DrawCharacterMask(Vector2 currUV, int spot)
+	{
+		spot *= textWidth;
+		int currX = (int)currUV.x;
+		int currY = (int)currUV.y;
+		for (int x = spot; x < (spot + textWidth); x++)
+		{
+			for (int y = 0; y < textHeight; y++)
+			{
+
+				Color pixelColor = alphabetUsed.GetPixel(x, y);
+				if (pixelColor.a != 0)
+				{
+					pixelColor = brushColor;
+					pixelColor.a = 0.5f;
+					for (int i = 0; i < brushSize; i++)
+					{
+						for (int j = 0; j < brushSize; j++)
+						{
+							if (((currX + j) < canvasWidth) && (currY + ((y - 2) * brushSize) + i < canvasHeight))
+							{
+								maskCanvas.SetPixel(currX + j, currY + ((y - 2) * brushSize) + i, pixelColor);
+							}
+
+
+						}
+
+
+
+					}
+
+				}
+
+			}
+			currX += brushSize;
+		}
+		maskCanvas.Apply();
+	}
+    
     void lineMask()
     {
 
@@ -882,33 +1000,21 @@ public class NewPaint : MonoBehaviour
 
 	public void SetCanLoad()
 	{
-		
-		if (canSave == false && doneLoading)
+		if(selected)
 		{
-			doneLoading = false;
-			canLoad = true;
-			Texture2D newPng = new Texture2D(1, 1);
-			StartCoroutine(LoadWindow(newPng));
-			
+			if (canSave == false && doneLoading)
+			{
+				doneLoading = false;
+				canLoad = true;
+				Texture2D newPng = new Texture2D(1, 1);
+				StartCoroutine(LoadWindow(newPng));
+				
+			}
+			canLoad = false;
 		}
-		canLoad = false;
 		
 		
-		/*
-		canLoad = !canLoad;
-		canSave = false;
-		if (canLoad == true)
-		{
-			GameObject.Find("SaveField").GetComponent<InputField>().interactable = true;
-			GameObject.Find("TextInput").GetComponent<InputField>().interactable = false;
-			GameObject.Find("TextToggle").GetComponent<Toggle>().isOn = false;
-		}
-		else
-		{
-			GameObject.Find("SaveField").GetComponent<InputField>().interactable = false;
-			GameObject.Find("SavePlaceholder").GetComponent<Text>().text = "File_Name";
-		}
-		*/
+		
 
 	}
 	IEnumerator LoadWindow(Texture2D texture)
@@ -970,11 +1076,15 @@ public class NewPaint : MonoBehaviour
 
 	void sendClearCanvas()
 	{
-		float[] fArray = {1};
-		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
-            {
-                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
-            });
+		if(selected)
+		{
+			float[] fArray = {1};
+			this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+				{
+					GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+				});
+		}
+		
 	}
 	void ClearCanvas()
 	{
@@ -1053,7 +1163,7 @@ public class NewPaint : MonoBehaviour
 			inputInfoNew.mouseDown = System.Convert.ToBoolean(i[2]);
 			inputInfoNew.previousCanvasClick = new Vector2(i[3], i[4]);
 			inputInfoNew.previousMouseDown = System.Convert.ToBoolean(i[5]);
-			inputInfoNew.brushColor = new Color32((byte)i[6], (byte)i[7], (byte)i[8], 1);
+			inputInfoNew.brushColor = new Color(i[6], i[7], i[8], 1);
 			inputInfoNew.brushSize = (int)i[9];
 			inputInfoNew.eraseMode = System.Convert.ToBoolean(i[10]);
 			inputInfoNew.lineMode = System.Convert.ToBoolean(i[11]);
