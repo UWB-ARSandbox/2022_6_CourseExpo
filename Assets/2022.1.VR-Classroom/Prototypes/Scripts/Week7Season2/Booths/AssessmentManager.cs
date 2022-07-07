@@ -217,7 +217,7 @@ public class AssessmentManager : MonoBehaviour {
         walls.gameObject.SetActive(true);
 
         //Hide Players
-        GameManager.TogglePlayerVisibility(false);
+        // GameManager.TogglePlayerVisibility(false);
         GameManager.isTakingAssessment = true;
 
         timeStarted = Time.time;
