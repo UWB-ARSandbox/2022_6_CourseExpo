@@ -32,7 +32,8 @@ public class MumbleActor : MonoBehaviour {
     public string Username = "ExampleUser";
     public string Password = "1passwordHere!";
     public string ChannelToJoin = "";
-
+    //This is the front facing script for communication with the mumble class
+    //Note that 
 	void Start () {
         MyMumbleMic = null;
         if(MyMumbleMic == null){
@@ -148,7 +149,7 @@ public class MumbleActor : MonoBehaviour {
             parent = GameObject.Find("GameManager").GetComponent<AudioManager>().my_Controller.gameObject;
         }
         else{
-            parent = GameObject.Find(username);
+            parent = GameObject.Find(username + "_GhostPlayer");
         }
         GameObject newObj;
         if(parent != null){
