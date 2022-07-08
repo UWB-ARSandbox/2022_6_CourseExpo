@@ -227,7 +227,7 @@ public class AudioManager : MonoBehaviour
 
     //Intent is to create a list of channels that meet a specific criteria to reduce the amount of channels to be created
     public void ChannelToBeCreated(string channelName){
-        if(channelName.Contains("Quiz") || channelName.Contains("Test"))
+        if(channelName.Contains("Quiz") || channelName.Contains("Test") || channelName.Contains("Assessment"))
             ChannelList.Add(channelName);
     }
 
@@ -266,6 +266,8 @@ public class AudioManager : MonoBehaviour
                     yield return new WaitForSeconds(.6f);
                 }
                 CreateChannel("Private",2);
+                yield return new WaitForSeconds(1f);
+                CreateChannel("Group1",10);
                 yield return new WaitForSeconds(1f);
                 mumble.ConnectionEstablished -= startChannelCreation;
                 yield return new WaitForSeconds(2f);
