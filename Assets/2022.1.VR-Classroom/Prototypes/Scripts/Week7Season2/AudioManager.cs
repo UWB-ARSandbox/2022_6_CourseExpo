@@ -59,6 +59,32 @@ public class AudioManager : MonoBehaviour
         }
     }
 
+    #region MuteUser
+    //Intent is to provide the username of the user you want to mute
+    public bool GetUserState(string TargetUser){
+        if(VoiceChatEnabled){
+            Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
+            AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
+            return TargetSource.mute;
+        }
+        return false;
+    }
+    public void MuteUser(string TargetUser){
+        if(VoiceChatEnabled){
+            Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
+            AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
+            TargetSource.mute = true;
+        }
+    }
+    public void UnMuteUser(string TargetUser ){
+        if(VoiceChatEnabled){
+            Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
+            AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();
+            TargetSource.mute = false;
+        }
+    }
+    #endregion
+
     //Intended to be called by the GameManager upon recieving the CNNCT command from the Teacher
     //float[] _f should contain such information such as HostName and Password where password must match exactly
     //And hostname shall match the hostname indicated in the Voice Chat Setup guide

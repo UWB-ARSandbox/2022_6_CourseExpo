@@ -96,17 +96,7 @@ public class VoiceUI : MonoBehaviour
             ErrorOutput.text = "SUCCESS";
         }
     }
-    #region MuteUser
-    //Intent is to provide the username of the user you want to mute
-    public void MuteUser(string TargetUser){
-        AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
-        TargetSource.mute = true;
-    }
-    public void UnMuteUser(string TargetUser ){
-        AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();
-        TargetSource.mute = false;
-    }
-    #endregion
+
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){
         List<string> options = new List<string> ();
