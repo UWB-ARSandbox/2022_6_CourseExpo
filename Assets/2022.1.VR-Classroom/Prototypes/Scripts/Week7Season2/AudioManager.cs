@@ -21,6 +21,8 @@ public class AudioManager : MonoBehaviour
     public GameObject PrefabTeacherVoiceUI;
     public PlayerController my_Controller;
     
+    public Dictionary<string,bool> PlayerMuteStatus;
+
     public bool VoiceChatEnabled = false;
 
     private bool VoiceUIEnabled = false;
@@ -61,29 +63,67 @@ public class AudioManager : MonoBehaviour
 
     #region MuteUser
     //Intent is to provide the username of the user you want to mute
+    //May be better to use a list of all players and search them to see if they should be muted or unmuted
+    //and Update the audiosource of the target 
     public bool GetUserState(string TargetUser){
-        if(VoiceChatEnabled){
-            Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
-            AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
-            if(TargetSource != null)
-                return TargetSource.mute;
+        if(GameManager.players.ContainsValue(TargetUser)){
+            if(PlayerMuteStatus.ContainsKey(TargetUser)){
+            }
+            else{
+                PlayerMuteStatus.Add(TargetUser,false);
+            }
+            return PlayerMuteStatus[TargetUser];
+            // Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
+            // AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
+            // if(TargetSource != null)
+            //     return TargetSource.mute;
         }
+        else
+            Debug.Log("Bad Username");
         return false;
     }
     public void MuteUser(string TargetUser){
-        if(VoiceChatEnabled){
-            Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
-            AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
-            TargetSource.mute = true;
+        if(GameManager.players.ContainsValue(TargetUser)){
+            if(!PlayerMuteStatus.ContainsKey(TargetUser)){
+                PlayerMuteStatus.Add(TargetUser,false);
+            }
+            if(VoiceChatEnabled){
+                PlayerMuteStatus[TargetUser] = true;
+                if(UpdateUserStates != null){
+                    UpdateUserStates();
+                }
+                // Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
+                // AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
+                // if(TargetSource != null)
+                //     TargetSource.mute = true;
+            }
         }
+        else
+            Debug.Log("Bad Username");
     }
     public void UnMuteUser(string TargetUser ){
-        if(VoiceChatEnabled){
-            Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
-            AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();
-            TargetSource.mute = false;
+        if(GameManager.players.ContainsValue(TargetUser)){
+            if(!PlayerMuteStatus.ContainsKey(TargetUser)){
+                    PlayerMuteStatus.Add(TargetUser,false);
+            }
+            if(VoiceChatEnabled){
+                PlayerMuteStatus[TargetUser] = false;
+                if(UpdateUserStates != null){
+                    UpdateUserStates();
+                }
+                // Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
+                // AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();
+                // if(TargetSource != null)
+                //     TargetSource.mute = false;
+            }
         }
+        else
+            Debug.Log("Bad Username");
     }
+    //broadcast changes to users muted/unmuted
+    //Subscribe to the event through AudioManager.UpdateUserStates += <functionName>;
+    public event System.Action UpdateUserStates;
+
     #endregion
 
     //Intended to be called by the GameManager upon recieving the CNNCT command from the Teacher
