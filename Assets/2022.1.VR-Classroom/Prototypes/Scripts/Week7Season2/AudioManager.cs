@@ -21,7 +21,7 @@ public class AudioManager : MonoBehaviour
     public GameObject PrefabTeacherVoiceUI;
     public PlayerController my_Controller;
     
-    public Dictionary<string,bool> PlayerMuteStatus;
+    public Dictionary<string,bool> PlayerMuteStatus = new Dictionary<string, bool>();
 
     public bool VoiceChatEnabled = false;
 
@@ -66,47 +66,34 @@ public class AudioManager : MonoBehaviour
     //May be better to use a list of all players and search them to see if they should be muted or unmuted
     //and Update the audiosource of the target 
     public bool GetUserState(string TargetUser){
-        if(GameManager.players.ContainsValue(TargetUser)){
-            if(PlayerMuteStatus.ContainsKey(TargetUser)){
-            }
-            else{
-                PlayerMuteStatus.Add(TargetUser,false);
-            }
-            return PlayerMuteStatus[TargetUser];
+        if(PlayerMuteStatus.ContainsKey(TargetUser)){
         }
-        else
-            Debug.LogWarning("Bad Username");
-        return false;
+        else{
+            PlayerMuteStatus.Add(TargetUser,false);
+        }
+        return PlayerMuteStatus[TargetUser];
     }
     public void MuteUser(string TargetUser){
-        if(GameManager.players.ContainsValue(TargetUser)){
-            if(!PlayerMuteStatus.ContainsKey(TargetUser)){
-                PlayerMuteStatus.Add(TargetUser,false);
-            }
-            if(VoiceChatEnabled){
-                PlayerMuteStatus[TargetUser] = true;
-                if(UpdateUserStates != null){
-                    UpdateUserStates();
-                }
+        if(!PlayerMuteStatus.ContainsKey(TargetUser)){
+            PlayerMuteStatus.Add(TargetUser,false);
+        }
+        if(VoiceChatEnabled){
+            PlayerMuteStatus[TargetUser] = true;
+            if(UpdateUserStates != null){
+                UpdateUserStates();
             }
         }
-        else
-            Debug.LogWarning("Bad Username");
     }
     public void UnMuteUser(string TargetUser ){
-        if(GameManager.players.ContainsValue(TargetUser)){
-            if(!PlayerMuteStatus.ContainsKey(TargetUser)){
-                    PlayerMuteStatus.Add(TargetUser,false);
-            }
-            if(VoiceChatEnabled){
-                PlayerMuteStatus[TargetUser] = false;
-                if(UpdateUserStates != null){
-                    UpdateUserStates();
-                }
+        if(!PlayerMuteStatus.ContainsKey(TargetUser)){
+            PlayerMuteStatus.Add(TargetUser,false);
+        }
+        if(VoiceChatEnabled){
+            PlayerMuteStatus[TargetUser] = false;
+            if(UpdateUserStates != null){
+                UpdateUserStates();
             }
         }
-        else
-            Debug.LogWarning("Bad Username");
     }
     //broadcast changes to users muted/unmuted
     //Subscribe to the event through AudioManager.UpdateUserStates += <functionName>;

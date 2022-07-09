@@ -9,14 +9,11 @@ public class TeleportTrigger : MonoBehaviour
     public AudioManager _myAudioManager;
 
     //booth must have a collider and have trigger on
+    //Expected to be placed on the "BoothZone" object
 
     void Start()
     {
-        // GameObject player = (GameObject)GameObject.FindObjectOfType(typeof(PlayerController));
-        // CharacterCollider = player.GetComponent<Collider>();
-
-        // _myAudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
-
+        BoothName = gameObject.transform.parent.transform.parent.GetComponent<BoothManager>().boothName;
     }
 
     void Update()
