@@ -65,7 +65,8 @@ public class AudioManager : MonoBehaviour
         if(VoiceChatEnabled){
             Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
             AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
-            return TargetSource.mute;
+            if(TargetSource != null)
+                return TargetSource.mute;
         }
         return false;
     }
