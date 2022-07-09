@@ -73,13 +73,9 @@ public class AudioManager : MonoBehaviour
                 PlayerMuteStatus.Add(TargetUser,false);
             }
             return PlayerMuteStatus[TargetUser];
-            // Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
-            // AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
-            // if(TargetSource != null)
-            //     return TargetSource.mute;
         }
         else
-            Debug.Log("Bad Username");
+            Debug.LogWarning("Bad Username");
         return false;
     }
     public void MuteUser(string TargetUser){
@@ -92,14 +88,10 @@ public class AudioManager : MonoBehaviour
                 if(UpdateUserStates != null){
                     UpdateUserStates();
                 }
-                // Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
-                // AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();    
-                // if(TargetSource != null)
-                //     TargetSource.mute = true;
             }
         }
         else
-            Debug.Log("Bad Username");
+            Debug.LogWarning("Bad Username");
     }
     public void UnMuteUser(string TargetUser ){
         if(GameManager.players.ContainsValue(TargetUser)){
@@ -111,14 +103,10 @@ public class AudioManager : MonoBehaviour
                 if(UpdateUserStates != null){
                     UpdateUserStates();
                 }
-                // Debug.Log("Attempting to Find AudioSource for: "+TargetUser+"_MumbleAudioPlayer");
-                // AudioSource TargetSource = GameObject.Find(TargetUser+"_MumbleAudioPlayer").GetComponent<AudioSource>();
-                // if(TargetSource != null)
-                //     TargetSource.mute = false;
             }
         }
         else
-            Debug.Log("Bad Username");
+            Debug.LogWarning("Bad Username");
     }
     //broadcast changes to users muted/unmuted
     //Subscribe to the event through AudioManager.UpdateUserStates += <functionName>;
