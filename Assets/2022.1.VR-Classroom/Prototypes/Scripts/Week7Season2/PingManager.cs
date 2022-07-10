@@ -12,8 +12,6 @@ public class PingManager : MonoBehaviour
     void Start()
     {
         m_ASLObject = GetComponent<ASLObject>();
-        m_ASLObject._LocallySetFloatCallback(FloatReceive);
-        
         // start the ping routine if the connected user is a teacher
         if (GameManager.AmTeacher)
         {
@@ -46,18 +44,5 @@ public class PingManager : MonoBehaviour
                 }
             }
         }
-    }
-
-    void FloatReceive(string _id, float[] _f)
-    {
-        if ((int)_f[0] == 404)
-        {
-            string username = "";
-            for (int i = 1; i < _f.Length; i++) {
-                username += (char)(int)_f[i];
-            }
-            GameObject.Find(username + "_GhostPlayer").gameObject.SetActive(false);
-        }
-        
     }
 }

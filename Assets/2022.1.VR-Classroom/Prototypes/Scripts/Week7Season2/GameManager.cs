@@ -986,6 +986,13 @@ public class GameManager : MonoBehaviour {
             case CNNCT: //26628
                 _myAudioManager.RecieveConnectionInfo_FromGamemanager(_f);
                 break;
+            case 404:
+                string username = "";
+                for (int i = 1; i < _f.Length; i++) {
+                    username += (char)(int)_f[i];
+                }
+                GameObject.Find(username + "_GhostPlayer").gameObject.SetActive(false);
+                break;
         }
 
         if (countVerify != -1 && !BoothManager.verified) {
