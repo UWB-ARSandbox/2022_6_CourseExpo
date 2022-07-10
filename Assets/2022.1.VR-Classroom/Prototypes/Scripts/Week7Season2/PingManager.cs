@@ -7,16 +7,16 @@ public class PingManager : MonoBehaviour
 {
 
     public float waitTime = 5;
+    ASLObject m_ASLObject;
 
     void Start()
     {
+        m_ASLObject = GetComponent<ASLObject>();
+        m_ASLObject._LocallySetFloatCallback(FloatReceive);
+        
         if (GameManager.AmTeacher)
         {
             StartCoroutine(SendPing());
-        }
-        else
-        {
-            this.enabled = false;
         }
     }
 
@@ -32,10 +32,22 @@ public class PingManager : MonoBehaviour
                 {
                     if (!GameLiftManager.GetInstance().m_Players.ContainsValue(ghost.gameObject.name))
                     {
-                        GameObject.Find(ghost.gameObject.name).transform.parent.gameObject.SetActive(false);
+                        List<float> nameFloats = new List<float>();
+                        nameFloats.AddRange(GameManager.stringToFloats(ghost.gameObject.name));
+                        var nameFloatsArray = nameFloats.ToArray();
+                        m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(nameFloatsArray); });
                     }
                 }
             }
         }
+    }
+
+    void FloatReceive(string _id, float[] _f)
+    {
+        string username = "";
+        for (int i = 0; i < _f.Length; i++) {
+            username += (char)(int)_f[i];
+        }
+        GameObject.Find(username).transform.parent.gameObject.SetActive(false);
     }
 }
