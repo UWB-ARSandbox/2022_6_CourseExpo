@@ -36,6 +36,8 @@ public class AudioManager : MonoBehaviour
     public string HostName;
     public string Password;
 
+    public bool IsBeingHelped = false;
+
     public List<string> ChannelList = new List<string>();
     private MumbleActor mumble;
     private Mumble.MumbleMicrophone mumbleMic;
@@ -206,8 +208,8 @@ public class AudioManager : MonoBehaviour
         if(VoiceChatEnabled){
             if(_mumbleClient == null)
                 _mumbleClient = mumble.getClient();
-            previousChannel = _mumbleClient.GetCurrentChannel();
-            if(!_mumbleClient.GetCurrentChannel().Equals(RoomName)){
+            if(!_mumbleClient.GetCurrentChannel().Equals(RoomName) && !IsBeingHelped){
+                previousChannel = _mumbleClient.GetCurrentChannel();
                 _mumbleClient.JoinChannel(RoomName);
                 Debug.Log(Username+ " Moved to: " +RoomName);
             }
@@ -235,8 +237,8 @@ public class AudioManager : MonoBehaviour
         if(VoiceChatEnabled){
             if(_mumbleClient == null)
                 _mumbleClient = mumble.getClient();
-            if(!_mumbleClient.GetCurrentChannel().Equals("root"))
-                _mumbleClient.JoinChannel("root");
+            if(!_mumbleClient.GetCurrentChannel().Equals("Root") && !IsBeingHelped)
+                _mumbleClient.JoinChannel("Root");
             else
                 Debug.Log("User is already in root");
         }

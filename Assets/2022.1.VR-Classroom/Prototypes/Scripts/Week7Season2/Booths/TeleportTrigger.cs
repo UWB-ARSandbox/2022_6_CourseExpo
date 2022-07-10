@@ -13,7 +13,11 @@ public class TeleportTrigger : MonoBehaviour
 
     void Start()
     {
-        BoothName = gameObject.transform.parent.transform.parent.GetComponent<BoothManager>().boothName;
+        BoothName = gameObject.transform.parent.transform.parent.GetComponent<BoothManager>().boothName;        
+        if(_myAudioManager == null){
+            _myAudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
+        }
+        _myAudioManager.ChannelToBeCreated(BoothName);
     }
 
     void Update()
@@ -23,9 +27,7 @@ public class TeleportTrigger : MonoBehaviour
             if(player !=null)
                 CharacterCollider = player.gameObject.GetComponent<Collider>();
         }
-        if(_myAudioManager == null){
-            _myAudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
-        }
+
     }
 
     private void OnTriggerEnter(Collider other) {
@@ -34,10 +36,17 @@ public class TeleportTrigger : MonoBehaviour
             _myAudioManager.moveChannel(BoothName);
         }
     }
+    
+    //ensures the user is in the appropriate channel
+    private void OnTriggerStay(Collider other) {
+        if(other == CharacterCollider){
+            _myAudioManager.moveChannel(BoothName);
+        }
+    }
 
     private void OnTriggerExit(Collider other) {
         if(other == CharacterCollider){
-            _myAudioManager.moveChannel("Root");
+            _myAudioManager.ReturnToRootChannel();
         }
     }
 }

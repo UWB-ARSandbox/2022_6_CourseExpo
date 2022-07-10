@@ -46,6 +46,7 @@ public class HelpRequestButton : MonoBehaviour
             transform.parent.parent.parent.GetComponent<HelpRequestedUI>().ReenableButton(id);
             transform.parent.parent.parent.GetComponent<HelpRequestedUI>().SpawnHelpFinishedButton();
             GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
+            GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = true;
             Destroy(gameObject);
         }
         else{
