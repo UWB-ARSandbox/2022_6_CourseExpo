@@ -33,7 +33,7 @@ public class PingManager : MonoBehaviour
             foreach(GhostPlayer ghost in ghostList)
             {
                 string name = ghost.gameObject.name.Split('_')[0];
-                if (name != GameManager.players[GameManager.MyID])
+                if (name != GameManager.players[1])
                 {
                     if (!GameLiftManager.GetInstance().m_Players.ContainsValue(name))
                     {
