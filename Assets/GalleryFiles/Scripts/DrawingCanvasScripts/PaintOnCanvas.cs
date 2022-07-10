@@ -7,7 +7,7 @@
  * The user is allowed to change the brush size and color. User can type
  * text in two sizes 7 pixels wide or 12 pixels wide.
 */
-
+using System;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -17,6 +17,127 @@ using UnityEngine.EventSystems;
 
 public class PaintOnCanvas : MonoBehaviour
 {
+	//For getting the input information of other peers instead of sending over a texture
+	//IEquatable and IComparable sutff borrowed from https://stackoverflow.com/questions/59031994/how-to-implement-icomparabletime-in-my-struct
+	struct InputInformation //: IEquatable<InputInformation>, IComparable<InputInformation>
+	{
+		//public int peerID;
+		public Vector2 canvasClick;
+
+		public bool mouseDown;
+		public bool previousMouseDown;
+		public Vector2 previousCanvasClick;
+
+		public Color32 brushColor;
+		public int brushSize;
+
+		public bool eraseMode;
+		public bool textMode;
+		public bool lineMode;
+
+		public string textInput;
+		/*
+		public override bool Equals(object other)
+        {
+			if (other == null || this.GetType() != other.GetType()) 
+			{
+				return false;
+			}
+            return this.peerID == ((InputInformation)other).peerID;
+        }
+		public override int GetHashCode()
+        {
+            return this.GetHashCode();
+        }
+		public bool Equals(InputInformation other)
+        {
+            return this.Equals((object)other);
+        }
+		public int CompareTo(InputInformation other)
+        {
+            if(peerID > (other.peerID))
+			{
+				return 1;
+			}
+			else if (peerID < (other.peerID))
+			{
+				return -1;
+			}
+			else 
+			{
+				return 0;
+			}
+
+            // Code that compares two variables
+        }
+		*/
+		
+	}
+	//gotten from https://visualstudiomagazine.com/Articles/2012/11/01/Priority-Queues-with-C.aspx?Page=1
+	public class PriorityQueue <T> where T : IComparable <T>
+	{
+		private List <T> data;
+
+		public PriorityQueue()
+		{
+			this.data = new List <T>();
+		}
+		public void Enqueue(T item)
+		{
+			data.Add(item);
+			int ci = data.Count - 1;
+			while (ci  > 0)
+			{
+				int pi = (ci - 1) / 2;
+				if (data[ci].CompareTo(data[pi])  >= 0)
+				break;
+				T tmp = data[ci]; data[ci] = data[pi]; data[pi] = tmp;
+				ci = pi;
+			}
+		}
+		public T Dequeue()
+		{
+			// Assumes pq isn't empty
+			int li = data.Count - 1;
+			T frontItem = data[0];
+			data[0] = data[li];
+			data.RemoveAt(li);
+
+			--li;
+			int pi = 0;
+			while (true)
+			{
+				int ci = pi * 2 + 1;
+				if (ci  > li) break;
+				int rc = ci + 1;
+				if (rc  <= li && data[rc].CompareTo(data[ci])  < 0)
+				ci = rc;
+				if (data[pi].CompareTo(data[ci])  <= 0) break;
+				T tmp = data[pi]; data[pi] = data[ci]; data[ci] = tmp;
+				pi = ci;
+			}
+			return frontItem;
+		}
+		public override string ToString()
+		{
+			string s = "";
+			for (int i = 0; i  < data.Count; ++i)
+				s += data[i].ToString() + " ";
+			s += "count = " + data.Count;
+			return s;
+		}
+		public int Count()
+		{
+			return data.Count;
+		}
+		public T Peek()
+		{
+			T frontItem = data[0];
+			return frontItem;
+		}
+	}
+	Queue<InputInformation> myQueue;
+
 	//the canvas of the students
 	Texture2D studentCanvas;
 
@@ -126,6 +247,8 @@ public class PaintOnCanvas : MonoBehaviour
 	// Start is called before the first frame update
 	void Start()
 	{
+		//myQueue = new Queue<InputInformation>();
+		
 		// Allows students to resubmit work
 		handler = GameObject.Find("Resubmission").GetComponent<ResubmissionHandler>();
 
@@ -295,7 +418,11 @@ public class PaintOnCanvas : MonoBehaviour
 		}
 	}
 
+	
+
+	
 	// Update is called once per frame
+
 	void Update()
 	{
 		// Makes sure that the paint brush mask is not applied every frame
@@ -381,36 +508,19 @@ public class PaintOnCanvas : MonoBehaviour
 				if (Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask) == true
 					&& raycastHit.transform.GetComponent<PaintOnCanvas>() != null)
 				{
-					Vector2 uv;
-					if ((int)transform.forward.z == -1)
-					{
-						uv = new Vector2((raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
-						(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
-					}
-					else if ((int)transform.forward.z == 1)
-					{
-						uv = new Vector2(1 - (raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
-						(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
-					}
-					else if ((int)transform.forward.x == -1)
-					{
-						uv = new Vector2(1 - (raycastHit.point.z - (transform.position.z - (transform.localScale.x / 2))) / (canvasWidth / 256),
-						(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
-					}
-					else if ((int)transform.forward.x == 1)
-					{
-						uv = new Vector2((raycastHit.point.z - (transform.position.z - (transform.localScale.x / 2))) / (canvasWidth / 256),
-						(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
-					}
-					else
-					{
-						Debug.Log("Bad canvas angle");
-						uv = new Vector2(0.5f, 0.5f);
-					}
-					//converts raycastHit point into a UV coordinate
-					//Vector2 uv = new Vector2((raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
-					//(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
+					Vector2 uv = raycastHit.textureCoord;
+					
 					Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+					InputInformation inputInfo;
+					
+					inputInfo.canvasClick = pixelCoord;
+					inputInfo.textMode = this.textMode;
+					inputInfo.eraseMode = this.eraseMode;
+					inputInfo.lineMode = this.lineMode;
+					inputInfo.previousCanvasClick = this.previousCoord;
+					inputInfo.previousMouseDown = this.previousMouseDown;
+
 					dirPath = Application.dataPath;
 
 					//If the mouse wasn't down, don't interpolate
@@ -640,8 +750,7 @@ public class PaintOnCanvas : MonoBehaviour
 		&& raycastHit.transform.GetComponent<PaintOnCanvas>() != null)
 		{
 			//converts raycastHit point into a UV coordinate
-			Vector2 uv = new Vector2((raycastHit.point.x - (transform.position.x - (transform.localScale.x / 2))) / (canvasWidth / 256),
-			(raycastHit.point.y - (transform.position.y - (transform.localScale.y / 2))) / (canvasHeight / 256));
+			Vector2 uv = raycastHit.textureCoord;
 			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
 			if (brushSize > 1)
 			{
