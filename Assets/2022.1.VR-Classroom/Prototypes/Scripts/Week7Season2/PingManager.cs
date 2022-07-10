@@ -32,12 +32,13 @@ public class PingManager : MonoBehaviour
             GhostPlayer[] ghostList = FindObjectsOfType<GhostPlayer>();
             foreach(GhostPlayer ghost in ghostList)
             {
-                if (ghost.gameObject.name != GameManager.players[GameManager.MyID])
+                string name = ghost.gameObject.name.Split('_')[0];
+                if (name != GameManager.players[GameManager.MyID])
                 {
-                    if (!GameLiftManager.GetInstance().m_Players.ContainsValue(ghost.gameObject.name))
+                    if (!GameLiftManager.GetInstance().m_Players.ContainsValue(name))
                     {
                         List<float> nameFloats = new List<float>();
-                        nameFloats.AddRange(GameManager.stringToFloats(ghost.gameObject.name));
+                        nameFloats.AddRange(GameManager.stringToFloats(name));
                         var nameFloatsArray = nameFloats.ToArray();
                         m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(nameFloatsArray); });
                     }
@@ -52,6 +53,6 @@ public class PingManager : MonoBehaviour
         for (int i = 0; i < _f.Length; i++) {
             username += (char)(int)_f[i];
         }
-        GameObject.Find(username).transform.parent.gameObject.SetActive(false);
+        GameObject.Find(username + "_GhostPlayer").gameObject.SetActive(false);
     }
 }
