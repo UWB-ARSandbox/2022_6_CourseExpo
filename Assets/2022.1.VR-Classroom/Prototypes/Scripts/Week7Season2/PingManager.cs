@@ -38,6 +38,7 @@ public class PingManager : MonoBehaviour
                     if (!GameLiftManager.GetInstance().m_Players.ContainsValue(name))
                     {
                         List<float> nameFloats = new List<float>();
+                        nameFloats.Add(404); // PING REQUEST
                         nameFloats.AddRange(GameManager.stringToFloats(name));
                         var nameFloatsArray = nameFloats.ToArray();
                         m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(nameFloatsArray); });
@@ -49,10 +50,14 @@ public class PingManager : MonoBehaviour
 
     void FloatReceive(string _id, float[] _f)
     {
-        string username = "";
-        for (int i = 0; i < _f.Length; i++) {
-            username += (char)(int)_f[i];
+        if ((int)_f[0] == 404)
+        {
+            string username = "";
+            for (int i = 1; i < _f.Length; i++) {
+                username += (char)(int)_f[i];
+            }
+            GameObject.Find(username + "_GhostPlayer").gameObject.SetActive(false);
         }
-        GameObject.Find(username + "_GhostPlayer").gameObject.SetActive(false);
+        
     }
 }
