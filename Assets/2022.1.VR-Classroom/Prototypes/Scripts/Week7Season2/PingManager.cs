@@ -39,15 +39,22 @@ public class PingManager : MonoBehaviour
         {
             yield return new WaitForSeconds(waitTime);
             myFloats[0] = PINGREQUEST;
-            m_ASLObject.SendAndSetClaim(() => {
-                m_ASLObject.SendFloatArray(myFloats);
-            });
+            foreach (int playerID in playerList.Keys)
+            {
+                if (playerID != 1)
+                {
+                    myFloats[1] = playerID;
+                    m_ASLObject.SendAndSetClaim(() => {
+                    m_ASLObject.SendFloatArray(myFloats);
+                });
+                }
+            }
         }
     }
 
     void FloatReceive(string _id, float[] _f)
     {
-        if((int)_f[0] == PINGREQUEST && !GameManager.AmTeacher)
+        if((int)_f[0] == PINGREQUEST && (int)_f[1] == GameManager.MyID)
         {
             myFloats[0] = PINGRESPONSE;
             myFloats[1] = GameManager.MyID;
