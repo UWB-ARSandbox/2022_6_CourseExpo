@@ -19,7 +19,10 @@ public class VoiceUI : MonoBehaviour
     public InputField HostName;
     public InputField Password;
 
+    public Button TestConnection;
     public Button ConnectUsers;
+
+    public Text ErrorOutput;
 
     Mumble.MumbleMicrophone UserMicrophone;
     MumbleActor myMumble;
@@ -32,13 +35,17 @@ public class VoiceUI : MonoBehaviour
     public void SetUserMicrophone(Mumble.MumbleMicrophone mumbleMic){
         UserMicrophone = mumbleMic;
     }
+
     public void SetMumble(MumbleActor s){
         myMumble = s;
     }
+
     private void Awake() {
+        ConnectUsers.enabled = false;
         _AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
         Debug.Assert(_AudioManager != null);
     }
+
     void Start()
     {
 
@@ -71,6 +78,7 @@ public class VoiceUI : MonoBehaviour
             ShowConnectionPanel();
 
         if(!GameManager.AmTeacher){
+            TestConnection.enabled = false;
             HostName.interactable = false;
             Password.interactable = false;
             VoiceConnectionSettings.enabled = false;
@@ -82,7 +90,13 @@ public class VoiceUI : MonoBehaviour
         if(_AudioManager.VoiceChatEnabled){
             ConnectUsers.enabled = false;
         }
+        if(_AudioManager.TestSuccess_bool){
+            ConnectUsers.enabled = true;
+            TestConnection.enabled = false;
+            ErrorOutput.text = "SUCCESS";
+        }
     }
+
     //populate dropdown with list of microphone devices
     void PopulateMicrophoneDropDown(){
         List<string> options = new List<string> ();
@@ -92,6 +106,10 @@ public class VoiceUI : MonoBehaviour
         User_Microphones.ClearOptions();
         User_Microphones.AddOptions(options);
     }
+
+    #region Input Assignment
+    //Current limitation no check to see if the keybind conflicts with existing keybinds
+    //Potential fix is to create an interactable controls menu to allow the user to rebind all keys
     void OnGUI() {
         keyEvent = Event.current;
         if(keyEvent.isKey && waitingForKey){
@@ -120,6 +138,8 @@ public class VoiceUI : MonoBehaviour
             PushToTalkText.text = inputText;
         }
     }
+    #endregion
+
     public void ChangeVoiceSetting(){
         switch(User_MicType.value){
             case 0:
@@ -144,9 +164,11 @@ public class VoiceUI : MonoBehaviour
                 break;
         }                
     }
+
     public void UpdateVoiceSensitivity(){
         UserMicrophone.MinAmplitude = MicrophoneSensitivity.value;
     }
+
     public void ToggleMute(){
         if(myMumble.getClient().IsSelfMuted())
             myMumble.getClient().SetSelfMute(false);
@@ -158,13 +180,40 @@ public class VoiceUI : MonoBehaviour
         MicrophonePanel.SetActive(false);
         VoiceConnectionPanel.SetActive(true);
     }
+
     public void HideConnectionPanel(){
         VoiceConnectionPanel.SetActive(false);
         MicrophonePanel.SetActive(true);
     }
+
+    //Create test function/button to test connection settings
+    #region TestConnection
+    public void RunTestConnection(){
+        _AudioManager.TestConnection(HostName.text,Password.text);
+        TestConnection.enabled = false;
+    }
+    public void TestConnectionSuccess(){
+        //lock inputfields
+        HostName.interactable = false;
+        Password.interactable = false;
+        //unlock EnableVoiceChat button
+        ErrorOutput.text = "SUCCESS";
+        ConnectUsers.enabled = true;
+        TestConnection.enabled = false;
+        
+    }
+    public void TestConnectionFailure(){
+        Debug.LogError("Test Connection Failed");
+        //spawn debug output
+        TestConnection.enabled = true;
+        ErrorOutput.text = "ERROR: Test Connection Failed";
+    }
+    #endregion
+
+    //To Do: Create error handling for bad input/test input before sending to everyone else
+    //IE only send connection info if the teacher is able to successfully connect to the server
     public void EnableVoiceChat(){
         _AudioManager.SetConnectionInfo(HostName.text,Password.text);
-        _AudioManager.EnableVoiceChat();
         ConnectUsers.enabled = false;
     }
     public void Destroy(){
@@ -173,8 +222,6 @@ public class VoiceUI : MonoBehaviour
     //On destroy update Microphone settings
     private void OnDestroy() { 
         _AudioManager.setVoiceUIEnabled();
-        //Cursor.lockState = CursorLockMode.Locked;
-        //Cursor.visible = false;
     }
 
 
