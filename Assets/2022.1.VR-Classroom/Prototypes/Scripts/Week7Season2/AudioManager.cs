@@ -73,6 +73,7 @@ public class AudioManager : MonoBehaviour
         else{
             PlayerMuteStatus.Add(TargetUser,false);
         }
+        Debug.Log("Getting user state for: " +TargetUser);
         return PlayerMuteStatus[TargetUser];
     }
     public void MuteUser(string TargetUser){

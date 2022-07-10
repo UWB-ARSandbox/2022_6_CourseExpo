@@ -17,11 +17,8 @@ public class MutePlayer : MonoBehaviour
         _myAudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
         if(!_myAudioManager.VoiceChatEnabled){
             Destroy(gameObject);
-        }
+        }        
         _myAudioManager.UpdateUserStates += UserUpdate;
-        if(UserName == null || UserName == ""){
-            UserName = gameObject.transform.parent.gameObject.GetComponent<PlayerTP>().username;
-        }
     }
 
     // Update is called once per frame
@@ -29,7 +26,9 @@ public class MutePlayer : MonoBehaviour
     {
         if(UserName == null || UserName == ""){
             UserName = gameObject.transform.parent.gameObject.GetComponent<PlayerTP>().username;
+            UserUpdate();
         }
+        
         if(UserMuted){
             gameObject.GetComponent<Image>().sprite = Muted;
         }
