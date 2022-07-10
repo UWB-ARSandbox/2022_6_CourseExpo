@@ -56,4 +56,10 @@ public class ColorPicker : MonoBehaviour
             }
         }
     }
+
+    public void SetUserColor(Color color)
+    {
+            // Update player color
+            FindObjectOfType<XpoPlayer>().ColorUser(color);
+    }
 }
