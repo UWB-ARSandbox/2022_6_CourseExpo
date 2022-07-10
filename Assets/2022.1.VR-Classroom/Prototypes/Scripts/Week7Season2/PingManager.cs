@@ -6,7 +6,7 @@ using ASL;
 public class PingManager : MonoBehaviour
 {
 
-    public float waitTime = 5;
+    public float waitTime = 60; // 1 minute - measured in seconds
     ASLObject m_ASLObject;
 
     void Start()
@@ -14,6 +14,7 @@ public class PingManager : MonoBehaviour
         m_ASLObject = GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
         
+        // start the ping routine if the connected user is a teacher
         if (GameManager.AmTeacher)
         {
             StartCoroutine(SendPing());
@@ -22,6 +23,9 @@ public class PingManager : MonoBehaviour
 
     IEnumerator SendPing()
     {
+        // continuously compare the connected users player list to the ghost players in the scene
+        // if a ghost player does not exist in the connected players list then send the name of the
+        // disconnect user to all players to remove it from their scenes
         while (true)
         {
             yield return new WaitForSeconds(waitTime);
