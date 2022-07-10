@@ -53,10 +53,15 @@ public class PingManager : MonoBehaviour
             {
                 if(!connectedPlayers.Contains(playerID))
                 {
-                    if (GameObject.Find(GameManager.players[playerID]))
-                    {
-                        GameObject.Find(GameManager.players[playerID]).transform.parent.gameObject.SetActive(false);
-                    }
+                    Debug.Log(GameManager.players[playerID] + " is not connected!");
+                    // if (GameObject.Find(GameManager.players[playerID]))
+                    // {
+                    //     GameObject.Find(GameManager.players[playerID]).transform.parent.gameObject.SetActive(false);
+                    // }
+                }
+                if(connectedPlayers.Contains(playerID))
+                {
+                    Debug.Log(GameManager.players[playerID] + " is connected!");
                 }
             }
             connectedPlayers.Clear();
