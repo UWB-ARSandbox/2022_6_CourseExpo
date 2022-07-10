@@ -28,12 +28,6 @@ public class PingManager : MonoBehaviour
         }
     }
 
-    // Update is called once per frame
-    void Update()
-    {
-        
-    }
-
     IEnumerator SendPing()
     {
         while (true)
