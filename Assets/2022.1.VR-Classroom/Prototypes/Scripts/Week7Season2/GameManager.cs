@@ -1067,7 +1067,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    static List<float> stringToFloats(string toConvert) {
+    public static List<float> stringToFloats(string toConvert) {
         var floats = new List<float>();
         foreach (var c in toConvert) {
             floats.Add((int)c);
