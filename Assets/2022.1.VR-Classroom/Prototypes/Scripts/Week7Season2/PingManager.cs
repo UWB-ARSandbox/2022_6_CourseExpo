@@ -51,9 +51,12 @@ public class PingManager : MonoBehaviour
             // that did not return a ping response
             foreach(int playerID in playerList.Keys)
             {
-                if(connectedPlayers.Contains(playerID))
+                if(!connectedPlayers.Contains(playerID))
                 {
-                    Debug.Log(GameManager.players[playerID] + " is connected!");
+                    if (GameObject.Find(GameManager.players[playerID]))
+                    {
+                        GameObject.Find(GameManager.players[playerID]).transform.parent.gameObject.SetActive(false);
+                    }
                 }
             }
             connectedPlayers.Clear();
