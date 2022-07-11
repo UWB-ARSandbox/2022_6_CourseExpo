@@ -61,6 +61,12 @@ public class AudioManager : MonoBehaviour
         if(PCMenu == null){
             PCMenu = GameObject.Find("PC Menu").GetComponent<MenuScreen>();
         }
+        #region SetupBoothZones
+        GameObject[] BoothZones = GameObject.FindGameObjectsWithTag("BoothZone");
+        foreach(GameObject BoothZone in BoothZones ){
+            BoothZone.AddComponent<TeleportTrigger>();
+        }
+        #endregion
     }
 
     #region MuteUser
