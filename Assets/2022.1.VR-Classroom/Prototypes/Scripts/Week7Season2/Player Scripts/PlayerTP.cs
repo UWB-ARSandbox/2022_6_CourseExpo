@@ -6,7 +6,7 @@ using UnityEngine.UI;
 public class PlayerTP : MonoBehaviour
 {
     private GameObject Player;
-    string username;
+    public string username;
 
     void Start()
     {

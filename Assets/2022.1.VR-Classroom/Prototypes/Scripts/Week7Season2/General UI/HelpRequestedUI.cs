@@ -48,6 +48,7 @@ public class HelpRequestedUI : MonoBehaviour
     }
     //call the HelpFinished function when the teacher clicks the done helping button-> should return the user being helped and the teacher to their previous channels
     public void HelpFinished(){
+        GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = false;
         GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
         if(HelpingFinishedButton != null){
             Destroy(HelpingFinishedButton);
@@ -79,21 +80,24 @@ public class HelpRequestedUI : MonoBehaviour
                 requestHelpButton.GetComponent<Button>().enabled = true;
                 //move user to private voice channel when teacher teleports to them
                 GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
+                GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = true;
             }
         }
         else if ((int)_f[1] == 100 && GameManager.AmTeacher)
         {
             Debug.Log(GameManager.players[(int)_f[0]] + " has requested help");
-            GameObject newButton = Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity) as GameObject;
+            GameObject newButton = (GameObject)Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity, scrollPanel.transform);
+            //newButton.transform.parent = scrollPanel.transform;
+            newButton.transform.localScale = new Vector3(1, 1, 1);
             newButton.GetComponent<HelpRequestButton>().username = GameManager.players[(int)_f[0]];
             newButton.GetComponent<HelpRequestButton>().id = (int)_f[0];
-            newButton.transform.parent = scrollPanel.transform;
-            newButton.transform.localScale = new Vector3(1, 1, 1);
         }
         else if((int)_f[1] == 102 && !GameManager.AmTeacher){
         //Move User back to their original channel
-            if ((int)_f[0] == GameManager.MyID)
-               GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
+            if ((int)_f[0] == GameManager.MyID){
+                GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = false;
+                GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
+            }
         }
         
     }

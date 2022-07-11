@@ -224,6 +224,11 @@ public class GameManager : MonoBehaviour {
         FindObjectOfType<XpoPlayer>().SetFaceTexture();
     }
 
+    public XpoPlayer GetXpoPlayer()
+    {
+        return FindObjectOfType<XpoPlayer>();
+    }
+
     public static void LoadExpoFile()
     {
         nameAndDesc = new Dictionary<string, string>();
@@ -981,6 +986,13 @@ public class GameManager : MonoBehaviour {
             case CNNCT: //26628
                 _myAudioManager.RecieveConnectionInfo_FromGamemanager(_f);
                 break;
+            case 404:
+                string username = "";
+                for (int i = 1; i < _f.Length; i++) {
+                    username += (char)(int)_f[i];
+                }
+                GameObject.Find(username + "_GhostPlayer").gameObject.SetActive(false);
+                break;
         }
 
         if (countVerify != -1 && !BoothManager.verified) {
@@ -1062,7 +1074,7 @@ public class GameManager : MonoBehaviour {
         }
     }
 
-    static List<float> stringToFloats(string toConvert) {
+    public static List<float> stringToFloats(string toConvert) {
         var floats = new List<float>();
         foreach (var c in toConvert) {
             floats.Add((int)c);
