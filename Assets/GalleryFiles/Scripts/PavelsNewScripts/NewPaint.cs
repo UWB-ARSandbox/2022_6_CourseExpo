@@ -18,7 +18,19 @@ using SimpleFileBrowser;
 
 public class NewPaint : MonoBehaviour
 {
-	public bool[] allowedPlayers;
+	bool allowedPlayer;
+
+	public void enableCanvas()
+	{
+		allowedPlayer = true;
+		gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
+
+	}
+	public void disableCanvas()
+	{
+		allowedPlayer = false;
+		gameObject.GetComponent<Renderer>().material.mainTexture = blankCanvas;
+	}
 
 	
 
@@ -56,7 +68,9 @@ public class NewPaint : MonoBehaviour
     Queue<InputInformation> myQueue;
 
 	//the canvas of the students
-	Texture2D studentCanvas;
+	public Texture2D studentCanvas;
+
+	Texture2D blankCanvas;
 
     int brushSize;
 
@@ -169,12 +183,6 @@ public class NewPaint : MonoBehaviour
         GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(recieveInput);
 
 		int numOfPlayers = ASL.GameLiftManager.GetInstance().m_Players.Count;
-		allowedPlayers = new bool[numOfPlayers];
-		for (int i= 0; i < allowedPlayers.Length; i++)
-		{
-			allowedPlayers[i] = true;
-			
-		}
 		
 
         myQueue = new Queue<InputInformation>();
@@ -196,6 +204,8 @@ public class NewPaint : MonoBehaviour
 		pixelToDraw = new Vector2(0, 0);
         previousCoord = new Vector2(0, 0);
 
+		allowedPlayer = true;
+
         alphabet = Resources.Load("alphabet", typeof(Texture2D)) as Texture2D;
 		alphabet2 = Resources.Load("alphabet2", typeof(Texture2D)) as Texture2D;
 
@@ -210,6 +220,7 @@ public class NewPaint : MonoBehaviour
         //Texture stuff
         studentCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 		maskCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
+		blankCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 
         for (int x = 0; x < canvasWidth; x++)
 		{
@@ -217,10 +228,13 @@ public class NewPaint : MonoBehaviour
 			{
 				studentCanvas.SetPixel(x, y, Color.white);
 				maskCanvas.SetPixel(x, y, Color.clear);
+				blankCanvas.SetPixel(x,y, Color.black );
 
 			}
 		}
+		studentCanvas.Apply();
 		maskCanvas.Apply();
+		blankCanvas.Apply();
 
         gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
 		maskRenderer.material.mainTexture = maskCanvas;
@@ -279,7 +293,7 @@ public class NewPaint : MonoBehaviour
 
 		loadB.onClick.AddListener(SetCanLoad);
 
-        
+    
 
         StartCoroutine(UpdateCanvas());
     }
@@ -288,14 +302,15 @@ public class NewPaint : MonoBehaviour
     void Update()
     {
         // Makes sure that the paint brush mask is not applied every frame
-        UpdateMask();
-
-        //Get inputs to send over for the canvas
-		int playerID = ASL.GameLiftManager.GetInstance().m_PeerId;
-		if(allowedPlayers[playerID - 1])
+		if(allowedPlayer)
 		{
+			UpdateMask();
 
-		
+			//Get inputs to send over for the canvas
+			int playerID = ASL.GameLiftManager.GetInstance().m_PeerId;
+			
+
+			
 			if (!EventSystem.current.IsPointerOverGameObject())
 			{
 				if (Input.GetMouseButton(0) == true && !textMode)
@@ -340,7 +355,7 @@ public class NewPaint : MonoBehaviour
 								previousCoord = pixelCoord;
 							}
 							previousMouseDown = true;
-							if(!lineMode && !textMode)
+							if(!lineMode)
 							{
 								SendInput(inputInfo);
 							}
@@ -407,8 +422,9 @@ public class NewPaint : MonoBehaviour
 				}
 				
 			}
-			
 		}
+			
+		
 
     }
     IEnumerator UpdateCanvas()
@@ -540,8 +556,9 @@ public class NewPaint : MonoBehaviour
                 
                 
             }
-            studentCanvas.Apply();
+            
         }
+		studentCanvas.Apply();
 	}
 	void DrawText(InputInformation inp)
 	{
@@ -1061,13 +1078,15 @@ public class NewPaint : MonoBehaviour
 	}
 	void applyTexture(Texture2D tex)
 	{
-		for (int x = 0; x < tex.width; x++)
+		for (int x = 0; x < canvasWidth; x++)
 		{
-			for (int y = 0; y < tex.height; y++)
+			for (int y = 0; y < canvasHeight; y++)
 			{
 				if (x < studentCanvas.width && y < studentCanvas.height)
 				{
-					studentCanvas.SetPixel(x, y, tex.GetPixel(x, y));
+					float x0 = (float)tex.width/(float)canvasWidth;
+					float y0 = (float)tex.height/(float)canvasHeight;
+					studentCanvas.SetPixel(x, y, tex.GetPixel((int)(x * x0), (int)(y * y0)));
 				}
 			}
 		}
@@ -1156,6 +1175,10 @@ public class NewPaint : MonoBehaviour
 		{
 			inputInfoNew.ClearCanvas = true;
 		}
+		else if(i.Length == 2) //Special case for allowing players access to the canvas
+		{
+
+		}
 		else{
 
 		
@@ -1176,7 +1199,9 @@ public class NewPaint : MonoBehaviour
 			}
 
 			inputInfoNew.textInput = text;
-			inputInfoNew.ClearCanvas = false;
+
+			//Unecessary dead code (I think)
+			inputInfoNew.ClearCanvas = false; 
 			inputInfo.loadTexture = false;
 			
 
