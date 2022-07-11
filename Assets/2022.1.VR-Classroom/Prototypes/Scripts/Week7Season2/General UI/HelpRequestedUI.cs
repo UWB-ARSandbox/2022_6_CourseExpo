@@ -48,6 +48,7 @@ public class HelpRequestedUI : MonoBehaviour
     }
     //call the HelpFinished function when the teacher clicks the done helping button-> should return the user being helped and the teacher to their previous channels
     public void HelpFinished(){
+        GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = false;
         GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
         if(HelpingFinishedButton != null){
             Destroy(HelpingFinishedButton);
@@ -79,6 +80,7 @@ public class HelpRequestedUI : MonoBehaviour
                 requestHelpButton.GetComponent<Button>().enabled = true;
                 //move user to private voice channel when teacher teleports to them
                 GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
+                GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = true;
             }
         }
         else if ((int)_f[1] == 100 && GameManager.AmTeacher)
@@ -93,6 +95,7 @@ public class HelpRequestedUI : MonoBehaviour
         else if((int)_f[1] == 102 && !GameManager.AmTeacher){
         //Move User back to their original channel
             if ((int)_f[0] == GameManager.MyID)
+                GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = false;
                GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
         }
         
