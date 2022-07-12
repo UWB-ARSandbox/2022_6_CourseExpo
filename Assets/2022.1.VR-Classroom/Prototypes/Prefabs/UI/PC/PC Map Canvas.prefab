@@ -2331,6 +2331,10 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 8538072984101215546}
     - target: {fileID: 8566890927842373749, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
+      propertyPath: flipAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: b72fec190d176d24ebd20d159fffc383, type: 3}
+    - target: {fileID: 8566890927842373749, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
       propertyPath: PlayerList
       value: 
       objectReference: {fileID: 8538072983300595145}

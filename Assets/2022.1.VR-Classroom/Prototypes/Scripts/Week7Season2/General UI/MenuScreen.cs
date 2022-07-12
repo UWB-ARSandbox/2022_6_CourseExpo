@@ -13,11 +13,13 @@ public class MenuScreen : MonoBehaviour
     public GameObject PlayerList;
     public Button Refresh;
     public List<GameObject> Screens;
+    public AudioClip flipAudio;
 
     public void flipScreen()
     {
         if (gameObject.activeSelf == false)
         {
+            FindObjectOfType<GameManager>().GetComponent<AudioSource>().PlayOneShot(flipAudio);
             Cursor.lockState = CursorLockMode.None;
             Cursor.visible = true;
 
