@@ -65,6 +65,9 @@ public class KeyboardEntry : MonoBehaviour
     public void AddChar(string character) {
         txtField.text += character;
     }
+    public void ExternalUpdate(string character){
+        txtField.text += character;
+    }
 
     public void Backspace() {
         txtField.text = txtField.text.Remove(txtField.text.Length - 1);

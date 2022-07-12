@@ -41,10 +41,11 @@ public class CollaborativeManager : MonoBehaviour
         _myAssessmentManager = gameObject.GetComponent<AssessmentManager>();
         _myBooth = gameObject.GetComponent<BoothManager>();
         m_ASLObject = gameObject.GetComponent<ASLObject>();
+        m_ASLObject._LocallySetFloatCallback(FloatReceive);
     }
 
-    public void SetMaxStudents(){
-
+    public void SetMaxStudents(int maxStudents){
+        MaxStudents = maxStudents;
     }
     public void DisableBooth(){
 
@@ -89,6 +90,20 @@ public class CollaborativeManager : MonoBehaviour
             });
         }
     }
+    //do I need to send each input or do I need to only send strings?
+    public void SendTextUpdates(string Character){
+        //use KeyboardEntry.cs to send text updates
+        for(int i = 0; i< curStudents.Count; i++){        
+            List<float> NewInput = new List<float>();
+            NewInput[0] = curStudents[i];
+            NewInput[1] = ShortAnswerUpdate;
+            NewInput.AddRange(stringToFloats(Character));
+            var FloatsInput = NewInput.ToArray();
+            m_ASLObject.SendAndSetClaim(() => {
+                m_ASLObject.SendFloatArray(FloatsInput);
+            });
+        }
+    }
 
     public void FloatReceive(string _id, float[] _f) {
         if((int)_f[0] == GameManager.MyID || (int)_f[0] == -1){
@@ -126,7 +141,7 @@ public class CollaborativeManager : MonoBehaviour
                     break;   
                 }
                 case ShortAnswerUpdate:{
-
+                    //
                     break;   
                 }
                 case NewRandom:{
