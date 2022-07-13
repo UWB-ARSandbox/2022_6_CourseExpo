@@ -65,6 +65,7 @@ public class AudioManager : MonoBehaviour
         GameObject[] BoothZones = GameObject.FindGameObjectsWithTag("BoothZone");
         foreach(GameObject BoothZone in BoothZones ){
             BoothZone.AddComponent<TeleportTrigger>();
+            BoothZone.AddComponent<BoothZoneManager>();
         }
         #endregion
     }
