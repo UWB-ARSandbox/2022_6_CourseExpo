@@ -9,7 +9,7 @@ public class CollaborativeManager : MonoBehaviour
 
     public BoothManager _myBooth;
     public ASLObject m_ASLObject;
-    public AssessmentManager _myAssessmentManager;
+    public AssessmentManager_Collaborative _myAssessmentManager;
     public KeyboardEntry _myKeyBoardEntry;
     public GameObject TimerText;
 
@@ -26,18 +26,18 @@ public class CollaborativeManager : MonoBehaviour
 
     #region MessageHeaders
     //Answer inputs - dont necessarily need to be message headers could use the same header for all depends on how much information we want to send
-    const float QuizStarted = 100;
+    public const float QuizStarted = 100;
 
-    const float buttonA = 101;
-    const float buttonB = 102;
-    const float buttonC = 103;
-    const float buttonD = 104;
-    const float buttonTrue = 105;
-    const float buttonFalse = 106;
-    const float buttonSubmit = 107;
-    const float ShortAnswerUpdate = 108;
+    public const float buttonA = 101;
+    public const float buttonB = 102;
+    public const float buttonC = 103;
+    public const float buttonD = 104;
+    public const float buttonTrue = 105;
+    public const float buttonFalse = 106;
+    public const float buttonSubmit = 107;
+    public const float ShortAnswerUpdate = 108;
 
-    const float NewRandom = 109;
+    public const float NewRandom = 109;
 
     #endregion
     // Need to sync the randomize result IE need to take the result from the first student in curStudents
@@ -45,7 +45,7 @@ public class CollaborativeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _myAssessmentManager = gameObject.GetComponent<AssessmentManager>();
+        _myAssessmentManager = gameObject.GetComponent<AssessmentManager_Collaborative>();
         _myBooth = gameObject.GetComponent<BoothManager>();
         m_ASLObject = gameObject.GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
@@ -63,12 +63,16 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void SyncedTimer(){
-        if(!TimerStarted && !QuizActive)
+        if(!TimerStarted && !QuizActive){
+            if(curStudents[0] == (float)GameManager.MyID)
+                SendNewRandom();
             StartCoroutine(StartCountdown(StartTimer));
+        }
     }
 
     public IEnumerator StartCountdown(float countdownValue)
     {
+        TimerStarted = true;
         TimerText.SetActive(true);
         TimerText.GetComponent<TextMesh>().text = "Starting in: "+countdownValue;
         while (currCountdownValue > 0)
@@ -96,7 +100,7 @@ public class CollaborativeManager : MonoBehaviour
             var RandomFloatsArray = NewRandomList.ToArray();
             m_ASLObject.SendAndSetClaim(() => {
                 m_ASLObject.SendFloatArray(RandomFloatsArray);
-            });    
+            });
         }
     }
     //Send ID of player that has started quiz IE hit the button
@@ -147,31 +151,31 @@ public class CollaborativeManager : MonoBehaviour
                     break;
                 }
                 case buttonA:{
-
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonA);
                     break;   
                 }
                 case buttonB:{
-
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonB);
                     break;   
                 }
                 case buttonC:{
-
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonC);
                     break;   
                 }
                 case buttonD:{
-
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonD);
                     break;   
                 }
                 case buttonTrue:{
-
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonTrue);
                     break;   
                 }
                 case buttonFalse:{
-
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonFalse);
                     break;   
                 }
                 case buttonSubmit:{
-
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonSubmit);
                     break;   
                 }
                 case ShortAnswerUpdate:{
