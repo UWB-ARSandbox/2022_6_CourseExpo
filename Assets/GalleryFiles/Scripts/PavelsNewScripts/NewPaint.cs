@@ -20,16 +20,24 @@ public class NewPaint : MonoBehaviour
 {
 	bool allowedPlayer;
 
-	public void enableCanvas()
+	public void enableCanvasLocal()
 	{
 		allowedPlayer = true;
 		gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
 
 	}
-	public void disableCanvas()
+	public void disableCanvasLocal()
 	{
 		allowedPlayer = false;
 		gameObject.GetComponent<Renderer>().material.mainTexture = blankCanvas;
+	}
+	public void enableCanvasForStudent(int peerID)
+	{
+
+	}
+	public void disableCanvasForStudent(int peerID)
+	{
+		
 	}
 
 	
