@@ -85,6 +85,8 @@ public class CollaborativeManager : MonoBehaviour
         TimerText.SetActive(false);
         QuizActive = true;
         TimerStarted = false;
+        if(curStudents.Contains((float)GameManager.MyID))
+            _myAssessmentManager.StartAssessment();
         yield return null;
     }
 

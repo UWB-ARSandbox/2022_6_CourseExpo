@@ -181,7 +181,7 @@ public class AssessmentManager : MonoBehaviour {
         StartCoroutine(CheckLoadedAndVerify());
     }
 
-    private void StartAssessment() {
+    public void StartAssessment() {
         //Assessment already started
         if (assessmentStarted) {
             return;
