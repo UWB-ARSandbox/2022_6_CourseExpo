@@ -66,6 +66,7 @@ public class AudioManager : MonoBehaviour
         foreach(GameObject BoothZone in BoothZones ){
             BoothZone.AddComponent<TeleportTrigger>();
             BoothZone.AddComponent<BoothZoneManager>();
+            BoothZone.AddComponent<ASLObject>();
         }
         #endregion
     }
