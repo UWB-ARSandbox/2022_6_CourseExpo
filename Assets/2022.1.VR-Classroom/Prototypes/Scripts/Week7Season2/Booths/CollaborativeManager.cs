@@ -63,7 +63,7 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void SyncedTimer(){
-        if(!TimerStarted)
+        if(!TimerStarted && !QuizActive)
             StartCoroutine(StartCountdown(StartTimer));
     }
 
@@ -80,6 +80,7 @@ public class CollaborativeManager : MonoBehaviour
         TimerText.SetActive(false);
         QuizActive = true;
         TimerStarted = false;
+        yield return null;
     }
 
     #region Sending Floats
