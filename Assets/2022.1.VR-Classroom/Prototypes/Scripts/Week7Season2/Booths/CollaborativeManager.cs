@@ -9,7 +9,7 @@ public class CollaborativeManager : MonoBehaviour
 
     public BoothManager _myBooth;
     public ASLObject m_ASLObject;
-    public AssessmentManager_Collaborative _myAssessmentManager;
+    public AssessmentManager _myAssessmentManager;
     public KeyboardEntry _myKeyBoardEntry;
     public GameObject TimerText;
 
@@ -45,7 +45,7 @@ public class CollaborativeManager : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
-        _myAssessmentManager = gameObject.GetComponent<AssessmentManager_Collaborative>();
+        _myAssessmentManager = gameObject.GetComponent<AssessmentManager>();
         _myBooth = gameObject.GetComponent<BoothManager>();
         m_ASLObject = gameObject.GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
@@ -151,31 +151,31 @@ public class CollaborativeManager : MonoBehaviour
                     break;
                 }
                 case buttonA:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonA);
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonA);
                     break;   
                 }
                 case buttonB:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonB);
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonB);
                     break;   
                 }
                 case buttonC:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonC);
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonC);
                     break;   
                 }
                 case buttonD:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonD);
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonD);
                     break;   
                 }
                 case buttonTrue:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonTrue);
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonTrue);
                     break;   
                 }
                 case buttonFalse:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonFalse);
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonFalse);
                     break;   
                 }
                 case buttonSubmit:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager_Collaborative.ResponseType.buttonSubmit);
+                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonSubmit);
                     break;   
                 }
                 case ShortAnswerUpdate:{
