@@ -33,11 +33,19 @@ public class NewPaint : MonoBehaviour
 	}
 	public void enableCanvasForStudent(int peerID)
 	{
-
+		float[] fArray = {1, peerID};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+            {
+                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+            });
 	}
 	public void disableCanvasForStudent(int peerID)
 	{
-		
+		float[] fArray = {2, peerID};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+            {
+                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+            });
 	}
 
 	
@@ -1185,7 +1193,18 @@ public class NewPaint : MonoBehaviour
 		}
 		else if(i.Length == 2) //Special case for allowing players access to the canvas
 		{
-
+			
+			if(ASL.GameLiftManager.GetInstance().m_PeerId == i[1])
+			{
+				if(i[0] == 1)
+				{
+					enableCanvasLocal();
+				}
+				else if(i[0] == 2)
+				{
+					disableCanvasLocal();
+				}
+			}
 		}
 		else{
 
