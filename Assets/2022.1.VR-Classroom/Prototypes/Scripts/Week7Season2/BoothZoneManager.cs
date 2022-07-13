@@ -18,6 +18,8 @@ public class BoothZoneManager : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
+        if (m_ASLObject == null)
+            m_ASLObject = GetComponent<ASLObject>();
         if (other.GetComponent<XpoPlayer>())
         {
             float[] myFloats = new float[2];
