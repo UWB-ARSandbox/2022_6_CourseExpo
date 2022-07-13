@@ -483,8 +483,7 @@ public class AssessmentManager_Collaborative : MonoBehaviour {
         //Shuffle
         System.Random random = new System.Random();
         result = result.OrderBy(x => random.Next()).ToArray();
-        //
-        stringToFloats(result[i])
+        //stringToFloats(result[i])
         //send results and return results
         return result;
         

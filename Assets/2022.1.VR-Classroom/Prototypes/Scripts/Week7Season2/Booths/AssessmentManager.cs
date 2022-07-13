@@ -467,7 +467,25 @@ public class AssessmentManager : MonoBehaviour {
         txt_MultChoiceQuestion.text = currentQuestion.text;
         pnl_MultipleChoice.SetActive(true);
     }
+    public string[] RandomizeMCOptions_Collab(){
+        //Declare
+        int num_TotalAnswers = currentQuestion.answers.Answer.Length + 1;
+        string[] result = new string[num_TotalAnswers];
 
+        //Load
+        for (int i = 0; i < num_TotalAnswers - 1; i++) {
+            result[i] = currentQuestion.answers.Answer[i].ToString();
+        }
+        result[num_TotalAnswers - 1] = currentQuestion.correct;
+
+        //Shuffle
+        System.Random random = new System.Random();
+        result = result.OrderBy(x => random.Next()).ToArray();
+        // stringToFloats(result[i])
+        //send results and return results
+        return result;
+        
+    }
     private string[] RandomizeMCOptions() {
         //Declare
         int num_TotalAnswers = currentQuestion.answers.Answer.Length + 1;
