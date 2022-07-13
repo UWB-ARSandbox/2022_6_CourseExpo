@@ -10,12 +10,19 @@ public class CollaborativeManager : MonoBehaviour
     public BoothManager _myBooth;
     public ASLObject m_ASLObject;
     public AssessmentManager _myAssessmentManager;
+    public KeyboardEntry _myKeyBoardEntry;
+    public GameObject TimerText;
 
     //Definable number of students
     public int MaxStudents;
     //maybe float[] and track students ids
     public List<float> curStudents = new List<float>();
     public int RandomVal;
+
+    public bool TimerStarted = false;
+    public float StartTimer;
+    public float currCountdownValue;
+    public bool QuizActive = false;
 
     #region MessageHeaders
     //Answer inputs - dont necessarily need to be message headers could use the same header for all depends on how much information we want to send
@@ -42,6 +49,10 @@ public class CollaborativeManager : MonoBehaviour
         _myBooth = gameObject.GetComponent<BoothManager>();
         m_ASLObject = gameObject.GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
+        if(StartTimer == 0f){
+            StartTimer = 15f;
+        }
+        Debug.Assert(TimerText != null);
     }
 
     public void SetMaxStudents(int maxStudents){
@@ -49,6 +60,26 @@ public class CollaborativeManager : MonoBehaviour
     }
     public void DisableBooth(){
 
+    }
+
+    public void SyncedTimer(){
+        if(!TimerStarted)
+            StartCoroutine(StartCountdown(StartTimer));
+    }
+
+    public IEnumerator StartCountdown(float countdownValue)
+    {
+        TimerText.SetActive(true);
+        TimerText.GetComponent<TextMesh>().text = "Starting in: "+countdownValue;
+        while (currCountdownValue > 0)
+        {
+            Debug.Log("Countdown: " + currCountdownValue);
+            yield return new WaitForSeconds(1.0f);
+            currCountdownValue--;
+        }
+        TimerText.SetActive(false);
+        QuizActive = true;
+        TimerStarted = false;
     }
 
     #region Sending Floats
@@ -90,6 +121,7 @@ public class CollaborativeManager : MonoBehaviour
             });
         }
     }
+    
     //do I need to send each input or do I need to only send strings?
     public void SendTextUpdates(string Character){
         //use KeyboardEntry.cs to send text updates
@@ -110,6 +142,7 @@ public class CollaborativeManager : MonoBehaviour
             switch(_f[1]){
                 case QuizStarted:{
                     curStudents.Add(_f[2]);
+                    SyncedTimer();
                     break;
                 }
                 case buttonA:{
