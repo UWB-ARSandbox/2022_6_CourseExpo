@@ -18,6 +18,7 @@ using System.Linq;
 public class AssessmentManager_Collaborative : MonoBehaviour {
     //Booth Manager
     private BoothManager boothManager;
+    public CollaborativeManager _myCollabManager;
 
     //Assessment Walls
     public AssessmentWalls walls;
@@ -469,26 +470,12 @@ public class AssessmentManager_Collaborative : MonoBehaviour {
         txt_MultChoiceQuestion.text = currentQuestion.text;
         pnl_MultipleChoice.SetActive(true);
     }
-    public string[] RandomizeMCOptions_Collab(){
-        //Declare
-        int num_TotalAnswers = currentQuestion.answers.Answer.Length + 1;
-        string[] result = new string[num_TotalAnswers];
 
-        //Load
-        for (int i = 0; i < num_TotalAnswers - 1; i++) {
-            result[i] = currentQuestion.answers.Answer[i].ToString();
-        }
-        result[num_TotalAnswers - 1] = currentQuestion.correct;
-
-        //Shuffle
-        System.Random random = new System.Random();
-        result = result.OrderBy(x => random.Next()).ToArray();
-        //stringToFloats(result[i])
-        //send results and return results
-        return result;
-        
-    }
     private string[] RandomizeMCOptions() {
+        //grab the random float from the Collaborative Manager RandomVal instead of creating a random value
+        //IE result = result.OrderBy(x => _myCollabManager.RandomVal).ToArray();
+        //This should ensure that all questions in are a synched random state as opposed to a random client side state
+
         //Declare
         int num_TotalAnswers = currentQuestion.answers.Answer.Length + 1;
         string[] result = new string[num_TotalAnswers];
@@ -500,8 +487,9 @@ public class AssessmentManager_Collaborative : MonoBehaviour {
         result[num_TotalAnswers - 1] = currentQuestion.correct;
 
         //Shuffle
-        System.Random random = new System.Random();
-        result = result.OrderBy(x => random.Next()).ToArray();
+        //System.Random random = new System.Random();
+        //result = result.OrderBy(x => random.Next()).ToArray();
+        result = result.OrderBy(x => _myCollabManager.RandomVal).ToArray();
 
         //Return
         return result;
