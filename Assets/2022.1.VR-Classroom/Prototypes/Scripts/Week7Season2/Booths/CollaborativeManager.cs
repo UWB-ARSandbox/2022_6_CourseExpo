@@ -46,6 +46,7 @@ public class CollaborativeManager : MonoBehaviour
     void Start()
     {
         _myAssessmentManager = gameObject.GetComponent<AssessmentManager>();
+        _myAssessmentManager.Set_myCollabManager(this);
         _myBooth = gameObject.GetComponent<BoothManager>();
         m_ASLObject = gameObject.GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);

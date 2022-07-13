@@ -17,6 +17,7 @@ public class AssessmentManager : MonoBehaviour {
     //Booth Manager
     private BoothManager boothManager;
     public CollaborativeManager _myCollabManager;
+    public void Set_myCollabManager(CollaborativeManager collab){_myCollabManager = collab;}
     public int NumberOfConcurrentUsers = 1;
 
     //Assessment Walls
@@ -1206,7 +1207,10 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "btn_Start":
                     btn_Start = obj.GetComponent<Button>();
-                    btn_Start.onClick.AddListener(StartAssessment);
+                    if(NumberOfConcurrentUsers == 1)
+                        btn_Start.onClick.AddListener(StartAssessment);
+                    else
+                        btn_Start.onClick.AddListener(_myCollabManager.SendStartMessage);
                     btn_Start.gameObject.SetActive(true);
                     break;
                 case "pnl_WelcomeScreen":
@@ -1232,25 +1236,37 @@ public class AssessmentManager : MonoBehaviour {
                 case "img_OptionA":
                     imgAry_multipleChoice[0] = obj.GetComponent<Image>();
                     btn_imgAry_multipleChoice[0] = obj.GetComponent<Button>();
-                    btn_imgAry_multipleChoice[0].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonA));
+                    if(NumberOfConcurrentUsers == 1)
+                        btn_imgAry_multipleChoice[0].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonA));
+                    else
+                        btn_imgAry_multipleChoice[0].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonA));
                     imgAry_multipleChoice[0].gameObject.SetActive(false);
                     break;
                 case "img_OptionB":
                     imgAry_multipleChoice[1] = obj.GetComponent<Image>();
                     btn_imgAry_multipleChoice[1] = obj.GetComponent<Button>();
-                    btn_imgAry_multipleChoice[1].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonB));
+                    if(NumberOfConcurrentUsers == 1)
+                        btn_imgAry_multipleChoice[1].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonB));
+                    else
+                        btn_imgAry_multipleChoice[1].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonB));
                     imgAry_multipleChoice[1].gameObject.SetActive(false);
                     break;
                 case "img_OptionC":
                     imgAry_multipleChoice[2] = obj.GetComponent<Image>();
                     btn_imgAry_multipleChoice[2] = obj.GetComponent<Button>();
-                    btn_imgAry_multipleChoice[2].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonC));
+                    if(NumberOfConcurrentUsers == 1)
+                        btn_imgAry_multipleChoice[2].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonC));
+                    else
+                        btn_imgAry_multipleChoice[2].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonC));
                     imgAry_multipleChoice[2].gameObject.SetActive(false);
                     break;
                 case "img_OptionD":
                     imgAry_multipleChoice[3] = obj.GetComponent<Image>();
                     btn_imgAry_multipleChoice[3] = obj.GetComponent<Button>();
-                    btn_imgAry_multipleChoice[3].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonD));
+                    if(NumberOfConcurrentUsers == 1)
+                        btn_imgAry_multipleChoice[3].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonD));
+                    else
+                        btn_imgAry_multipleChoice[3].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonD));
                     imgAry_multipleChoice[3].gameObject.SetActive(false);
                     break;
                 case "txt_LetterA":
@@ -1314,7 +1330,7 @@ public class AssessmentManager : MonoBehaviour {
                     if(NumberOfConcurrentUsers == 1)
                         btnAry_multipleChoice[3].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonD));
                     else
-                        btnAry_multipleChoice[3].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonA));
+                        btnAry_multipleChoice[3].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonD));
                     btnAry_multipleChoice[3].gameObject.SetActive(true);
                     break;
                 case "pnl_TrueFalse":
