@@ -3,61 +3,54 @@ using System.Collections.Generic;
 using UnityEngine;
 using ASL;
 
-public class BoothBounds : MonoBehaviour
+public class BoothZoneManager : MonoBehaviour
 {
 
 
-    List<string> currentUsers = new List<string>();
-    ASL_ObjectCollider m_ASLObjectCollider;
+    public List<string> currentUsers = new List<string>();
     ASLObject m_ASLObject;
 
     void Start()
     {
         m_ASLObject = GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
-        m_ASLObjectCollider = GetComponent<ASL_ObjectCollider>();
-        m_ASLObjectCollider.ASL_OnTriggerEnter(ASLOnTriggerEnter);
-        m_ASLObjectCollider.ASL_OnTriggerExit(ASLOnTriggerExit);
-    }
-    
-    void Update()
-    {
-        
     }
 
-    void ASLOnTriggerEnter(Collider other)
+    void OnTriggerEnter(Collider other)
     {
         if (other.GetComponent<XpoPlayer>())
         {
             float[] myFloats = new float[2];
             myFloats[0] = 600;
             myFloats[1] = GameManager.MyID;
-            name = GameManager.players[GameManager.MyID];
+
             m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloats); });
         }
     }
 
-    void ASLOnTriggerExit(Collider other)
+    void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<XpoPlayer>())
         {
             float[] myFloats = new float[2];
             myFloats[0] = 601;
             myFloats[1] = GameManager.MyID;
-            name = GameManager.players[GameManager.MyID];
             m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloats); });
         }
     }
 
     void FloatReceive(string _id, float[] _f)
     {
+        string boothName;
         switch(_f[0]) {
             case 600:
-                Debug.Log(GameManager.players[(int)_f[1]] + " has entered the booth");
+                boothName = gameObject.transform.parent.transform.parent.GetComponent<BoothManager>().boothName;
+                Debug.Log(GameManager.players[(int)_f[1]] + " has entered booth: " + boothName);
                 currentUsers.Add(GameManager.players[(int)_f[1]]);
                 break;
             case 601:
-                Debug.Log(GameManager.players[(int)_f[1]] + " has left the booth");
+                boothName = gameObject.transform.parent.transform.parent.GetComponent<BoothManager>().boothName;
+                Debug.Log(GameManager.players[(int)_f[1]] + " has left booth: " + boothName);
                 currentUsers.Remove(GameManager.players[(int)_f[1]]);
                 break;
         }
