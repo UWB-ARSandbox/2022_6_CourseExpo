@@ -148,7 +148,7 @@ public class StatsManager : MonoBehaviour
         if (GameManager.AmTeacher) {
             switch (_f[0]) {
                 case STATS:
-                    Debug.LogError("RECIEVED " + _f.ToString());
+                    Debug.LogWarning("RECIEVED " + _f.ToString());
                     StoreReceivedStats(_f);
                     break;
             }
