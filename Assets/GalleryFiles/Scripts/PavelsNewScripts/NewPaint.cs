@@ -47,7 +47,7 @@ public class NewPaint : MonoBehaviour
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
             });
 	}
-
+	
 	
 
     struct InputInformation //: IEquatable<InputInformation>, IComparable<InputInformation>
