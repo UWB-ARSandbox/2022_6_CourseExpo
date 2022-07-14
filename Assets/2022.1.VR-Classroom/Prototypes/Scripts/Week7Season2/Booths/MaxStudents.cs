@@ -16,17 +16,8 @@ public class MaxStudents : MonoBehaviour
     void Start()
     {
         assessmentManager = transform.parent.parent.GetComponent<AssessmentManager>();
-        m_ASLObject = GetComponent<ASLObject>();
-        StartCoroutine(DelayedUnlock());
-    }
-
-    public void StartDelayedUnlock() {
-        StartCoroutine(DelayedUnlock());
-    }
-
-    IEnumerator DelayedUnlock() {
-        yield return new WaitForSeconds(0.1f);
         maxStudentsText.text = assessmentManager.NumberOfConcurrentUsers.ToString();
+        m_ASLObject = GetComponent<ASLObject>();
     }
 
     public void Incremenent()

@@ -18,7 +18,7 @@ public class LockToggle : MonoBehaviour
     public LockToggle Pair;
     ASLObject m_ASLObject;
     private string boothName = "";
-    public MaxStudents studentLimit;
+    MaxStudents studentLimit;
     
     void Start()
     {
@@ -30,6 +30,7 @@ public class LockToggle : MonoBehaviour
         }
 
         m_ASLObject = GetComponent<ASLObject>();
+        studentLimit = GetComponent<MaxStudents>();
         m_ASLObject._LocallySetFloatCallback(floatFunction);
 
         defaultLockedTransparency = boothRenderer.material.color.a;
