@@ -145,7 +145,7 @@ public class PersonalStats : MonoBehaviour
 
     #region Setters
     public void SetTimeInBooth(string boothName, int time) {
-        Debug.LogError(boothName);
+        Debug.LogWarning(boothName);
         boothStats[boothName].timeInBooth = time;
     }
     public void SetPercentageScore(string boothName, float score) {
