@@ -15,7 +15,8 @@ public class BoothZoneManager : MonoBehaviour
         m_ASLObject = GetComponent<ASLObject>();
         if(m_ASLObject == null)
             Destroy(this);
-        m_ASLObject._LocallySetFloatCallback(FloatReceive);
+        if(m_ASLObject != null)
+            m_ASLObject._LocallySetFloatCallback(FloatReceive);
         
         CollaborativeManager _myManager = gameObject.transform.parent.transform.parent.GetComponent<CollaborativeManager>();
         if(_myManager != null)

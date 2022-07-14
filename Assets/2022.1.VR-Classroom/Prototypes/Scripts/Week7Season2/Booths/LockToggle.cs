@@ -108,7 +108,8 @@ public class LockToggle : MonoBehaviour
         }
         locked = false;
         foreach (ChatManager cm in BoothManager.chatManagers) {
-            cm.AddMessage("\n\"<color=#00ffffff>" + boothName + "</color>\" has been <color=#00ff00ff>unlocked</color>.");
+            if(cm.gameObject.active)
+                cm.AddMessage("\n\"<color=#00ffffff>" + boothName + "</color>\" has been <color=#00ff00ff>unlocked</color>.");
         }
         boothRenderer.enabled = false;
         boothCollider.enabled = false;
