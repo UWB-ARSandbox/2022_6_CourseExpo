@@ -80,7 +80,8 @@ public class CollaborativeManager : MonoBehaviour
     public void DisableBooth(){
         if(!GameManager.AmTeacher){
             //_myBooth.lockToggle.Lock();
-            _myAssessmentManager.walls.gameObject.SetActive(true);
+            if(!_myAssessmentManager.walls.gameObject.active)
+                _myAssessmentManager.walls.gameObject.SetActive(true);
         }
         //kick users out that are in the booth but not in the curStudents list
         //IE compare the curStudentsList against the one in BoothZoneManager currentUsers
@@ -93,8 +94,11 @@ public class CollaborativeManager : MonoBehaviour
 
     public void EnableBooth(){
         //_myBooth.lockToggle.Unlock();
-        _myAssessmentManager.pnl_Start.SetActive(true);
-        _myAssessmentManager.walls.gameObject.SetActive(false);
+        QuizActive = false;
+        if(!_myAssessmentManager.pnl_Start.active)
+            _myAssessmentManager.pnl_Start.SetActive(true);
+        if(_myAssessmentManager.walls.gameObject.active)
+            _myAssessmentManager.walls.gameObject.SetActive(false);
         if(TPChannelTrigger != null){
             TPChannelTrigger.Active = false;
         }
@@ -262,6 +266,7 @@ public class CollaborativeManager : MonoBehaviour
                     break;   
                 }
                 case ShortAnswerUpdate:{
+                    //change to sendTextField
                     txtField.text += (char)(int)_f[2];
                     break;   
                 }
@@ -302,12 +307,10 @@ public class CollaborativeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(curStudents.Count >= MaxStudents){
+        if(curStudents.Count >= MaxStudents && _myAssessmentManager.pnl_Start.active){
             //disable start button and lock booth
-            if(!curStudents.Contains(GameManager.MyID)){
-                _myAssessmentManager.pnl_Start.SetActive(false);
+            _myAssessmentManager.pnl_Start.SetActive(false);
                 //_myBooth.lockToggle.Lock();
-            }
         }
     }
 }
