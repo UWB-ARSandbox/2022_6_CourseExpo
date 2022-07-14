@@ -96,8 +96,9 @@ public class CollaborativeManager : MonoBehaviour
     public void SendNewRandom(){
         List<float> NewRandomList = new List<float>();
         System.Random random = new System.Random();
-        NewRandomList[1] = NewRandom;
-        NewRandomList[2] = random.Next();
+        NewRandomList.Add(0);
+        NewRandomList.Add(NewRandom);
+        NewRandomList.Add(random.Next());
         for(int i = 0; i< curStudents.Count; i++){
             NewRandomList[0] = curStudents[i];
             var RandomFloatsArray = NewRandomList.ToArray();
@@ -109,9 +110,10 @@ public class CollaborativeManager : MonoBehaviour
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
         List<float> NewFloats = new List<float>();
-        NewFloats[0] = 0;
-        NewFloats[1] = QuizStarted;
-        NewFloats[2] = (float)GameManager.MyID;
+        
+        NewFloats.Add(-1);
+        NewFloats.Add(QuizStarted);
+        NewFloats.Add((float)GameManager.MyID);
         var FloatsArray = NewFloats.ToArray();
         m_ASLObject.SendAndSetClaim(() => {
             m_ASLObject.SendFloatArray(FloatsArray);
@@ -120,7 +122,8 @@ public class CollaborativeManager : MonoBehaviour
     //expected input should be a float between the values of 101 - 107
     public void SendInput(float _f){
         List<float> NewInput = new List<float>();
-        NewInput[1] = _f;
+        NewInput.Add(0);
+        NewInput.Add(_f);
         for(int i = 0; i< curStudents.Count; i++){
             NewInput[0] = curStudents[i];
             var FloatsInput = NewInput.ToArray();
@@ -135,8 +138,8 @@ public class CollaborativeManager : MonoBehaviour
         //use KeyboardEntry.cs to send text updates
         for(int i = 0; i< curStudents.Count; i++){        
             List<float> NewInput = new List<float>();
-            NewInput[0] = curStudents[i];
-            NewInput[1] = ShortAnswerUpdate;
+            NewInput.Add(curStudents[i]);
+            NewInput.Add(ShortAnswerUpdate);
             NewInput.AddRange(stringToFloats(Character));
             var FloatsInput = NewInput.ToArray();
             m_ASLObject.SendAndSetClaim(() => {
