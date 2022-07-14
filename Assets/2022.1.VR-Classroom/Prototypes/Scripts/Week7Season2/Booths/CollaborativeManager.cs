@@ -79,7 +79,7 @@ public class CollaborativeManager : MonoBehaviour
 
     public void DisableBooth(){
         if(!GameManager.AmTeacher){
-            _myBooth.lockToggle.Lock();
+            //_myBooth.lockToggle.Lock();
             _myAssessmentManager.walls.gameObject.SetActive(true);
         }
         //kick users out that are in the booth but not in the curStudents list
@@ -92,7 +92,7 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void EnableBooth(){
-        _myBooth.lockToggle.Unlock();
+        //_myBooth.lockToggle.Unlock();
         _myAssessmentManager.pnl_Start.SetActive(true);
         _myAssessmentManager.walls.gameObject.SetActive(false);
         if(TPChannelTrigger != null){
@@ -306,7 +306,7 @@ public class CollaborativeManager : MonoBehaviour
             //disable start button and lock booth
             if(!curStudents.Contains(GameManager.MyID)){
                 _myAssessmentManager.pnl_Start.SetActive(false);
-                _myBooth.lockToggle.Lock();
+                //_myBooth.lockToggle.Lock();
             }
         }
     }
