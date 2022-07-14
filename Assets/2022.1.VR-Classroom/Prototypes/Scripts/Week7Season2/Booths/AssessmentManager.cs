@@ -1407,8 +1407,10 @@ public class AssessmentManager : MonoBehaviour {
                     btn_Submit = obj.GetComponent<Button>();
                     if(NumberOfConcurrentUsers < 2)
                         btn_Submit.onClick.AddListener(() => ReceiveResponse(ResponseType.buttonSubmit));
-                    else
+                    else{
+                        btn_Submit.onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.SendTextField));
                         btn_Submit.onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonSubmit));
+                        }
                     btn_Submit.gameObject.SetActive(true);
                     break;
                 case "pnl_Dashboard":

@@ -6,7 +6,6 @@ using ASL;
 
 public class CollaborativeManager : MonoBehaviour
 {
-
     public BoothManager _myBooth;
     public ASLObject m_ASLObject;
     public AssessmentManager _myAssessmentManager;
@@ -14,6 +13,8 @@ public class CollaborativeManager : MonoBehaviour
     public GameObject TimerText;
     public BoothZoneManager BZM;
     public void SetBZM(BoothZoneManager BoothZM){BZM = BoothZM;}
+    private GameObject Player;
+    public TeleportTrigger TPChannelTrigger;
 
     //Definable number of students
     public int MaxStudents;
@@ -25,6 +26,8 @@ public class CollaborativeManager : MonoBehaviour
     public float StartTimer;
     public float currCountdownValue;
     public bool QuizActive = false;
+
+    public InputField txtField;
 
     #region MessageHeaders
     //Answer inputs - dont necessarily need to be message headers could use the same header for all depends on how much information we want to send
@@ -38,11 +41,11 @@ public class CollaborativeManager : MonoBehaviour
     public const float buttonFalse = 106;
     public const float buttonSubmit = 107;
     public const float ShortAnswerUpdate = 108;
-
+    
     public const float NewRandom = 109;
 
     public const float TestFinished = 110;
-
+    public const float SendTextField = 111;
     #endregion
     // Need to sync the randomize result IE need to take the result from the first student in curStudents
     //
@@ -59,25 +62,40 @@ public class CollaborativeManager : MonoBehaviour
             StartTimer = 15f;
         }
         Debug.Assert(TimerText != null);
+        Player = GameObject.Find("FirstPersonPlayer(Clone)");
+        TPChannelTrigger = gameObject.GetComponentInChildren<TeleportTrigger>();
     }
 
     public void SetMaxStudents(int maxStudents){
         MaxStudents = maxStudents;
     }
 
+    public IEnumerator KickPlayerOut(){
+        Player.transform.GetComponent<CharacterController>().enabled = false;
+        Player.transform.position = gameObject.GetComponentInChildren<LockToggle>().transform.position + (Vector3.up);
+        Player.transform.GetComponent<CharacterController>().enabled = true;
+        yield return null;
+    }
+
     public void DisableBooth(){
         _myBooth.lockToggle.Lock();
+        _myAssessmentManager.walls.gameObject.SetActive(true);
         //kick users out that are in the booth but not in the curStudents list
         //IE compare the curStudentsList against the one in BoothZoneManager currentUsers
         //if the user is not in curStudents and they are in BoothZoneManager remove them
         if(!curStudents.Contains((float)GameManager.MyID) && BZM.currentUsers.Contains(GameManager.players[GameManager.MyID])){
             //teleport user away
+            StartCoroutine(KickPlayerOut());
         }
     }
 
     public void EnableBooth(){
         _myBooth.lockToggle.Unlock();
         _myAssessmentManager.pnl_Start.SetActive(true);
+        _myAssessmentManager.walls.gameObject.SetActive(false);
+        if(TPChannelTrigger != null){
+            TPChannelTrigger.Active = false;
+        }
     }
 
     public void SyncedTimer(){
@@ -103,8 +121,12 @@ public class CollaborativeManager : MonoBehaviour
         TimerText.SetActive(false);
         QuizActive = true;
         TimerStarted = false;
-        if(curStudents.Contains((float)GameManager.MyID))
+        if(curStudents.Contains((float)GameManager.MyID)){
             _myAssessmentManager.StartAssessment();
+            if(TPChannelTrigger != null){
+                TPChannelTrigger.Active = true;
+            }
+        }
         else
             DisableBooth();
             //Lock room until assessment is finished 
@@ -139,27 +161,36 @@ public class CollaborativeManager : MonoBehaviour
     }
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
-        List<float> NewFloats = new List<float>();  
-        NewFloats.Add(-1);
-        NewFloats.Add(QuizStarted);
-        NewFloats.Add((float)GameManager.MyID);
-        var FloatsArray = NewFloats.ToArray();
-        m_ASLObject.SendAndSetClaim(() => {
-            m_ASLObject.SendFloatArray(FloatsArray);
-        });    
+        if(!GameManager.AmTeacher){
+            List<float> NewFloats = new List<float>();  
+            NewFloats.Add(-1);
+            NewFloats.Add(QuizStarted);
+            NewFloats.Add((float)GameManager.MyID);
+            var FloatsArray = NewFloats.ToArray();
+            m_ASLObject.SendAndSetClaim(() => {
+                m_ASLObject.SendFloatArray(FloatsArray);
+            });
+            _myAssessmentManager.walls.gameObject.SetActive(true);
+        }    
     }
     //expected input should be a float between the values of 101 - 107
     public void SendInput(float _f){
-        List<float> NewInput = new List<float>();
-        NewInput.Add(0);
-        NewInput.Add(_f);
-        for(int i = 0; i< curStudents.Count; i++){
-            NewInput[0] = curStudents[i];
-            var FloatsInput = NewInput.ToArray();
-            m_ASLObject.SendAndSetClaim(() => {
-                m_ASLObject.SendFloatArray(FloatsInput);
-            });
+        if(_f == SendTextField){
+            SendText(txtField.text);
         }
+        else{
+            List<float> NewInput = new List<float>();
+            NewInput.Add(0);
+            NewInput.Add(_f);
+            for(int i = 0; i< curStudents.Count; i++){
+                NewInput[0] = curStudents[i];
+                var FloatsInput = NewInput.ToArray();
+                m_ASLObject.SendAndSetClaim(() => {
+                    m_ASLObject.SendFloatArray(FloatsInput);
+                });
+            }
+        }
+        SendNewRandom();
     }
     
     //do I need to send each input or do I need to only send strings?
@@ -170,6 +201,20 @@ public class CollaborativeManager : MonoBehaviour
             NewInput.Add(curStudents[i]);
             NewInput.Add(ShortAnswerUpdate);
             NewInput.AddRange(stringToFloats(Character));
+            var FloatsInput = NewInput.ToArray();
+            m_ASLObject.SendAndSetClaim(() => {
+                m_ASLObject.SendFloatArray(FloatsInput);
+            });
+        }
+    }
+    //should be used to set the txtField for all clients if the user was using a keyboard
+    public void SendText(string ToSend){
+        for(int i = 0; i< curStudents.Count; i++){        
+            List<float> NewInput = new List<float>();
+            NewInput.Add(curStudents[i]);
+            NewInput.Add(SendTextField);
+            NewInput.Add(ToSend.Length);
+            NewInput.AddRange(stringToFloats(ToSend));
             var FloatsInput = NewInput.ToArray();
             m_ASLObject.SendAndSetClaim(() => {
                 m_ASLObject.SendFloatArray(FloatsInput);
@@ -215,7 +260,7 @@ public class CollaborativeManager : MonoBehaviour
                     break;   
                 }
                 case ShortAnswerUpdate:{
-                    //
+                    txtField.text += (char)(int)_f[2];
                     break;   
                 }
                 case NewRandom:{
@@ -226,6 +271,16 @@ public class CollaborativeManager : MonoBehaviour
                     curStudents.Clear();
                     curStudents.TrimExcess();
                     EnableBooth();
+                    _myAssessmentManager.walls.gameObject.SetActive(false);
+                    break;
+                }
+                case SendTextField:{
+                    int length = (int)_f[2];
+                    string NewText = "";
+                    for (int i = 3; i <= length + 1; i++) {
+                        NewText += (char)(int)_f[i];
+                    }
+                    txtField.text = NewText;
                     break;
                 }
             }

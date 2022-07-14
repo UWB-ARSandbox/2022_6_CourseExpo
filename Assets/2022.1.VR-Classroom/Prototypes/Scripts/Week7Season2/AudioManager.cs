@@ -279,7 +279,7 @@ public class AudioManager : MonoBehaviour
 
     //Intent is to create a list of channels that meet a specific criteria to reduce the amount of channels to be created
     public void ChannelToBeCreated(string channelName){
-        if(channelName.Contains("Quiz") || channelName.Contains("Test") || channelName.Contains("Assessment"))
+        if(channelName.Contains("Quiz") || channelName.Contains("Test") || channelName.Contains("Assignment"))
             ChannelList.Add(channelName);
     }
 
