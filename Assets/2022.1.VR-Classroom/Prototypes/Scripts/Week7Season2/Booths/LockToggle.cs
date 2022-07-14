@@ -18,6 +18,7 @@ public class LockToggle : MonoBehaviour
     public LockToggle Pair;
     ASLObject m_ASLObject;
     private string boothName = "";
+    public MaxStudents studentLimit;
     
     void Start()
     {
@@ -71,6 +72,12 @@ public class LockToggle : MonoBehaviour
                 break;
             case 101: //lock
                 Lock();
+                break;
+            case 102: // increment max students
+                studentLimit.Incremenent();
+                break;
+            case 103: // decrement max students
+                studentLimit.Decrement();
                 break;
         }
         

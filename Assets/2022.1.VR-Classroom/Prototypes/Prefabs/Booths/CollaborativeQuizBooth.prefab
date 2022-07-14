@@ -151,6 +151,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 2106175336285128574, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+      propertyPath: studentLimit
+      value: 
+      objectReference: {fileID: 2328074741179315564}
     - target: {fileID: 2123225571142676687, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1051,6 +1055,18 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 4667069848013833446, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2328074741179315564}
+    - target: {fileID: 4667069848013833446, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: IncrementMaxStudents
+      objectReference: {fileID: 0}
+    - target: {fileID: 4667069848013833446, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MaxStudents, Assembly-CSharp
+      objectReference: {fileID: 0}
     - target: {fileID: 4697356878447686606, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -1394,6 +1410,18 @@ PrefabInstance:
     - target: {fileID: 6308163417470488785, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
       propertyPath: m_Mesh
       value: 
+      objectReference: {fileID: 0}
+    - target: {fileID: 6358841400980205617, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
+      value: 
+      objectReference: {fileID: 2328074741179315564}
+    - target: {fileID: 6358841400980205617, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_MethodName
+      value: DecrementMaxStudents
+      objectReference: {fileID: 0}
+    - target: {fileID: 6358841400980205617, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+      propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_TargetAssemblyTypeName
+      value: MaxStudents, Assembly-CSharp
       objectReference: {fileID: 0}
     - target: {fileID: 6368637110906568429, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
       propertyPath: m_Mesh
@@ -2263,6 +2291,10 @@ PrefabInstance:
       propertyPath: m_Mesh
       value: 
       objectReference: {fileID: 0}
+    - target: {fileID: 7556972553561202669, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+      propertyPath: m_RootOrder
+      value: 7
+      objectReference: {fileID: 0}
     - target: {fileID: 7559596986966711186, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
       propertyPath: m_Mesh
       value: 
@@ -2594,6 +2626,22 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 5747386380525221306, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
   m_PrefabInstance: {fileID: 980499691858018076}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &8658643229205737654 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 8481053676590698410, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+  m_PrefabInstance: {fileID: 980499691858018076}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &3757942350904635020 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 4160635486077096336, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
+  m_PrefabInstance: {fileID: 980499691858018076}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 5f7201a12d95ffc409449d95f23cf332, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1498904080041261917 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 1825719369266463809, guid: 12b151b7d794c884694dc64bb04d5f76, type: 3}
@@ -2616,6 +2664,20 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 03c58412da33e154692db87cbf8c6ff0, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &2328074741179315564
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 8658643229205737654}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 1a2dfc38ea4e6524fa832f8bff55b537, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  maxStudentsText: {fileID: 3757942350904635020}
+  maxStudents: 1
 --- !u!114 &5419156200396841716
 MonoBehaviour:
   m_ObjectHideFlags: 0
