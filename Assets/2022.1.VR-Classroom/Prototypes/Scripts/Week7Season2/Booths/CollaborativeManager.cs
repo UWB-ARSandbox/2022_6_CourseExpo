@@ -109,7 +109,7 @@ public class CollaborativeManager : MonoBehaviour
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
         List<float> NewFloats = new List<float>();
-        NewFloats[0] = -1;
+        NewFloats[0] = 0;
         NewFloats[1] = QuizStarted;
         NewFloats[2] = (float)GameManager.MyID;
         var FloatsArray = NewFloats.ToArray();
@@ -146,7 +146,7 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void FloatReceive(string _id, float[] _f) {
-        if((int)_f[0] == GameManager.MyID || (int)_f[0] == -1){
+        if((int)_f[0] == GameManager.MyID || _f[1] == QuizStarted){
             switch(_f[1]){
                 case QuizStarted:{
                     curStudents.Add(_f[2]);
