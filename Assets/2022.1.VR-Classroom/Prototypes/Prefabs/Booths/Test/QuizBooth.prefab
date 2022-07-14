@@ -3454,7 +3454,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollabManager: {fileID: 0}
-  NumberOfConcurrentUsers: 1
+  NumberOfConcurrentUsers: 2
   walls: {fileID: 0}
   UnitCounter: 0
   assessmentType: 0
@@ -11124,7 +11124,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 8430695976780284555, guid: a658e986695f1914eb9a9d3b958dd5ee, type: 3}
       propertyPath: m_IsActive
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a658e986695f1914eb9a9d3b958dd5ee, type: 3}
