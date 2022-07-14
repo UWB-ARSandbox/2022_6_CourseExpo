@@ -78,8 +78,10 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void DisableBooth(){
-        _myBooth.lockToggle.Lock();
-        _myAssessmentManager.walls.gameObject.SetActive(true);
+        if(!GameManager.AmTeacher){
+            _myBooth.lockToggle.Lock();
+            _myAssessmentManager.walls.gameObject.SetActive(true);
+        }
         //kick users out that are in the booth but not in the curStudents list
         //IE compare the curStudentsList against the one in BoothZoneManager currentUsers
         //if the user is not in curStudents and they are in BoothZoneManager remove them
