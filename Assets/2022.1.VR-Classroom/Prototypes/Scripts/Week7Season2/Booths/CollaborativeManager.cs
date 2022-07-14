@@ -92,12 +92,11 @@ public class CollaborativeManager : MonoBehaviour
     {
         TimerStarted = true;
         TimerText.SetActive(true);
-        TimerText.GetComponent<TextMesh>().text = "Starting in: "+countdownValue;
         currCountdownValue = countdownValue;
         while (currCountdownValue > 0)
         {
             Debug.Log("Countdown: " + currCountdownValue);
-            TimerText.GetComponent<TextMesh>().text = "Starting in: "+countdownValue;
+            TimerText.GetComponent<TextMesh>().text = "Starting in: "+currCountdownValue;
             yield return new WaitForSeconds(1.0f);
             currCountdownValue--;
         }
