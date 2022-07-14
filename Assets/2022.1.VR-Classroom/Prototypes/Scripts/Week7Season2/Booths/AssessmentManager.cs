@@ -83,7 +83,7 @@ public class AssessmentManager : MonoBehaviour {
     private float timeStarted;
 
     //General Response Panel
-    private GameObject pnl_Start;
+    public GameObject pnl_Start;
     private GameObject pnl_Response;
     private Button btn_Start;
 
@@ -507,7 +507,7 @@ public class AssessmentManager : MonoBehaviour {
         result[num_TotalAnswers - 1] = currentQuestion.correct;
 
         //Shuffle
-        if(NumberOfConcurrentUsers == 1){
+        if(NumberOfConcurrentUsers < 2){
             System.Random random = new System.Random();
             result = result.OrderBy(x => random.Next()).ToArray();
         }
@@ -1207,7 +1207,7 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "btn_Start":
                     btn_Start = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_Start.onClick.AddListener(StartAssessment);
                     else
                         btn_Start.onClick.AddListener(_myCollabManager.SendStartMessage);
@@ -1236,7 +1236,7 @@ public class AssessmentManager : MonoBehaviour {
                 case "img_OptionA":
                     imgAry_multipleChoice[0] = obj.GetComponent<Image>();
                     btn_imgAry_multipleChoice[0] = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_imgAry_multipleChoice[0].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonA));
                     else
                         btn_imgAry_multipleChoice[0].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonA));
@@ -1245,7 +1245,7 @@ public class AssessmentManager : MonoBehaviour {
                 case "img_OptionB":
                     imgAry_multipleChoice[1] = obj.GetComponent<Image>();
                     btn_imgAry_multipleChoice[1] = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_imgAry_multipleChoice[1].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonB));
                     else
                         btn_imgAry_multipleChoice[1].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonB));
@@ -1254,7 +1254,7 @@ public class AssessmentManager : MonoBehaviour {
                 case "img_OptionC":
                     imgAry_multipleChoice[2] = obj.GetComponent<Image>();
                     btn_imgAry_multipleChoice[2] = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_imgAry_multipleChoice[2].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonC));
                     else
                         btn_imgAry_multipleChoice[2].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonC));
@@ -1263,7 +1263,7 @@ public class AssessmentManager : MonoBehaviour {
                 case "img_OptionD":
                     imgAry_multipleChoice[3] = obj.GetComponent<Image>();
                     btn_imgAry_multipleChoice[3] = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_imgAry_multipleChoice[3].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonD));
                     else
                         btn_imgAry_multipleChoice[3].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonD));
@@ -1303,7 +1303,7 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "ButtonA":
                     btnAry_multipleChoice[0] = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btnAry_multipleChoice[0].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonA));
                     else
                         btnAry_multipleChoice[0].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonA));
@@ -1311,7 +1311,7 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "ButtonB":
                     btnAry_multipleChoice[1] = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btnAry_multipleChoice[1].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonB));
                     else
                         btnAry_multipleChoice[1].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonB));
@@ -1319,7 +1319,7 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "ButtonC":
                     btnAry_multipleChoice[2] = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btnAry_multipleChoice[2].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonC));
                     else
                         btnAry_multipleChoice[2].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonC));
@@ -1327,7 +1327,7 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "ButtonD":
                     btnAry_multipleChoice[3] = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btnAry_multipleChoice[3].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonD));
                     else
                         btnAry_multipleChoice[3].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonD));
@@ -1344,7 +1344,7 @@ public class AssessmentManager : MonoBehaviour {
                 case "img_True":
                     img_True = obj.GetComponent<Image>();
                     btn_img_True = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_img_True.onClick.AddListener(() => ReceiveResponse(ResponseType.buttonTrue));
                     else
                         btn_img_True.onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonTrue));
@@ -1353,7 +1353,7 @@ public class AssessmentManager : MonoBehaviour {
                 case "img_False":
                     img_False = obj.GetComponent<Image>();
                     btn_img_False = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_img_False.onClick.AddListener(() => ReceiveResponse(ResponseType.buttonFalse));
                     else
                         btn_img_False.onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonFalse));
@@ -1369,7 +1369,7 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "ButtonTrue":
                     btn_True = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_True.onClick.AddListener(() => ReceiveResponse(ResponseType.buttonTrue));
                     else
                         btn_True.onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonTrue));
@@ -1377,7 +1377,7 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "ButtonFalse":
                     btn_False = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_False.onClick.AddListener(() => ReceiveResponse(ResponseType.buttonFalse));
                     else
                         btn_False.onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonFalse));
@@ -1405,7 +1405,7 @@ public class AssessmentManager : MonoBehaviour {
                     break;
                 case "Submit":
                     btn_Submit = obj.GetComponent<Button>();
-                    if(NumberOfConcurrentUsers == 1)
+                    if(NumberOfConcurrentUsers < 2)
                         btn_Submit.onClick.AddListener(() => ReceiveResponse(ResponseType.buttonSubmit));
                     else
                         btn_Submit.onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonSubmit));

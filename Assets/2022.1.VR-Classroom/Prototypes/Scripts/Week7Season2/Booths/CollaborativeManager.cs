@@ -12,6 +12,8 @@ public class CollaborativeManager : MonoBehaviour
     public AssessmentManager _myAssessmentManager;
     public KeyboardEntry _myKeyBoardEntry;
     public GameObject TimerText;
+    public BoothZoneManager BZM;
+    public void SetBZM(BoothZoneManager BoothZM){BZM = BoothZM;}
 
     //Definable number of students
     public int MaxStudents;
@@ -39,6 +41,8 @@ public class CollaborativeManager : MonoBehaviour
 
     public const float NewRandom = 109;
 
+    public const float TestFinished = 110;
+
     #endregion
     // Need to sync the randomize result IE need to take the result from the first student in curStudents
     //
@@ -47,6 +51,7 @@ public class CollaborativeManager : MonoBehaviour
     {
         _myAssessmentManager = gameObject.GetComponent<AssessmentManager>();
         _myAssessmentManager.Set_myCollabManager(this);
+        MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
         _myBooth = gameObject.GetComponent<BoothManager>();
         m_ASLObject = gameObject.GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
@@ -59,8 +64,20 @@ public class CollaborativeManager : MonoBehaviour
     public void SetMaxStudents(int maxStudents){
         MaxStudents = maxStudents;
     }
-    public void DisableBooth(){
 
+    public void DisableBooth(){
+        _myBooth.lockToggle.Lock();
+        //kick users out that are in the booth but not in the curStudents list
+        //IE compare the curStudentsList against the one in BoothZoneManager currentUsers
+        //if the user is not in curStudents and they are in BoothZoneManager remove them
+        if(!curStudents.Contains((float)GameManager.MyID) && BZM.currentUsers.Contains(GameManager.players[GameManager.MyID])){
+            //teleport user away
+        }
+    }
+
+    public void EnableBooth(){
+        _myBooth.lockToggle.Unlock();
+        _myAssessmentManager.pnl_Start.SetActive(true);
     }
 
     public void SyncedTimer(){
@@ -76,9 +93,11 @@ public class CollaborativeManager : MonoBehaviour
         TimerStarted = true;
         TimerText.SetActive(true);
         TimerText.GetComponent<TextMesh>().text = "Starting in: "+countdownValue;
+        currCountdownValue = countdownValue;
         while (currCountdownValue > 0)
         {
             Debug.Log("Countdown: " + currCountdownValue);
+            TimerText.GetComponent<TextMesh>().text = "Starting in: "+countdownValue;
             yield return new WaitForSeconds(1.0f);
             currCountdownValue--;
         }
@@ -87,10 +106,22 @@ public class CollaborativeManager : MonoBehaviour
         TimerStarted = false;
         if(curStudents.Contains((float)GameManager.MyID))
             _myAssessmentManager.StartAssessment();
+        else
+            DisableBooth();
+            //Lock room until assessment is finished 
         yield return null;
     }
 
     #region Sending Floats
+    public void CurTestFinished(){
+        List<float> NewFloats = new List<float>();  
+        NewFloats.Add(-1);
+        NewFloats.Add(TestFinished);
+        var FloatsArray = NewFloats.ToArray();
+        m_ASLObject.SendAndSetClaim(() => {
+            m_ASLObject.SendFloatArray(FloatsArray);
+        });    
+    }
     //Send new random to each person taking the quiz
     //Intent is to provide a random float value that is the same for all members taking the collaborative quiz
     public void SendNewRandom(){
@@ -109,8 +140,7 @@ public class CollaborativeManager : MonoBehaviour
     }
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
-        List<float> NewFloats = new List<float>();
-        
+        List<float> NewFloats = new List<float>();  
         NewFloats.Add(-1);
         NewFloats.Add(QuizStarted);
         NewFloats.Add((float)GameManager.MyID);
@@ -149,10 +179,11 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void FloatReceive(string _id, float[] _f) {
-        if((int)_f[0] == GameManager.MyID || _f[1] == QuizStarted){
+        if((int)_f[0] == GameManager.MyID || _f[0] == -1){
             switch(_f[1]){
                 case QuizStarted:{
                     curStudents.Add(_f[2]);
+                    Debug.Log("Student ID:" +_f[2] +"started test");
                     SyncedTimer();
                     break;
                 }
@@ -192,6 +223,12 @@ public class CollaborativeManager : MonoBehaviour
                     RandomVal = (int)_f[2];
                     break;
                 }
+                case TestFinished:{
+                    curStudents.Clear();
+                    curStudents.TrimExcess();
+                    EnableBooth();
+                    break;
+                }
             }
         }
     }
@@ -209,8 +246,12 @@ public class CollaborativeManager : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if(MaxStudents <= curStudents.Count){
+        if(curStudents.Count >= MaxStudents){
             //disable start button and lock booth
+            if(!curStudents.Contains(GameManager.MyID)){
+                _myAssessmentManager.pnl_Start.SetActive(false);
+                _myBooth.lockToggle.Lock();
+            }
         }
     }
 }

@@ -30,7 +30,7 @@ public class StatsManager : MonoBehaviour
                 if (studentIdToName.Key != 1) { //Don't add teacher/host to list
                     var newObject = new GameObject("PersonalStats_for_" + studentIdToName.Value);
                     studentStats.Add(studentIdToName.Value, newObject.AddComponent<PersonalStats>());
-                    Debug.LogError($"ID: {studentIdToName.Key}, Name: {studentIdToName.Value}");
+                    Debug.LogWarning($"ID: {studentIdToName.Key}, Name: {studentIdToName.Value}");
                 }
             }
         }
@@ -98,7 +98,7 @@ public class StatsManager : MonoBehaviour
             for (int i = 5; (i - 5) < boothStats.Key.Length; i++) { //booth name
                 statInfoToSend[i] = (float)(int)boothStats.Key[i - 5];
             }
-            Debug.LogError("SENT " + statInfoToSend.ToString());
+            Debug.LogWarning("SENT " + statInfoToSend.ToString());
 
             //Send information
             m_ASLObject.SendAndSetClaim(() => {
