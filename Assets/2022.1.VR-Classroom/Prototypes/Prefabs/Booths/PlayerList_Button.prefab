@@ -329,7 +329,7 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_Sprite: {fileID: 21300000, guid: 9cfdb275e655f424889c20fdc2f87d6c, type: 3}
+  m_Sprite: {fileID: 21300000, guid: 0ed44bd0c15e98440b22d41c6300c7ed, type: 3}
   m_Type: 0
   m_PreserveAspect: 0
   m_FillCenter: 1
@@ -410,5 +410,5 @@ MonoBehaviour:
   UserMuted: 0
   _myAudioManager: {fileID: 0}
   UserName: 
-  Muted: {fileID: 21300000, guid: 9cfdb275e655f424889c20fdc2f87d6c, type: 3}
-  UnMuted: {fileID: 21300000, guid: 418565ebda61ff348a47bc6555579fd2, type: 3}
+  Muted: {fileID: 21300000, guid: 0ed44bd0c15e98440b22d41c6300c7ed, type: 3}
+  UnMuted: {fileID: 21300000, guid: f468c48aef5757944b5379e08b09f51d, type: 3}
