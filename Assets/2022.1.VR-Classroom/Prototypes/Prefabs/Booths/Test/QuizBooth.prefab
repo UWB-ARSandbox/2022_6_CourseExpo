@@ -5295,7 +5295,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _myCollabManager: {fileID: 0}
-  NumberOfConcurrentUsers: 2
+  NumberOfConcurrentUsers: 1
   walls: {fileID: 0}
   UnitCounter: 0
   assessmentType: 0
@@ -11742,25 +11742,6 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 3036119850833366670, guid: 82e908c39560e9c4898ff40b2979f741, type: 3}
   m_PrefabInstance: {fileID: 2567598325281861557}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &7984635426495015250 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 5579659286464431847, guid: 82e908c39560e9c4898ff40b2979f741, type: 3}
-  m_PrefabInstance: {fileID: 2567598325281861557}
-  m_PrefabAsset: {fileID: 0}
---- !u!64 &8877620252888952610
-MeshCollider:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 7984635426495015250}
-  m_Material: {fileID: 0}
-  m_IsTrigger: 0
-  m_Enabled: 1
-  serializedVersion: 4
-  m_Convex: 0
-  m_CookingOptions: 30
-  m_Mesh: {fileID: -9168623004629909065, guid: 3eb535b40e94bda458b7715a9183d7cb, type: 3}
 --- !u!1001 &2864095955828543034
 PrefabInstance:
   m_ObjectHideFlags: 0

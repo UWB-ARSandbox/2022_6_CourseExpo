@@ -235,6 +235,7 @@ public class CollaborativeManager : MonoBehaviour
                     curStudents.Add(_f[2]);
                     Debug.Log("Student ID:" +_f[2] +"started test");
                     SyncedTimer();
+                    MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
                     break;
                 }
                 case buttonA:{
