@@ -46,6 +46,7 @@ public class CollaborativeManager : MonoBehaviour
 
     public const float TestFinished = 110;
     public const float SendTextField = 111;
+    public const float BackSpace = 112;
     #endregion
     // Need to sync the randomize result IE need to take the result from the first student in curStudents
     //
@@ -227,6 +228,17 @@ public class CollaborativeManager : MonoBehaviour
             });
         }
     }
+    public void SendBackSpace(){
+        for(int i = 0; i< curStudents.Count; i++){        
+            List<float> NewInput = new List<float>();
+            NewInput.Add(curStudents[i]);
+            NewInput.Add(BackSpace);
+            var FloatsInput = NewInput.ToArray();
+            m_ASLObject.SendAndSetClaim(() => {
+                m_ASLObject.SendFloatArray(FloatsInput);
+            });
+        }
+    }
 
     public void FloatReceive(string _id, float[] _f) {
         if((int)_f[0] == GameManager.MyID || _f[0] == -1){
@@ -289,6 +301,10 @@ public class CollaborativeManager : MonoBehaviour
                         NewText += (char)(int)_f[i];
                     }
                     txtField.text = NewText;
+                    break;
+                }
+                case BackSpace:{
+                    txtField.text = txtField.text.Remove(txtField.text.Length - 1);
                     break;
                 }
             }

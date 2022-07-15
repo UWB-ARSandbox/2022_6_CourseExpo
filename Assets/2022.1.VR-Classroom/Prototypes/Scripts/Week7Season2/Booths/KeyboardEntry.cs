@@ -79,7 +79,11 @@ public class KeyboardEntry : MonoBehaviour
         _InputInterceptor.SendTextUpdates(character);
     }
 
-    public void Backspace() {
-        txtField.text = txtField.text.Remove(txtField.text.Length - 1);
+    public void Backspace() {        
+        if(_InputInterceptor != null){
+            _InputInterceptor.SendBackSpace();
+        }
+        else
+            txtField.text = txtField.text.Remove(txtField.text.Length - 1);
     }
 }

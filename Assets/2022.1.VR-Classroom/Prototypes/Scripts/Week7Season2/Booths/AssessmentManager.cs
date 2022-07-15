@@ -374,7 +374,7 @@ public class AssessmentManager : MonoBehaviour {
 
         //Start timer if exists
         if (currentQuestion.timer > 0) {
-            questionTimeLimit = currentQuestion.timer;
+            questionTimeLimit = currentQuestion.timer+(10*(NumberOfConcurrentUsers-1));//intent is to add 10 more seconds to each question timer for each additional concurrent user so at 4 users 30 seconds would be added
             questionTimeRemaining = questionTimeLimit;
             img_QuestionTimer.rectTransform.sizeDelta = new Vector2(QUESTION_TIMER_INTIAL_WIDTH, 0);
             txt_QuestionTimer.text = (int)(questionTimeLimit / 60) + ":" + (int)(questionTimeLimit % 60);
