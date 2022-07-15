@@ -207,7 +207,7 @@ public class CollaborativeManager : MonoBehaviour
             List<float> NewInput = new List<float>();
             NewInput.Add(curStudents[i]);
             NewInput.Add(ShortAnswerUpdate);
-            NewInput.AddRange(stringToFloats(Character));
+            NewInput.AddRange((int)Character);
             var FloatsInput = NewInput.ToArray();
             m_ASLObject.SendAndSetClaim(() => {
                 m_ASLObject.SendFloatArray(FloatsInput);

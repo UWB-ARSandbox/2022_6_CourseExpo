@@ -1314,7 +1314,7 @@ public class AssessmentManager : MonoBehaviour {
                     // if(NumberOfConcurrentUsers < 2)
                     //     btnAry_multipleChoice[1].onClick.AddListener(() => ReceiveResponse(ResponseType.buttonB));
                     // else
-                    //     btnAry_multipleChoice[1].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonB));
+                    btnAry_multipleChoice[1].onClick.AddListener(() => _myCollabManager.SendInput(CollaborativeManager.buttonB));
                     btnAry_multipleChoice[1].gameObject.SetActive(true);
                     break;
                 case "ButtonC":
