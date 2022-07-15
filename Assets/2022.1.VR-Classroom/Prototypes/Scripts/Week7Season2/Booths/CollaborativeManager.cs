@@ -244,10 +244,10 @@ public class CollaborativeManager : MonoBehaviour
         if((int)_f[0] == GameManager.MyID || _f[0] == -1){
             switch(_f[1]){
                 case QuizStarted:{
+                    MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
                     curStudents.Add(_f[2]);
                     Debug.Log("Student ID:" +_f[2] +"started test");
                     SyncedTimer();
-                    MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
                     break;
                 }
                 case buttonA:{
