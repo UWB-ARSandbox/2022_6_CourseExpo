@@ -6,6 +6,7 @@ public class GrabCanvas : MonoBehaviour
 {
     // Start is called before the first frame update
     Quaternion currentRotation;
+    float currentY;
     bool selected;
 
     void Start()
@@ -24,6 +25,7 @@ public class GrabCanvas : MonoBehaviour
                 this.transform.parent.SetParent(Camera.main.transform);
                 selected = true;
                 currentRotation = this.transform.parent.rotation;
+                currentY = this.transform.parent.position.y;
                 StartCoroutine(sendPosition());
             }
         }
@@ -42,6 +44,7 @@ public class GrabCanvas : MonoBehaviour
         while(selected)
         {
             this.transform.parent.rotation = currentRotation;
+            this.transform.parent.position = new Vector3(this.transform.parent.position.x, currentY, this.transform.parent.position.z);
             float[] fArray = {ASL.GameLiftManager.GetInstance().m_PeerId, transform.parent.position.x, transform.parent.position.y, transform.parent.position.z};
            GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray); 
