@@ -51,6 +51,9 @@ public class CanvasInput : MonoBehaviour
     }
     public bool getRaycastHitObject()
     {
+        
+        
+        
         return raycastHitObject && raycastHit.transform.GetComponent<NewPaint>() && !EventSystem.current.IsPointerOverGameObject();
     }
 
