@@ -169,7 +169,7 @@ public class CollaborativeManager : MonoBehaviour
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
         if(!GameManager.AmTeacher){
-            List<float> NewFloats = new List<float>();  
+            List<float> NewFloats = new List<float>();
             NewFloats.Add(-1);
             NewFloats.Add(QuizStarted);
             NewFloats.Add((float)GameManager.MyID);
@@ -297,7 +297,7 @@ public class CollaborativeManager : MonoBehaviour
                 case SendTextField:{
                     int length = (int)_f[2];
                     string NewText = "";
-                    for (int i = 3; i <= length + 1; i++) {
+                    for (int i = 3; i <= length + 2; i++) {
                         NewText += (char)(int)_f[i];
                     }
                     txtField.text = NewText;

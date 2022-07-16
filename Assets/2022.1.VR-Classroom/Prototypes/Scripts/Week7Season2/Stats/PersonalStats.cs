@@ -16,7 +16,7 @@ public class PersonalStats : MonoBehaviour
         public float percentageScore { get; set; }
         public float timeTaken { get; set; }
         public bool completed { get; set; }
-
+        public List<string> GroupMembers = new List<string>();
 
         //writer.AppendLine($"{item.Key},Time in booth,Time taken to complete,Questions timed out,Score,Completed");
 
@@ -150,6 +150,9 @@ public class PersonalStats : MonoBehaviour
     }
     public void SetPercentageScore(string boothName, float score) {
         ((AssessmentStats)boothStats[boothName]).percentageScore = score;
+    }
+    public void SetGroupMembers(string boothName, List<string> members){
+        ((AssessmentStats)boothStats[boothName]).GroupMembers = members;
     }
     public void SetCompleted(string boothName, bool completed) {
         try {

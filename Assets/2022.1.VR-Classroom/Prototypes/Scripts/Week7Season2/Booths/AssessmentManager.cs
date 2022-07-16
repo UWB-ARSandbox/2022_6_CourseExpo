@@ -33,6 +33,8 @@ public class AssessmentManager : MonoBehaviour {
     private Sprite BAR_GREEN;
     private Sprite BAR_ORANGE;
 
+    public List<string> temp = new List<string>();
+
     public enum AssessmentType {
         none,
         assignment,
@@ -186,6 +188,11 @@ public class AssessmentManager : MonoBehaviour {
         if (assessmentStarted) {
             return;
         }
+        List<float> tempList = new List<float>(_myCollabManager.curStudents);
+        for(int i = 0; i < tempList.Count(); i++){
+            temp.Add(GameManager.players[(int)tempList[i]]);  
+        }
+        
 
         //Coroutine? Check for when all questions are loaded before allow start.
         if (assessmentQuestions == null) {
@@ -908,6 +915,8 @@ public class AssessmentManager : MonoBehaviour {
         personalStats.SetPercentageScore(boothManager.boothName, finalScorePercentage);
         personalStats.SetTimeTaken(boothManager.boothName, Time.time - timeStarted);
         personalStats.SetCompleted(boothManager.boothName, true);
+
+        personalStats.SetGroupMembers(boothManager.boothName, temp);
     }
 
     //Verify the content has been loaded
