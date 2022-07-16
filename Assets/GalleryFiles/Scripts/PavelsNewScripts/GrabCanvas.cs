@@ -7,7 +7,12 @@ public class GrabCanvas : MonoBehaviour
     // Start is called before the first frame update
     Quaternion currentRotation;
     float currentY;
-    bool selected;
+    bool selected = false;
+
+    Transform previousParent;
+
+    [SerializeField] Transform objectToMove;
+
 
     void Start()
     {
@@ -22,18 +27,23 @@ public class GrabCanvas : MonoBehaviour
         {
             if(CanvasInput.Instance.GetRaycastHit().transform == this.transform)
             {
-                this.transform.parent.SetParent(Camera.main.transform);
+                previousParent = objectToMove.parent;
+                objectToMove.SetParent(Camera.main.transform);
                 selected = true;
-                currentRotation = this.transform.parent.rotation;
-                currentY = this.transform.parent.position.y;
+                currentRotation = objectToMove.rotation;
+                currentY = objectToMove.position.y;
+                
                 StartCoroutine(sendPosition());
             }
         }
-        if(Input.GetMouseButtonUp(0))
+        if(Input.GetMouseButtonUp(0) && selected)
         {
-            this.transform.parent.parent = null;
+            objectToMove.parent = previousParent;
             
             selected = false;
+
+            objectToMove.rotation = currentRotation;
+            objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
         }
         
     }
@@ -43,9 +53,9 @@ public class GrabCanvas : MonoBehaviour
         
         while(selected)
         {
-            this.transform.parent.rotation = currentRotation;
-            this.transform.parent.position = new Vector3(this.transform.parent.position.x, currentY, this.transform.parent.position.z);
-            float[] fArray = {ASL.GameLiftManager.GetInstance().m_PeerId, transform.parent.position.x, transform.parent.position.y, transform.parent.position.z};
+            objectToMove.rotation = currentRotation;
+            objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
+            float[] fArray = {ASL.GameLiftManager.GetInstance().m_PeerId, objectToMove.position.x, currentY, objectToMove.position.z};
            GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray); 
             });
@@ -58,7 +68,7 @@ public class GrabCanvas : MonoBehaviour
     {
         if(_f[0] != ASL.GameLiftManager.GetInstance().m_PeerId)
         {
-            transform.parent.position = new Vector3(_f[1], _f[2], _f[3]);
+            objectToMove.position = new Vector3(_f[1], _f[2], _f[3]);
         }
     }
 }
