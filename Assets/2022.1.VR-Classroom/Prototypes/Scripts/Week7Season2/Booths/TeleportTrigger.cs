@@ -17,7 +17,10 @@ public class TeleportTrigger : MonoBehaviour
         if(_myAudioManager == null){
             _myAudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
         }
-        _myAudioManager.ChannelToBeCreated(BoothName);
+        if(BoothName.Contains("Quiz") || BoothName.Contains("Test") || BoothName.Contains("Assessment"))
+            _myAudioManager.ChannelToBeCreated(BoothName);
+        else
+            Destroy(this);
     }
 
     void Update()

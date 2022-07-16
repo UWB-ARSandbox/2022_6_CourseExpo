@@ -962,6 +962,26 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8062765570913013383}
     m_Modifications:
+    - target: {fileID: 4868453919310426882, guid: 8573fce4d9e4cb04582982bd29ffc68a, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 4868453919310426882, guid: 8573fce4d9e4cb04582982bd29ffc68a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5251337943956550507, guid: 8573fce4d9e4cb04582982bd29ffc68a, type: 3}
+      propertyPath: m_AnchorMax.x
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5251337943956550507, guid: 8573fce4d9e4cb04582982bd29ffc68a, type: 3}
+      propertyPath: m_AnchorMax.y
+      value: 0
+      objectReference: {fileID: 0}
+    - target: {fileID: 5251337943956550507, guid: 8573fce4d9e4cb04582982bd29ffc68a, type: 3}
+      propertyPath: m_AnchorMin.x
+      value: 0
+      objectReference: {fileID: 0}
     - target: {fileID: 7385798173212096806, guid: 8573fce4d9e4cb04582982bd29ffc68a, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -1006,6 +1026,10 @@ PrefabInstance:
       propertyPath: Controls
       value: 
       objectReference: {fileID: 8062765572492654361}
+    - target: {fileID: 7385798174743689498, guid: 8573fce4d9e4cb04582982bd29ffc68a, type: 3}
+      propertyPath: flipAudio
+      value: 
+      objectReference: {fileID: 8300000, guid: b72fec190d176d24ebd20d159fffc383, type: 3}
     - target: {fileID: 7385798174743689498, guid: 8573fce4d9e4cb04582982bd29ffc68a, type: 3}
       propertyPath: PlayerList
       value: 

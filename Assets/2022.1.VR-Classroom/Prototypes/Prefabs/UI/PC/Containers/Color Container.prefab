@@ -435,6 +435,7 @@ GameObject:
   - component: {fileID: 4814188482485455960}
   - component: {fileID: 4814188482485455963}
   - component: {fileID: 4814188482485455962}
+  - component: {fileID: 3957989696763058633}
   m_Layer: 5
   m_Name: GrayButton
   m_TagString: Untagged
@@ -560,6 +561,18 @@ MonoBehaviour:
   imgOfChoice: {fileID: 0}
   colorPreview: {fileID: 7999544184926108170}
   colorOfChoice: {r: 0.53333336, g: 0.53333336, b: 0.53333336, a: 1}
+--- !u!114 &3957989696763058633
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814188482485455964}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4814188482569144783
 GameObject:
   m_ObjectHideFlags: 0
@@ -652,6 +665,7 @@ GameObject:
   - component: {fileID: 4814188482603298131}
   - component: {fileID: 4814188482603298130}
   - component: {fileID: 4814188482603298133}
+  - component: {fileID: 7821827112061598204}
   m_Layer: 5
   m_Name: RedButton
   m_TagString: Untagged
@@ -777,6 +791,18 @@ MonoBehaviour:
   imgOfChoice: {fileID: 0}
   colorPreview: {fileID: 7999544184926108170}
   colorOfChoice: {r: 1, g: 0, b: 0, a: 1}
+--- !u!114 &7821827112061598204
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814188482603298135}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4814188482651762477
 GameObject:
   m_ObjectHideFlags: 0
@@ -869,6 +895,7 @@ GameObject:
   - component: {fileID: 4814188482717995406}
   - component: {fileID: 4814188482717995393}
   - component: {fileID: 4814188482717995392}
+  - component: {fileID: 5779312731053587779}
   m_Layer: 5
   m_Name: BlueButton
   m_TagString: Untagged
@@ -994,6 +1021,18 @@ MonoBehaviour:
   imgOfChoice: {fileID: 0}
   colorPreview: {fileID: 7999544184926108170}
   colorOfChoice: {r: 0, g: 0, b: 1, a: 1}
+--- !u!114 &5779312731053587779
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814188482717995394}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4814188482781466339
 GameObject:
   m_ObjectHideFlags: 0
@@ -1244,6 +1283,7 @@ GameObject:
   - component: {fileID: 4814188483250426234}
   - component: {fileID: 4814188483250426237}
   - component: {fileID: 4814188483250426236}
+  - component: {fileID: 5547303677525383179}
   m_Layer: 5
   m_Name: GreenButton
   m_TagString: Untagged
@@ -1369,6 +1409,18 @@ MonoBehaviour:
   imgOfChoice: {fileID: 0}
   colorPreview: {fileID: 7999544184926108170}
   colorOfChoice: {r: 0, g: 1, b: 0, a: 1}
+--- !u!114 &5547303677525383179
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814188483250426238}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4814188483278788620
 GameObject:
   m_ObjectHideFlags: 0
@@ -1382,6 +1434,7 @@ GameObject:
   - component: {fileID: 4814188483278788616}
   - component: {fileID: 4814188483278788619}
   - component: {fileID: 4814188483278788618}
+  - component: {fileID: 1279171791750115878}
   m_Layer: 5
   m_Name: PinkButton
   m_TagString: Untagged
@@ -1507,6 +1560,18 @@ MonoBehaviour:
   imgOfChoice: {fileID: 0}
   colorPreview: {fileID: 7999544184926108170}
   colorOfChoice: {r: 1, g: 0, b: 1, a: 1}
+--- !u!114 &1279171791750115878
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814188483278788620}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4814188483465730117
 GameObject:
   m_ObjectHideFlags: 0
@@ -1678,6 +1743,7 @@ GameObject:
   - component: {fileID: 4814188483694100065}
   - component: {fileID: 4814188483694100064}
   - component: {fileID: 4814188483694100067}
+  - component: {fileID: 22596871736823120}
   m_Layer: 5
   m_Name: YellowButton
   m_TagString: Untagged
@@ -1803,6 +1869,18 @@ MonoBehaviour:
   imgOfChoice: {fileID: 0}
   colorPreview: {fileID: 7999544184926108170}
   colorOfChoice: {r: 1, g: 1, b: 0, a: 1}
+--- !u!114 &22596871736823120
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814188483694100069}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4814188483852394366
 GameObject:
   m_ObjectHideFlags: 0
@@ -1907,6 +1985,7 @@ GameObject:
   - component: {fileID: 4814188483965861803}
   - component: {fileID: 4814188483965861802}
   - component: {fileID: 4814188483965861805}
+  - component: {fileID: 1471566130677263415}
   m_Layer: 5
   m_Name: OrangeButton
   m_TagString: Untagged
@@ -2032,6 +2111,18 @@ MonoBehaviour:
   imgOfChoice: {fileID: 0}
   colorPreview: {fileID: 7999544184926108170}
   colorOfChoice: {r: 1, g: 0.64705884, b: 0, a: 1}
+--- !u!114 &1471566130677263415
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814188483965861807}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &4814188484130481321
 GameObject:
   m_ObjectHideFlags: 0
@@ -2254,6 +2345,7 @@ GameObject:
   - component: {fileID: 4814188484366131463}
   - component: {fileID: 4814188484366131462}
   - component: {fileID: 4814188484366131513}
+  - component: {fileID: 4475196927273397791}
   m_Layer: 5
   m_Name: PurpleButton
   m_TagString: Untagged
@@ -2379,6 +2471,18 @@ MonoBehaviour:
   imgOfChoice: {fileID: 0}
   colorPreview: {fileID: 7999544184926108170}
   colorOfChoice: {r: 0.64705884, g: 0, b: 1, a: 1}
+--- !u!114 &4475196927273397791
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 4814188484366131515}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &6893592134197951589
 GameObject:
   m_ObjectHideFlags: 0

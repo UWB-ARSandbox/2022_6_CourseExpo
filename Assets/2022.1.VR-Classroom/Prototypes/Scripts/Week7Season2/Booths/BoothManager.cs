@@ -44,7 +44,7 @@ public class BoothManager : MonoBehaviour
             if (!boothNames.ContainsKey(boothName)) {
                 boothNames.Add(boothName, gameObject);
                 minimapName.text = boothName;
-                GameObject.Find("GameManager").GetComponent<AudioManager>().ChannelToBeCreated(boothName);
+                //GameObject.Find("GameManager").GetComponent<AudioManager>().ChannelToBeCreated(boothName);
             } else {
                 Debug.LogError("Duplicate Booth Name \"" + boothName + "\" found in Scene and will not be counted for boothVerify"); 
             }
