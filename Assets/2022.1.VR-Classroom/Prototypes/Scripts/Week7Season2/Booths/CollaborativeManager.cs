@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ASL;
+using System.Linq;
 
 public class CollaborativeManager : MonoBehaviour
 {
@@ -137,6 +138,7 @@ public class CollaborativeManager : MonoBehaviour
         else
             DisableBooth();
             //Lock room until assessment is finished 
+        SetupVoteList();
         yield return null;
     }
 
@@ -189,6 +191,7 @@ public class CollaborativeManager : MonoBehaviour
             List<float> NewInput = new List<float>();
             NewInput.Add(0);
             NewInput.Add(_f);
+            NewInput.Add((float)GameManager.MyID);
             for(int i = 0; i< curStudents.Count; i++){
                 NewInput[0] = curStudents[i];
                 var FloatsInput = NewInput.ToArray();
@@ -250,34 +253,35 @@ public class CollaborativeManager : MonoBehaviour
                     SyncedTimer();
                     break;
                 }
-                case buttonA:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonA);
-                    break;   
-                }
-                case buttonB:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonB);
-                    break;   
-                }
-                case buttonC:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonC);
-                    break;   
-                }
-                case buttonD:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonD);
-                    break;   
-                }
-                case buttonTrue:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonTrue);
-                    break;   
-                }
-                case buttonFalse:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonFalse);
-                    break;   
-                }
-                case buttonSubmit:{
-                    _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonSubmit);
-                    break;   
-                }
+                // case buttonA:{
+                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonA);
+                //     StudentVotes[GameManager.players[(int)_f[2]]] = _f[1];
+                //     break;   
+                // }
+                // case buttonB:{
+                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonB);
+                //     break; 
+                // }
+                // case buttonC:{
+                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonC);
+                //     break;   
+                // }
+                // case buttonD:{
+                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonD);
+                //     break;   
+                // }
+                // case buttonTrue:{
+                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonTrue);
+                //     break;   
+                // }
+                // case buttonFalse:{
+                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonFalse);
+                //     break;   
+                // }
+                // case buttonSubmit:{
+                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonSubmit);
+                //     break;   
+                // }
                 case ShortAnswerUpdate:{
                     //change to sendTextField
                     txtField.text += (char)(int)_f[2];
@@ -307,10 +311,15 @@ public class CollaborativeManager : MonoBehaviour
                     txtField.text = txtField.text.Remove(txtField.text.Length - 1);
                     break;
                 }
+                default:{
+                    StudentVotes[GameManager.players[(int)_f[2]]] = _f[1];
+                    
+                    CheckVotes();
+                    break;
+                }
             }
         }
     }
-
     //not sure if necessary yet to convert strings to floats
     public static List<float> stringToFloats(string toConvert) {
         var floats = new List<float>();
@@ -321,6 +330,120 @@ public class CollaborativeManager : MonoBehaviour
     }
     #endregion
 
+    #region Voting System 
+    public Dictionary<string, float> StudentVotes = new Dictionary<string,float>();
+    public Dictionary<string, GameObject> VotePrefabs = new Dictionary<string, GameObject>();
+    public GameObject VotePrefab;
+
+    public void SetupVoteList(){
+        StudentVotes.Clear();
+        for(int i = 0;i < curStudents.Count;i++){
+            StudentVotes.Add(GameManager.players[(int)curStudents[i]],0f);   
+        }
+    }
+
+    public void CreateVotePrefab(string student){
+        bool studentExists = false;
+        if(VotePrefabs.ContainsKey(student)){
+            studentExists = true;
+            if(VotePrefabs[student] != null)
+                Destroy(VotePrefabs[student]);
+        }
+        if(!studentExists){
+            GameObject Vote = (GameObject)Instantiate(VotePrefab,Vector3.zero,transform.rotation);
+            VotePrefabs.Add(student, Vote);
+            switch(StudentVotes[student]){
+                case buttonA:{
+                    Vote.transform.SetParent(gameObject.transform);
+                    break;   
+                }
+                case buttonB:{
+                    Vote.transform.SetParent(gameObject.transform);
+                    break;   
+                }
+                case buttonC:{
+                    Vote.transform.SetParent(gameObject.transform);
+                    break;   
+                }
+                case buttonD:{
+                    Vote.transform.SetParent(gameObject.transform);
+                    break;   
+                }
+                case buttonTrue:{
+                    Vote.transform.SetParent(gameObject.transform);
+                    break;   
+                }
+                case buttonFalse:{
+                    Vote.transform.SetParent(gameObject.transform);
+                    break;   
+                }
+                case buttonSubmit:{
+                    Vote.transform.SetParent(gameObject.transform);
+                    break;   
+                }
+            }
+        }
+    }
+
+    public void ClearVotes(){
+        // foreach(KeyValuePair<string, float> res in StudentVotes){
+        //     res.Value = 0f;
+        // }
+    }
+
+    public void CheckVotes(){
+        for(int i = 0;i < curStudents.Count;i++){
+            CreateVotePrefab(GameManager.players[(int)curStudents[i]]);
+        }
+
+        var distinctList = StudentVotes.Values.Distinct().ToList();
+        Debug.Log("There are: "+distinctList.Count+"Distinct Votes");
+        for(int i = 0; i< distinctList.Count; i++){ 
+            Debug.Log("Current Votes are for: " +distinctList[i]);
+        }
+        if(distinctList.Count <= 1){
+            Debug.Log("Votes are unanimous");
+            SubmitInputs(distinctList[0]);
+            SetupVoteList();//clear old votes
+        }
+        else
+            Debug.Log("Votes are divided");
+    }
+
+    public void SubmitInputs(float _f){
+        switch(_f){
+            case buttonA:{
+                _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonA);
+                break;   
+            }
+            case buttonB:{
+                _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonB);
+                break;   
+            }
+            case buttonC:{
+                _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonC);
+                break;   
+            }
+            case buttonD:{
+                _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonD);
+                break;   
+            }
+            case buttonTrue:{
+                _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonTrue);
+                break;   
+            }
+            case buttonFalse:{
+                _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonFalse);
+                break;   
+            }
+            case buttonSubmit:{
+                _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonSubmit);
+                break;   
+            }
+        }
+    }
+
+    #endregion
     // Update is called once per frame
     void Update()
     {
