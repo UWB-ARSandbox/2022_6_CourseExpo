@@ -185,6 +185,9 @@ public class CollaborativeManager : MonoBehaviour
         }    
     }
     //expected input should be a float between the values of 101 - 107
+    //Expected output _f[curStudents[i]][101f-107f][GameManager.MyID]
+    //Send own ID is for the voting system to keep track of what input
+    //has been pressed locally
     public void SendInput(float _f){
         if(_f == SendTextField){
             SendText(txtField.text);
@@ -255,35 +258,6 @@ public class CollaborativeManager : MonoBehaviour
                     SyncedTimer();
                     break;
                 }
-                // case buttonA:{
-                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonA);
-                //     StudentVotes[GameManager.players[(int)_f[2]]] = _f[1];
-                //     break;   
-                // }
-                // case buttonB:{
-                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonB);
-                //     break; 
-                // }
-                // case buttonC:{
-                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonC);
-                //     break;   
-                // }
-                // case buttonD:{
-                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonD);
-                //     break;   
-                // }
-                // case buttonTrue:{
-                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonTrue);
-                //     break;   
-                // }
-                // case buttonFalse:{
-                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonFalse);
-                //     break;   
-                // }
-                // case buttonSubmit:{
-                //     _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonSubmit);
-                //     break;   
-                // }
                 case ShortAnswerUpdate:{
                     //change to sendTextField
                     txtField.text += (char)(int)_f[2];
