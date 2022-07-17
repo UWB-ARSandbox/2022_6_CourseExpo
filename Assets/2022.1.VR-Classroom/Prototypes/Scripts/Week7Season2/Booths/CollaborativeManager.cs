@@ -180,6 +180,8 @@ public class CollaborativeManager : MonoBehaviour
                 m_ASLObject.SendFloatArray(FloatsArray);
             });
             _myAssessmentManager.walls.gameObject.SetActive(true);
+            if(!_myAssessmentManager.pnl_Start.active)
+            _myAssessmentManager.pnl_Start.SetActive(false);
         }    
     }
     //expected input should be a float between the values of 101 - 107
@@ -369,7 +371,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonA:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionA.transform,false);
                     if(Vote != null){
-                        //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                        Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                         VotePrefabs.Add(student, Vote);
                     }
                     else
@@ -381,7 +383,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonB:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionB.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
                     }
                     else
@@ -392,7 +394,7 @@ public class CollaborativeManager : MonoBehaviour
                     
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionC.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
                     }
                     else
@@ -402,7 +404,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonD:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionD.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
                     }
                     else
@@ -412,7 +414,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonTrue:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionTrue.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
                     }
                     else
@@ -422,7 +424,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonFalse:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionFalse.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
                     }
                     else
@@ -432,7 +434,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonSubmit:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionSubmit.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);                    
                     }
                     else
@@ -446,7 +448,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonA:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionA.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs[student] = Vote;                    
                     }
                     else
@@ -456,7 +458,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonB:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionB.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs[student] = Vote;                    
                     }
                     else
@@ -466,7 +468,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonC:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionC.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs[student] = Vote;                    
                     }
                     else
@@ -476,7 +478,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonD:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionD.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs[student] = Vote;                    
                     }
                     else
@@ -486,7 +488,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonTrue:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionTrue.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs[student] = Vote;                    
                     }
                     else
@@ -496,7 +498,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonFalse:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionFalse.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs[student] = Vote;                    
                     }
                     else
@@ -506,7 +508,7 @@ public class CollaborativeManager : MonoBehaviour
                 case buttonSubmit:{
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionSubmit.transform,false);
                     if(Vote != null){
-                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs[student] = Vote;                    
                     }
                     else
