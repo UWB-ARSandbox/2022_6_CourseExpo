@@ -24,12 +24,14 @@ public class NewPaint : MonoBehaviour
 	{
 		allowedPlayer = true;
 		gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
+		canvasTextureSwitch.Invoke(studentCanvas);
 
 	}
 	public void disableCanvasLocal()
 	{
 		allowedPlayer = false;
 		gameObject.GetComponent<Renderer>().material.mainTexture = blankCanvas;
+		canvasTextureSwitch.Invoke(blankCanvas);
 	}
 	public void enableCanvasForStudent(int peerID)
 	{
@@ -47,6 +49,21 @@ public class NewPaint : MonoBehaviour
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
             });
 	}
+
+	public Texture2D getTexture()
+	{
+		if(allowedPlayer)
+		{
+			return studentCanvas;
+		}
+		else
+		{
+			return blankCanvas;
+		}
+	}
+
+	public event Action<Texture2D> canvasTextureSwitch;
+
 	
 	
 
