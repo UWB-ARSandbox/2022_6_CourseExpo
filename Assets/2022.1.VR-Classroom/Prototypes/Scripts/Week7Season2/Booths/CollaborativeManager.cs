@@ -312,8 +312,10 @@ public class CollaborativeManager : MonoBehaviour
                     break;
                 }
                 default:{
-                    StudentVotes[GameManager.players[(int)_f[2]]] = _f[1];
-                    
+                    if(StudentVotes.ContainsKey(GameManager.players[(int)_f[2]]))
+                        StudentVotes[GameManager.players[(int)_f[2]]] = _f[1];
+                    else
+                        StudentVotes.Add(GameManager.players[(int)_f[2]],_f[1]);            
                     CheckVotes();
                     break;
                 }
@@ -355,6 +357,7 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void CreateVotePrefab(string student){
+        Debug.Log("Attempting to create vote for: " +student);
         bool studentExists = false;
         if(VotePrefabs.ContainsKey(student)){
             studentExists = true;
@@ -362,48 +365,152 @@ public class CollaborativeManager : MonoBehaviour
                 Destroy(VotePrefabs[student]);
         }
         if(!studentExists){
-            GameObject Vote; 
             switch(StudentVotes[student]){
                 case buttonA:{
-                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionA.transform,voteAreaOptionA.transform);
-                    Vote.GetComponentInChildren<TextMesh>().text = student;
-                    VotePrefabs.Add(student, Vote);
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionA.transform,false);
+                    if(Vote != null){
+                        //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                        VotePrefabs.Add(student, Vote);
+                    }
+                    else
+                    {
+                        Debug.Log("Failed to Create VotePrefab");
+                    }
                     break;   
                 }
                 case buttonB:{
-                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionB.transform,voteAreaOptionB.transform);
-                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionB.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
                     break;   
                 }
                 case buttonC:{
-                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionC.transform,voteAreaOptionC.transform);
-                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionC.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
                     break;   
                 }
                 case buttonD:{
-                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionD.transform,voteAreaOptionD.transform);
-                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionD.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
                     break;   
                 }
                 case buttonTrue:{
-                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionTrue.transform,voteAreaOptionTrue.transform);
-                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionTrue.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
                     break;   
                 }
                 case buttonFalse:{
-                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionFalse.transform,voteAreaOptionFalse.transform);
-                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionFalse.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
                     break;   
                 }
                 case buttonSubmit:{
-                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionSubmit.transform,voteAreaOptionSubmit.transform);
-                    Vote.GetComponentInChildren<TextMesh>().text = student;
-                    VotePrefabs.Add(student, Vote);
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionSubmit.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    VotePrefabs.Add(student, Vote);                    
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
+                    break;   
+                }
+            }
+        }
+        else{
+            switch(StudentVotes[student]){
+                case buttonA:{
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionA.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    VotePrefabs[student] = Vote;                    
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
+                    break;   
+                }
+                case buttonB:{
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionB.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    VotePrefabs[student] = Vote;                    
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
+                    break;   
+                }
+                case buttonC:{
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionC.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    VotePrefabs[student] = Vote;                    
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
+                    break;   
+                }
+                case buttonD:{
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionD.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    VotePrefabs[student] = Vote;                    
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
+                    break;   
+                }
+                case buttonTrue:{
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionTrue.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    VotePrefabs[student] = Vote;                    
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
+                    break;   
+                }
+                case buttonFalse:{
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionFalse.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    VotePrefabs[student] = Vote;                    
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
+                    break;   
+                }
+                case buttonSubmit:{
+                    GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionSubmit.transform,false);
+                    if(Vote != null){
+                    //Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
+                    VotePrefabs[student] = Vote;                    
+                    }
+                    else
+                        Debug.Log("Failed to Create VotePrefab");
                     break;   
                 }
             }
