@@ -16,7 +16,7 @@ public class GroupManager : MonoBehaviour
     {
         if (GameManager.AmTeacher)
         {
-            groupsButton.enabled = true;
+            groupsButton.gameObject.SetActive(true);
             for (int i = 0; i < 5; i++)
             {
                 Group group = new Group();
