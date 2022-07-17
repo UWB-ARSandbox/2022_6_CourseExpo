@@ -32,7 +32,15 @@ public class GroupManager : MonoBehaviour
     {
         
     }
+
+    public void ValueChanged(int value)
+    {
+        Debug.Log("Value changed to " + groupList.options[value].text + " " + value);
+    }
+
 }
+
+
 
 [System.Serializable]
 public class Group
