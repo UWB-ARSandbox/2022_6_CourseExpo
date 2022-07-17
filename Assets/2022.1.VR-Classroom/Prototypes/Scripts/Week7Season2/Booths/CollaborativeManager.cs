@@ -334,9 +334,21 @@ public class CollaborativeManager : MonoBehaviour
     public Dictionary<string, float> StudentVotes = new Dictionary<string,float>();
     public Dictionary<string, GameObject> VotePrefabs = new Dictionary<string, GameObject>();
     public GameObject VotePrefab;
+    public GameObject voteAreaOptionA;
+    public GameObject voteAreaOptionB;
+    public GameObject voteAreaOptionC;
+    public GameObject voteAreaOptionD;
+    public GameObject voteAreaOptionTrue;
+    public GameObject voteAreaOptionFalse;
+    public GameObject voteAreaOptionSubmit;
 
     public void SetupVoteList(){
         StudentVotes.Clear();
+        foreach(KeyValuePair<string, GameObject> res in VotePrefabs){
+            if(res.Value != null)
+                Destroy(res.Value);
+        }
+        VotePrefabs.Clear();
         for(int i = 0;i < curStudents.Count;i++){
             StudentVotes.Add(GameManager.players[(int)curStudents[i]],0f);   
         }
@@ -350,35 +362,48 @@ public class CollaborativeManager : MonoBehaviour
                 Destroy(VotePrefabs[student]);
         }
         if(!studentExists){
-            GameObject Vote = (GameObject)Instantiate(VotePrefab,Vector3.zero,transform.rotation);
-            VotePrefabs.Add(student, Vote);
+            GameObject Vote; 
             switch(StudentVotes[student]){
                 case buttonA:{
-                    Vote.transform.SetParent(gameObject.transform);
+                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionA.transform,voteAreaOptionA.transform);
+                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    VotePrefabs.Add(student, Vote);
                     break;   
                 }
                 case buttonB:{
-                    Vote.transform.SetParent(gameObject.transform);
+                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionB.transform,voteAreaOptionB.transform);
+                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    VotePrefabs.Add(student, Vote);
                     break;   
                 }
                 case buttonC:{
-                    Vote.transform.SetParent(gameObject.transform);
+                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionC.transform,voteAreaOptionC.transform);
+                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    VotePrefabs.Add(student, Vote);
                     break;   
                 }
                 case buttonD:{
-                    Vote.transform.SetParent(gameObject.transform);
+                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionD.transform,voteAreaOptionD.transform);
+                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    VotePrefabs.Add(student, Vote);
                     break;   
                 }
                 case buttonTrue:{
-                    Vote.transform.SetParent(gameObject.transform);
+                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionTrue.transform,voteAreaOptionTrue.transform);
+                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    VotePrefabs.Add(student, Vote);
                     break;   
                 }
                 case buttonFalse:{
-                    Vote.transform.SetParent(gameObject.transform);
+                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionFalse.transform,voteAreaOptionFalse.transform);
+                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    VotePrefabs.Add(student, Vote);
                     break;   
                 }
                 case buttonSubmit:{
-                    Vote.transform.SetParent(gameObject.transform);
+                    Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionSubmit.transform,voteAreaOptionSubmit.transform);
+                    Vote.GetComponentInChildren<TextMesh>().text = student;
+                    VotePrefabs.Add(student, Vote);
                     break;   
                 }
             }
