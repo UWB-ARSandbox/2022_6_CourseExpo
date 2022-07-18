@@ -43,6 +43,8 @@ public class GroupManager : MonoBehaviour
 
     public void ValueChanged()
     {
+        groupName.text = "";
+        groupMembers.text = "";
         Debug.Log("Value changed to " + groupList.options[groupList.value].text);
         LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
     }
@@ -52,17 +54,14 @@ public class GroupManager : MonoBehaviour
         groupName.text = groups[index].name;
         foreach (string member in groups[index].members)
         {
-            groupMembers.text += member;
+            groupMembers.text += (member + "\n");
         }
     }
-
 }
-
-
 
 [System.Serializable]
 public class Group
 {
     public string name;
-    public List<string> members;
+    public List<string> members = new List<string>();
 }
