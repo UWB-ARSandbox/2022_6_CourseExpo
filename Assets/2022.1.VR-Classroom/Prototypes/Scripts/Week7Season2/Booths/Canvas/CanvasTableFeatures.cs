@@ -5,6 +5,7 @@ using ASL;
 
 public class CanvasTableFeatures : MonoBehaviour
 {
+    public bool isTeacherTable = false;
     public ASLObject top;
     private Vector3 canvasInitLocalPos;
     private Quaternion canvasInitLocalRot;
@@ -16,6 +17,10 @@ public class CanvasTableFeatures : MonoBehaviour
         Debug.Assert(top != null);
         canvasInitLocalPos = top.transform.localPosition;
         canvasInitLocalRot = top.transform.localRotation;
+
+        // Remove overhead preview for teacher table
+        if (isTeacherTable)
+            GetComponentInChildren<Billboard>().gameObject.SetActive(false);
     }
 
     public void PopUpCanvas()
@@ -23,7 +28,7 @@ public class CanvasTableFeatures : MonoBehaviour
         if (!flippedUp)
         {
             //top.SendAndSetLocalRotation(Quaternion.Euler(new Vector3(90f, 0f, 0f)));
-            //top.SendAndSetLocalPosition(new Vector3(top.transform.localPosition.x, 8f, top.transform.localPosition.z));
+            //top.SendAndSetLocalPosition(new Vector3(top.transform.localPosition.x, 1.75f, top.transform.localPosition.z));
 
             // This is done locally so canvases are not blocking everyone's vision, and to save network
             top.transform.localRotation = Quaternion.Euler(new Vector3(90f, 0f, 0f));
