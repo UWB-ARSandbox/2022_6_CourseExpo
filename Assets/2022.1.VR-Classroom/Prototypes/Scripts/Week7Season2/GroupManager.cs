@@ -35,7 +35,7 @@ public class GroupManager : MonoBehaviour
 
     public void ValueChanged(int value)
     {
-        Debug.Log("Value changed to " + groupList.options[value].text + " " + value);
+        Debug.Log("Value changed to " + groupList.options[groupList.value].text + " " + value);
     }
 
 }
