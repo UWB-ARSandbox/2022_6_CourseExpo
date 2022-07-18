@@ -24,6 +24,12 @@ public class GroupManager : MonoBehaviour
                 groups.Add(group);
                 groupList.options.Add(new TMP_Dropdown.OptionData() { text = group.name });
             }
+            groups[0].members.Add("Bobby 1");
+            groups[0].members.Add("Bobby 2");
+            groups[0].members.Add("Bobby 3");
+            groups[1].members.Add("Dobby 1");
+            groups[1].members.Add("Dobby 2");
+            groups[1].members.Add("Dobby 3");
         }
     }
 
