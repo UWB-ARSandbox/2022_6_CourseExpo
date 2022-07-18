@@ -321,15 +321,7 @@ public class CollaborativeManager : MonoBehaviour
     public GameObject voteAreaOptionSubmit;
 
     public void SetupVoteList(){
-        StudentVotes.Clear();
-        foreach(KeyValuePair<string, GameObject> res in VotePrefabs){
-            if(res.Value != null)
-                Destroy(res.Value);
-        }
-        VotePrefabs.Clear();
-        for(int i = 0;i < curStudents.Count;i++){
-            StudentVotes.Add(GameManager.players[(int)curStudents[i]],0f);   
-        }
+        ClearVotes();
     }
 
     public void CreateVotePrefab(string student){
@@ -497,6 +489,15 @@ public class CollaborativeManager : MonoBehaviour
         // foreach(KeyValuePair<string, float> res in StudentVotes){
         //     res.Value = 0f;
         // }
+        StudentVotes.Clear();
+        foreach(KeyValuePair<string, GameObject> res in VotePrefabs){
+            if(res.Value != null)
+                Destroy(res.Value);
+        }
+        VotePrefabs.Clear();
+        for(int i = 0;i < curStudents.Count;i++){
+            StudentVotes.Add(GameManager.players[(int)curStudents[i]],0f);   
+        }
     }
 
     public void CheckVotes(){

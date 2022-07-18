@@ -284,6 +284,7 @@ public class AssessmentManager : MonoBehaviour {
     private void StartNextQuestion() {
         //Start next question OR End assessment
         if (num_CurrentQuestion < num_TotalQuestions) {
+            _myCollabManager.ClearVotes();
             switch (assessmentType) {
                 case AssessmentType.assignment:
                     NextAssignmentQ();
