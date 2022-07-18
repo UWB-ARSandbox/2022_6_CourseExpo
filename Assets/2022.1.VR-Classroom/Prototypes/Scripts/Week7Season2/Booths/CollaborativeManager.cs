@@ -84,6 +84,7 @@ public class CollaborativeManager : MonoBehaviour
             //_myBooth.lockToggle.Lock();
             if(!_myAssessmentManager.walls.gameObject.active)
                 _myAssessmentManager.walls.gameObject.SetActive(true);
+            _myAssessmentManager.pnl_Start.SetActive(false);
         }
         //kick users out that are in the booth but not in the curStudents list
         //IE compare the curStudentsList against the one in BoothZoneManager currentUsers
@@ -97,9 +98,9 @@ public class CollaborativeManager : MonoBehaviour
     public void EnableBooth(){
         //_myBooth.lockToggle.Unlock();
         QuizActive = false;
-        if(!_myAssessmentManager.pnl_Start.active)
+        //if(!_myAssessmentManager.pnl_Start.active)
             _myAssessmentManager.pnl_Start.SetActive(true);
-        if(_myAssessmentManager.walls.gameObject.active)
+        //if(_myAssessmentManager.walls.gameObject.active)
             _myAssessmentManager.walls.gameObject.SetActive(false);
         if(TPChannelTrigger != null){
             TPChannelTrigger.Active = false;
@@ -170,7 +171,8 @@ public class CollaborativeManager : MonoBehaviour
     }
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
-        if(!GameManager.AmTeacher){
+        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)){
+            _myAssessmentManager.pnl_Start.SetActive(false);
             List<float> NewFloats = new List<float>();
             NewFloats.Add(-1);
             NewFloats.Add(QuizStarted);
@@ -180,8 +182,6 @@ public class CollaborativeManager : MonoBehaviour
                 m_ASLObject.SendFloatArray(FloatsArray);
             });
             _myAssessmentManager.walls.gameObject.SetActive(true);
-            if(!_myAssessmentManager.pnl_Start.active)
-            _myAssessmentManager.pnl_Start.SetActive(false);
         }    
     }
     //expected input should be a float between the values of 101 - 107
@@ -205,7 +205,6 @@ public class CollaborativeManager : MonoBehaviour
                 });
             }
         }
-        SendNewRandom();
     }
     
     //do I need to send each input or do I need to only send strings?
@@ -323,7 +322,17 @@ public class CollaborativeManager : MonoBehaviour
     public void SetupVoteList(){
         ClearVotes();
     }
-
+    public void ShowVotes(){
+        if(VotePrefabs.ContainsKey(GameManager.players[(int)GameManager.MyID])){
+            if(VotePrefabs[GameManager.players[(int)GameManager.MyID]] != null){
+                Debug.Log("I have casted my vote");
+                foreach(KeyValuePair<string, GameObject> res in VotePrefabs){
+                    if(res.Value != null)
+                        res.Value.SetActive(true);
+                }
+            }
+        }
+    }
     public void CreateVotePrefab(string student){
         Debug.Log("Attempting to create vote for: " +student);
         bool studentExists = false;
@@ -339,6 +348,7 @@ public class CollaborativeManager : MonoBehaviour
                     if(Vote != null){
                         Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                         VotePrefabs.Add(student, Vote);
+                        Vote.SetActive(false); 
                     }
                     else
                     {
@@ -351,6 +361,7 @@ public class CollaborativeManager : MonoBehaviour
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    Vote.SetActive(false); 
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -362,6 +373,7 @@ public class CollaborativeManager : MonoBehaviour
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    Vote.SetActive(false); 
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -372,6 +384,7 @@ public class CollaborativeManager : MonoBehaviour
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    Vote.SetActive(false); 
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -382,6 +395,7 @@ public class CollaborativeManager : MonoBehaviour
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    Vote.SetActive(false); 
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -392,6 +406,7 @@ public class CollaborativeManager : MonoBehaviour
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
                     VotePrefabs.Add(student, Vote);
+                    Vote.SetActive(false); 
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -401,7 +416,8 @@ public class CollaborativeManager : MonoBehaviour
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionSubmit.transform,false);
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
-                    VotePrefabs.Add(student, Vote);                    
+                    VotePrefabs.Add(student, Vote);
+                    Vote.SetActive(false);                     
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -415,7 +431,8 @@ public class CollaborativeManager : MonoBehaviour
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionA.transform,false);
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
-                    VotePrefabs[student] = Vote;                    
+                    VotePrefabs[student] = Vote; 
+                    Vote.SetActive(false);                    
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -425,7 +442,8 @@ public class CollaborativeManager : MonoBehaviour
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionB.transform,false);
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
-                    VotePrefabs[student] = Vote;                    
+                    VotePrefabs[student] = Vote;
+                    Vote.SetActive(false);                     
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -435,7 +453,8 @@ public class CollaborativeManager : MonoBehaviour
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionC.transform,false);
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
-                    VotePrefabs[student] = Vote;                    
+                    VotePrefabs[student] = Vote;
+                    Vote.SetActive(false);                     
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -445,7 +464,8 @@ public class CollaborativeManager : MonoBehaviour
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionD.transform,false);
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
-                    VotePrefabs[student] = Vote;                    
+                    VotePrefabs[student] = Vote;
+                    Vote.SetActive(false);                     
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -455,7 +475,8 @@ public class CollaborativeManager : MonoBehaviour
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionTrue.transform,false);
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
-                    VotePrefabs[student] = Vote;                    
+                    VotePrefabs[student] = Vote;
+                    Vote.SetActive(false);                     
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -465,7 +486,8 @@ public class CollaborativeManager : MonoBehaviour
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionFalse.transform,false);
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
-                    VotePrefabs[student] = Vote;                    
+                    VotePrefabs[student] = Vote;
+                    Vote.SetActive(false);                     
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -475,7 +497,8 @@ public class CollaborativeManager : MonoBehaviour
                     GameObject Vote = (GameObject)Instantiate(VotePrefab,voteAreaOptionSubmit.transform,false);
                     if(Vote != null){
                     Vote.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = student;
-                    VotePrefabs[student] = Vote;                    
+                    VotePrefabs[student] = Vote;
+                    Vote.SetActive(false);                    
                     }
                     else
                         Debug.Log("Failed to Create VotePrefab");
@@ -504,6 +527,7 @@ public class CollaborativeManager : MonoBehaviour
         for(int i = 0;i < curStudents.Count;i++){
             CreateVotePrefab(GameManager.players[(int)curStudents[i]]);
         }
+        ShowVotes();
 
         var distinctList = StudentVotes.Values.Distinct().ToList();
         Debug.Log("There are: "+distinctList.Count+"Distinct Votes");
