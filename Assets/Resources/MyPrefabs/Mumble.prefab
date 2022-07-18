@@ -51,7 +51,7 @@ MonoBehaviour:
     UseRandomUsername: 0
     UseLocalLoopback: 0
     UseSyntheticSource: 0
-    EnableEditorIOGraph: 1
+    EnableEditorIOGraph: 0
   MumbleMicrophone: {fileID: 971975365549943597, guid: d4a77e78e537e5848987eb06d37b3e43, type: 3}
   ConnectAsyncronously: 1
   SendPosition: 1
