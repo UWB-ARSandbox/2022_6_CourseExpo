@@ -19,31 +19,61 @@ using SimpleFileBrowser;
 public class NewPaint : MonoBehaviour
 {
 	bool allowedPlayer;
-
+	[SerializeField] List<int> startingAllowedPlayers;
+	[SerializeField] List<int> startingAllowedViewers;
 	public void enableCanvasLocal()
 	{
 		allowedPlayer = true;
-		gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
-		canvasTextureSwitch.Invoke(studentCanvas);
+		
 
 	}
 	public void disableCanvasLocal()
 	{
 		allowedPlayer = false;
+		
+	}
+	public void enableViewingLocal()
+	{
+		gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
+		canvasTextureSwitch.Invoke(studentCanvas);
+	}
+	public void disableViewingLocal()
+	{
 		gameObject.GetComponent<Renderer>().material.mainTexture = blankCanvas;
 		canvasTextureSwitch.Invoke(blankCanvas);
 	}
-	public void enableCanvasForStudent(int peerID)
+	public IEnumerator enableCanvasForPlayer(int peerID)
 	{
+		yield return new WaitForSeconds(1);
 		float[] fArray = {1, peerID};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+            {
+				
+                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+            });
+	}
+	public IEnumerator disableCanvasForPlayer(int peerID)
+	{
+		yield return new WaitForSeconds(1);
+		float[] fArray = {2, peerID};
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
             {
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
             });
 	}
-	public void disableCanvasForStudent(int peerID)
+	public IEnumerator enableViewingForPlayer(int peerID)
 	{
-		float[] fArray = {2, peerID};
+		yield return new WaitForSeconds(1);
+		float[] fArray = {3, peerID};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+            {
+                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+            });
+	}
+	public IEnumerator disableViewingForPlayer(int peerID)
+	{
+		yield return new WaitForSeconds(1);
+		float[] fArray = {4, peerID};
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
             {
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
@@ -330,7 +360,20 @@ public class NewPaint : MonoBehaviour
 
         StartCoroutine(UpdateCanvas());
 
-		enableCanvasLocal();
+		//enableCanvasLocal();
+		disableCanvasLocal();
+		disableViewingLocal();
+		for(int i = 0; i < startingAllowedPlayers.Count; i++)
+		{
+			
+			StartCoroutine(enableCanvasForPlayer(startingAllowedPlayers[i])); 
+			
+		}
+		for(int i = 0; i < startingAllowedViewers.Count; i++)
+		{
+			StartCoroutine(enableViewingForPlayer(startingAllowedViewers[i]));
+		}
+		
     }
 
     // Update is called once per frame
@@ -1168,10 +1211,36 @@ public class NewPaint : MonoBehaviour
     }
     public void recieveInput(string id, float[] i)
 	{
-        
-		InputInformation theInput = ConstructInputFromFloats(i);
+		
+        if(i.Length == 2) //Special case for allowing players access to the canvas
+		{
+			
+			if(ASL.GameLiftManager.GetInstance().m_PeerId == i[1])
+			{
+				if(i[0] == 1)
+				{
+					enableCanvasLocal();
+				}
+				else if(i[0] == 2)
+				{
+					disableCanvasLocal();
+				}
+				else if(i[0] == 3)
+				{
+					enableViewingLocal();
+				}
+				else if(i[0] == 4)
+				{
+					disableViewingLocal();
+				}
+			}
+		}
+		else{
+			InputInformation theInput = ConstructInputFromFloats(i);
         //Queues up the input to be built
-        myQueue.Enqueue(theInput);
+        	myQueue.Enqueue(theInput);
+		}
+		
 		
 	}
 
@@ -1209,22 +1278,9 @@ public class NewPaint : MonoBehaviour
 		if(i.Length == 1) //Special case for clear command
 		{
 			inputInfoNew.ClearCanvas = true;
-		}
-		else if(i.Length == 2) //Special case for allowing players access to the canvas
-		{
 			
-			if(ASL.GameLiftManager.GetInstance().m_PeerId == i[1])
-			{
-				if(i[0] == 1)
-				{
-					enableCanvasLocal();
-				}
-				else if(i[0] == 2)
-				{
-					disableCanvasLocal();
-				}
-			}
 		}
+		
 		else{
 
 		
