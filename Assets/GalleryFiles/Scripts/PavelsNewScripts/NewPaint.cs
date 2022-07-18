@@ -329,6 +329,8 @@ public class NewPaint : MonoBehaviour
     
 
         StartCoroutine(UpdateCanvas());
+
+		enableCanvasLocal();
     }
 
     // Update is called once per frame

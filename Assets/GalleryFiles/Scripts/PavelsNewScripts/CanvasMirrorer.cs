@@ -5,12 +5,14 @@ using UnityEngine;
 public class CanvasMirrorer : MonoBehaviour
 {
     public NewPaint myCanvas;
+    bool gotTexture = false;
     // Start is called before the first frame update
-    void Start()
+    void Awake()
     {
         myCanvas.canvasTextureSwitch += updateTexture;
-        gameObject.GetComponent<Renderer>().material.mainTexture = myCanvas.getTexture();
+        //StartCoroutine(getTexture());
     }
+
 
     // Update is called once per frame
     void updateTexture(Texture2D myTex)
@@ -21,4 +23,5 @@ public class CanvasMirrorer : MonoBehaviour
     {
         
     }
+    
 }

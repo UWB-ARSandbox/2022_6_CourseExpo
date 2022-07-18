@@ -13,6 +13,7 @@ GameObject:
   - component: {fileID: 1651861498810882280}
   - component: {fileID: 2449623843296058873}
   - component: {fileID: 5622251218036721692}
+  - component: {fileID: 6148256103730017556}
   m_Layer: 0
   m_Name: StudentCanvasMirror (1)
   m_TagString: Untagged
@@ -63,7 +64,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 513a5950d5351984abfb47e53f32e2ce, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -111,6 +112,19 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 65ff13437c36160409eca9496fc51ef2, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+--- !u!114 &6148256103730017556
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 2987271648862431960}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d04b1e160c424459ced65f9bb05dd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCanvas: {fileID: 6379331942319979313}
 --- !u!1 &6222251260855640501
 GameObject:
   m_ObjectHideFlags: 0
@@ -404,6 +418,7 @@ GameObject:
   - component: {fileID: 6083986148713765844}
   - component: {fileID: 1165963632668153834}
   - component: {fileID: 3689375528977060726}
+  - component: {fileID: 6407195292231780704}
   m_Layer: 0
   m_Name: TeacherCanvasMirrorPlaceholder (4)
   m_TagString: Untagged
@@ -453,7 +468,7 @@ MeshRenderer:
   m_RenderingLayerMask: 1
   m_RendererPriority: 0
   m_Materials:
-  - {fileID: 2100000, guid: 513a5950d5351984abfb47e53f32e2ce, type: 2}
+  - {fileID: 10754, guid: 0000000000000000f000000000000000, type: 0}
   m_StaticBatchInfo:
     firstSubMesh: 0
     subMeshCount: 0
@@ -489,6 +504,19 @@ MeshCollider:
   m_Convex: 0
   m_CookingOptions: 30
   m_Mesh: {fileID: 10210, guid: 0000000000000000e000000000000000, type: 0}
+--- !u!114 &6407195292231780704
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7892246554303968630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 80d04b1e160c424459ced65f9bb05dd1, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  myCanvas: {fileID: 0}
 --- !u!1 &8490269988838910981
 GameObject:
   m_ObjectHideFlags: 0
@@ -951,6 +979,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
+--- !u!4 &5982259423584434967 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 9207350022334854269, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
+  m_PrefabInstance: {fileID: 3225234085556227946}
+  m_PrefabAsset: {fileID: 0}
 --- !u!1 &3438185473017076618 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 249024165482910944, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
@@ -961,11 +994,17 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 7420519390332990564, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
   m_PrefabInstance: {fileID: 3225234085556227946}
   m_PrefabAsset: {fileID: 0}
---- !u!4 &5982259423584434967 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 9207350022334854269, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
+--- !u!114 &6379331942319979313 stripped
+MonoBehaviour:
+  m_CorrespondingSourceObject: {fileID: 8378284969420092507, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
   m_PrefabInstance: {fileID: 3225234085556227946}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: d0fa55ad1e928df4c8b8be8575029c40, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
 --- !u!1 &1464309139831092988 stripped
 GameObject:
   m_CorrespondingSourceObject: {fileID: 4075775493795936662, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
