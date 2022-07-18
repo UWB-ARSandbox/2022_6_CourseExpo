@@ -11,6 +11,8 @@ public class GroupManager : MonoBehaviour
     public List<Group> groups = new List<Group>();
     public TMP_Dropdown groupList;
     public Button groupsButton;
+    public TMP_Text groupName;
+    public TMP_Text groupMembers;
 
     void Start()
     {
@@ -39,9 +41,19 @@ public class GroupManager : MonoBehaviour
         
     }
 
-    public void ValueChanged(int value)
+    public void ValueChanged()
     {
-        Debug.Log("Value changed to " + groupList.options[groupList.value].text + " " + value);
+        Debug.Log("Value changed to " + groupList.options[groupList.value].text);
+        LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
+    }
+
+    public void LoadGroupData(int index)
+    {
+        groupName.text = groups[index].name;
+        foreach (string member in groups[index].members)
+        {
+            groupMembers.text += member;
+        }
     }
 
 }
