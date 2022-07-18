@@ -19,6 +19,9 @@ using SimpleFileBrowser;
 public class NewPaint : MonoBehaviour
 {
 	bool allowedPlayer;
+
+	[SerializeField] bool allowForEveryone;
+	[SerializeField] bool visibleForEveryone;
 	[SerializeField] List<int> startingAllowedPlayers;
 	[SerializeField] List<int> startingAllowedViewers;
 	public void enableCanvasLocal()
@@ -357,21 +360,34 @@ public class NewPaint : MonoBehaviour
 		loadB.onClick.AddListener(SetCanLoad);
 
     
-
-        StartCoroutine(UpdateCanvas());
-
-		//enableCanvasLocal();
-		disableCanvasLocal();
-		disableViewingLocal();
-		for(int i = 0; i < startingAllowedPlayers.Count; i++)
+		if(!allowForEveryone)
 		{
+			StartCoroutine(UpdateCanvas());
+
+			//enableCanvasLocal();
+			disableCanvasLocal();
 			
-			StartCoroutine(enableCanvasForPlayer(startingAllowedPlayers[i])); 
-			
+			for(int i = 0; i < startingAllowedPlayers.Count; i++)
+			{
+				
+				StartCoroutine(enableCanvasForPlayer(startingAllowedPlayers[i])); 
+				
+			}
 		}
-		for(int i = 0; i < startingAllowedViewers.Count; i++)
-		{
-			StartCoroutine(enableViewingForPlayer(startingAllowedViewers[i]));
+		else{
+			enableCanvasLocal();
+		}
+        
+		if(!visibleForEveryone)
+			{
+			disableViewingLocal();
+			for(int i = 0; i < startingAllowedViewers.Count; i++)
+			{
+				StartCoroutine(enableViewingForPlayer(startingAllowedViewers[i]));
+			}
+		}
+		else{
+			enableViewingLocal();
 		}
 		
     }
