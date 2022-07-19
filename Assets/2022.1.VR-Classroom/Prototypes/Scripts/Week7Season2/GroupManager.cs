@@ -59,6 +59,11 @@ public class GroupManager : MonoBehaviour
             groupMembers.text += (member + "\n");
         }
     }
+
+    public void ShowAddPlayerScreen()
+    {
+        addPlayerContainer.SetActive(true);
+    }
 }
 
 [System.Serializable]
