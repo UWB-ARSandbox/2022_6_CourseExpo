@@ -13,9 +13,11 @@ public class GroupManager : MonoBehaviour
     public Button groupsButton;
     public TMP_Text groupName;
     public TMP_Text groupMembers;
+    public GameObject addPlayerContainer;
 
     void Start()
     {
+        addPlayerContainer.SetActive(false);
         if (GameManager.AmTeacher)
         {
             groupsButton.gameObject.SetActive(true);
