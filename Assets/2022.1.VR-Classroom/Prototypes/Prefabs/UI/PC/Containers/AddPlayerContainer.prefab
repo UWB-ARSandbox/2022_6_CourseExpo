@@ -418,7 +418,7 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 1486935783061661165}
   m_HandleRect: {fileID: 1486935783061661164}
   m_Direction: 0
-  m_Value: 0
+  m_Value: 1
   m_Size: 1
   m_NumberOfSteps: 0
   m_OnValueChanged:
@@ -713,7 +713,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6584272813781207200, guid: 693a1a7f03fceb9459a1f1cb1eea1ed7, type: 3}
       propertyPath: m_Text
-      value: Players
+      value: Add Player
       objectReference: {fileID: 0}
     - target: {fileID: 6584272813781207200, guid: 693a1a7f03fceb9459a1f1cb1eea1ed7, type: 3}
       propertyPath: m_Color.b
