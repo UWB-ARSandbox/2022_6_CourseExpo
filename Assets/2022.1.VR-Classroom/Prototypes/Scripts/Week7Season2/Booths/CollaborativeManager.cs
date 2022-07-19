@@ -99,6 +99,7 @@ public class CollaborativeManager : MonoBehaviour
         //_myBooth.lockToggle.Unlock();
         QuizActive = false;
         //if(!_myAssessmentManager.pnl_Start.active)
+        if(!curStudents.Contains(GameManager.MyID))
             _myAssessmentManager.pnl_Start.SetActive(true);
         //if(_myAssessmentManager.walls.gameObject.active)
             _myAssessmentManager.walls.gameObject.SetActive(false);
@@ -145,13 +146,15 @@ public class CollaborativeManager : MonoBehaviour
 
     #region Sending Floats
     public void CurTestFinished(){
-        List<float> NewFloats = new List<float>();  
-        NewFloats.Add(-1);
-        NewFloats.Add(TestFinished);
-        var FloatsArray = NewFloats.ToArray();
-        m_ASLObject.SendAndSetClaim(() => {
-            m_ASLObject.SendFloatArray(FloatsArray);
-        });    
+        if(curStudents[0] == GameManager.MyID){
+            List<float> NewFloats = new List<float>();  
+            NewFloats.Add(-1);
+            NewFloats.Add(TestFinished);
+            var FloatsArray = NewFloats.ToArray();
+            m_ASLObject.SendAndSetClaim(() => {
+                m_ASLObject.SendFloatArray(FloatsArray);
+            });    
+        }
     }
     //Send new random to each person taking the quiz
     //Intent is to provide a random float value that is the same for all members taking the collaborative quiz
@@ -267,9 +270,9 @@ public class CollaborativeManager : MonoBehaviour
                     break;
                 }
                 case TestFinished:{
+                    EnableBooth();
                     curStudents.Clear();
                     curStudents.TrimExcess();
-                    EnableBooth();
                     _myAssessmentManager.walls.gameObject.SetActive(false);
                     break;
                 }
@@ -509,9 +512,6 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void ClearVotes(){
-        // foreach(KeyValuePair<string, float> res in StudentVotes){
-        //     res.Value = 0f;
-        // }
         StudentVotes.Clear();
         foreach(KeyValuePair<string, GameObject> res in VotePrefabs){
             if(res.Value != null)
@@ -519,7 +519,7 @@ public class CollaborativeManager : MonoBehaviour
         }
         VotePrefabs.Clear();
         for(int i = 0;i < curStudents.Count;i++){
-            StudentVotes.Add(GameManager.players[(int)curStudents[i]],0f);   
+            StudentVotes.Add(GameManager.players[(int)curStudents[i]],(float)i);   
         }
     }
 

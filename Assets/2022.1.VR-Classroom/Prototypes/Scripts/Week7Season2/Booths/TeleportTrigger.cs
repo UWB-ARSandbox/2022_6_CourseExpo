@@ -49,7 +49,7 @@ public class TeleportTrigger : MonoBehaviour
     }
 
     private void OnTriggerExit(Collider other) {
-        if(other == CharacterCollider && Active){
+        if(other == CharacterCollider){
             _myAudioManager.ReturnToRootChannel();
         }
     }

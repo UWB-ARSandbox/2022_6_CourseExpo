@@ -48,7 +48,7 @@ public class SaveStats : MonoBehaviour
             foreach (var item in statsManager.studentStats)
             {
                 //top line: name, stats categories
-                writer.AppendLine($"{item.Key},Time in booth,Time taken to complete,Questions timed out,Score,Completed");
+                writer.AppendLine($"{item.Key},Time in booth,Time taken to complete,Questions timed out,Score,Completed,GroupNumber");
                 PersonalStats studentStats = item.Value;
 
                 //sort the names before exporting
@@ -65,7 +65,7 @@ public class SaveStats : MonoBehaviour
         {
             //sort the names before exporting
             PlayerStats.boothStats = PlayerStats.boothStats.OrderBy(x => x.Key).ToDictionary(x => x.Key, x => x.Value);
-            writer.AppendLine($",Time in booth,Time taken to complete,Questions timed out,Score,Completed");
+            writer.AppendLine($",Time in booth,Time taken to complete,Questions timed out,Score,Completed,GroupNumber");
             foreach (var item in PlayerStats.boothStats)
             {
                 writer.AppendLine($"{item.Key},{item.Value.OutputStats()}");

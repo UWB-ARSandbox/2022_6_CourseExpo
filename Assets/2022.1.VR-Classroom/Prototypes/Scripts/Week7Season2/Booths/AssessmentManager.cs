@@ -863,6 +863,7 @@ public class AssessmentManager : MonoBehaviour {
     }
 
     private void EndAssessment() {
+        
         questionTimerActive = false;
         lockoutTimerActive = false;
 
@@ -872,14 +873,13 @@ public class AssessmentManager : MonoBehaviour {
 
         //Hide the response panel
         pnl_Response.SetActive(false);
-
+        
         string correctAnswersText = num_CorrectAnswers + " / " + num_TotalQuestions;
         string finalScoreText = num_CurrentPoints + " / " + num_TotalPoints;
         float finalScorePercentage = ((float)num_CurrentPoints / (float)num_TotalPoints) * 100;
 
         txt_EndTitle.text = "Assessment Complete";
         string endDescription = "";
-
         //Special Booth Check
         if (txt_boothName.text == "?????" && finalScorePercentage == 100) {
             endDescription += ("Congratulations! You've scored 100%!\n");
@@ -918,8 +918,18 @@ public class AssessmentManager : MonoBehaviour {
         personalStats.SetPercentageScore(boothManager.boothName, finalScorePercentage);
         personalStats.SetTimeTaken(boothManager.boothName, Time.time - timeStarted);
         personalStats.SetCompleted(boothManager.boothName, true);
-
-        personalStats.SetGroupMembers(boothManager.boothName, temp);
+        string GroupMembers ="";
+        foreach(string s in temp){
+            GroupMembers +=s;
+        }
+        float GNumber =0f;
+        List<float> tempLists = GameManager.stringToFloats(GroupMembers);
+        foreach(float f in tempLists){
+            GNumber += f;
+        }
+        personalStats.SetGroupMembers(boothManager.boothName, GroupMembers);
+        personalStats.SetGroupNumber(boothManager.boothName,GNumber );
+        _myCollabManager.CurTestFinished();
     }
 
     //Verify the content has been loaded
