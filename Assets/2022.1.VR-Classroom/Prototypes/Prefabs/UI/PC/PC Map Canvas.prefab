@@ -2336,6 +2336,10 @@ PrefabInstance:
       propertyPath: Announcement
       value: 
       objectReference: {fileID: 8538072982680230035}
+    - target: {fileID: 8566890927842373749, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
+      propertyPath: AddPlayerScreen
+      value: 
+      objectReference: {fileID: 5145825495504486699}
     - target: {fileID: 8566890927871171417, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
       propertyPath: ErrorPC
       value: 
