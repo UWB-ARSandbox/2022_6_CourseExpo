@@ -6,6 +6,12 @@ using ASL;
 public class CanvasTableFeatures : MonoBehaviour
 {
     public bool isTeacherTable = false;
+
+    // For hiding/showing the table mirror object: see ToggleOverheadPreview()
+    public GameObject tableMirror;
+    private Vector3 tableMirrorInitScale;
+
+    // Drawing table pop-up functionality: see PopUpCanvas()
     public ASLObject top;
     private Vector3 canvasInitLocalPos;
     private Quaternion canvasInitLocalRot;
@@ -14,6 +20,11 @@ public class CanvasTableFeatures : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        Debug.Assert(tableMirror != null);
+        tableMirrorInitScale = tableMirror.transform.localScale;
+        // Disable overhead previews by default
+        ToggleOverheadPreview();
+
         Debug.Assert(top != null);
         canvasInitLocalPos = top.transform.localPosition;
         canvasInitLocalRot = top.transform.localRotation;
@@ -21,6 +32,14 @@ public class CanvasTableFeatures : MonoBehaviour
         // Remove overhead preview for teacher table
         if (isTeacherTable)
             GetComponentInChildren<Billboard>().gameObject.SetActive(false);
+    }
+
+    public void ToggleOverheadPreview()
+    {
+        if (tableMirror.transform.localScale == Vector3.zero)
+            tableMirror.transform.localScale = tableMirrorInitScale;
+        else
+            tableMirror.transform.localScale = Vector3.zero;
     }
 
     public void PopUpCanvas()
