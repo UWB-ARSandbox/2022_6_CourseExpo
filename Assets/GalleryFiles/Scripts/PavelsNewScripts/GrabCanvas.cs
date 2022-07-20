@@ -12,6 +12,7 @@ public class GrabCanvas : MonoBehaviour
     Transform previousParent;
 
     [SerializeField] Transform objectToMove;
+    public bool lookAtParent = false;
 
 
     void Start()
@@ -38,12 +39,16 @@ public class GrabCanvas : MonoBehaviour
         }
         if(Input.GetMouseButtonUp(0) && selected)
         {
+            if (lookAtParent)
+                objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
+            else
+                objectToMove.rotation = currentRotation;
+
+            objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
+
             objectToMove.parent = previousParent;
             
             selected = false;
-
-            objectToMove.rotation = currentRotation;
-            objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
         }
         
     }
@@ -53,9 +58,12 @@ public class GrabCanvas : MonoBehaviour
         
         while(selected)
         {
-            objectToMove.rotation = currentRotation;
+            if (lookAtParent)
+                objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
+            else
+                objectToMove.rotation = currentRotation;
             objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
-            float[] fArray = {ASL.GameLiftManager.GetInstance().m_PeerId, objectToMove.position.x, currentY, objectToMove.position.z};
+            float[] fArray = {ASL.GameLiftManager.GetInstance().m_PeerId, objectToMove.position.x, currentY, objectToMove.position.z, objectToMove.parent.position.x, objectToMove.parent.position.z};
            GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray); 
             });
@@ -68,6 +76,9 @@ public class GrabCanvas : MonoBehaviour
     {
         if(_f[0] != ASL.GameLiftManager.GetInstance().m_PeerId)
         {
+            if (lookAtParent)
+                objectToMove.transform.LookAt(new Vector3(_f[4], _f[2], _f[5]));
+
             objectToMove.position = new Vector3(_f[1], _f[2], _f[3]);
         }
     }
