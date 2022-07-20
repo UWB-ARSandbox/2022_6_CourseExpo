@@ -64,4 +64,9 @@ public class GroupManager : MonoBehaviour
     {
         addPlayerContainer.SetActive(true);
     }
+
+    public void CloseAddPlayerScreen()
+    {
+        addPlayerContainer.SetActive(false);
+    }
 }
