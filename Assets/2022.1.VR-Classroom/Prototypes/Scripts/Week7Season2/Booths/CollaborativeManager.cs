@@ -146,7 +146,7 @@ public class CollaborativeManager : MonoBehaviour
 
     #region Sending Floats
     public void CurTestFinished(){
-        if(curStudents[0] == GameManager.MyID){
+        if(curStudents[0] == GameManager.MyID){//make sure to only run once
             List<float> NewFloats = new List<float>();  
             NewFloats.Add(-1);
             NewFloats.Add(TestFinished);
@@ -228,9 +228,10 @@ public class CollaborativeManager : MonoBehaviour
     public void SendText(string ToSend){
         for(int i = 0; i< curStudents.Count; i++){        
             List<float> NewInput = new List<float>();
-            NewInput.Add(curStudents[i]);
-            NewInput.Add(SendTextField);
-            NewInput.Add(ToSend.Length);
+            NewInput.Add(curStudents[i]);//_f[0]
+            NewInput.Add(SendTextField);//_f[1]
+            NewInput.Add((float)GameManager.MyID);//_f[2]
+            NewInput.Add(ToSend.Length);//_f[3]
             NewInput.AddRange(stringToFloats(ToSend));
             var FloatsInput = NewInput.ToArray();
             m_ASLObject.SendAndSetClaim(() => {
@@ -262,7 +263,7 @@ public class CollaborativeManager : MonoBehaviour
                 }
                 case ShortAnswerUpdate:{
                     //change to sendTextField
-                    txtField.text += (char)(int)_f[2];
+                    //txtField.text += (char)(int)_f[2];
                     break;   
                 }
                 case NewRandom:{
@@ -277,16 +278,17 @@ public class CollaborativeManager : MonoBehaviour
                     break;
                 }
                 case SendTextField:{
-                    int length = (int)_f[2];
+                    int length = (int)_f[3];
                     string NewText = "";
-                    for (int i = 3; i <= length + 2; i++) {
+                    for (int i = 4; i < length + 4; i++) {
                         NewText += (char)(int)_f[i];
                     }
-                    txtField.text = NewText;
+                    //txtField.text = NewText;
+                    CreateShortAnswerPrefab(NewText, _f[2]);
                     break;
                 }
                 case BackSpace:{
-                    txtField.text = txtField.text.Remove(txtField.text.Length - 1);
+                    //txtField.text = txtField.text.Remove(txtField.text.Length - 1);
                     break;
                 }
                 default:{
@@ -321,6 +323,11 @@ public class CollaborativeManager : MonoBehaviour
     public GameObject voteAreaOptionTrue;
     public GameObject voteAreaOptionFalse;
     public GameObject voteAreaOptionSubmit;
+    //important to check the shortanswers against each other
+    public Dictionary<string, GameObject> ShortAnswer = new Dictionary<string, GameObject>();
+    public GameObject TextAreaOptionSubmit;
+    public GameObject ShortAnswerPrefab;
+
 
     public void SetupVoteList(){
         ClearVotes();
@@ -334,8 +341,35 @@ public class CollaborativeManager : MonoBehaviour
                         res.Value.SetActive(true);
                 }
             }
+            if(ShortAnswer.ContainsKey(GameManager.players[(int)GameManager.MyID])){
+                if(ShortAnswer[GameManager.players[(int)GameManager.MyID]] != null){
+                    foreach(KeyValuePair<string, GameObject> res in ShortAnswer){
+                    if(res.Value != null)
+                        res.Value.SetActive(true);
+                    }
+                }
+            }
         }
     }
+
+    public void CreateShortAnswerPrefab(string text, float student_id){
+        string studentName = GameManager.players[(int)student_id];
+        if(ShortAnswer.ContainsKey(studentName)){
+            if(ShortAnswer[studentName] != null)
+                Destroy(ShortAnswer[studentName]);
+            GameObject ShortAnswerP = (GameObject)Instantiate(ShortAnswerPrefab, TextAreaOptionSubmit.transform, false);
+            ShortAnswerP.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = text;
+            ShortAnswer[studentName] = ShortAnswerP;
+            ShortAnswerP.SetActive(false);
+        }
+        else{
+            GameObject ShortAnswerP = (GameObject)Instantiate(ShortAnswerPrefab, TextAreaOptionSubmit.transform, false);
+            ShortAnswerP.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = text;
+            ShortAnswer.Add(studentName, ShortAnswerP);
+            ShortAnswerP.SetActive(false);
+        }
+    }
+
     public void CreateVotePrefab(string student){
         Debug.Log("Attempting to create vote for: " +student);
         bool studentExists = false;
@@ -521,6 +555,11 @@ public class CollaborativeManager : MonoBehaviour
         for(int i = 0;i < curStudents.Count;i++){
             StudentVotes.Add(GameManager.players[(int)curStudents[i]],(float)i);   
         }
+        foreach(KeyValuePair<string, GameObject> res in ShortAnswer){
+            if(res.Value != null)
+                Destroy(res.Value);
+        }
+        ShortAnswer.Clear();
     }
 
     public void CheckVotes(){
@@ -535,6 +574,13 @@ public class CollaborativeManager : MonoBehaviour
             Debug.Log("Current Votes are for: " +distinctList[i]);
         }
         if(distinctList.Count <= 1){
+            if(distinctList[0] == buttonSubmit){//check that the actual submission texts between each student are equal
+                 var distinctShortAnswer = ShortAnswer.Values.Distinct().ToList();
+                 for(int i = 0; i < distinctShortAnswer.Count; i++){
+                    if(distinctShortAnswer[0].GetComponentInChildren<TMPro.TextMeshProUGUI>().text != distinctShortAnswer[i].GetComponentInChildren<TMPro.TextMeshProUGUI>().text)
+                        return;
+                 }
+            }
             Debug.Log("Votes are unanimous");
             SubmitInputs(distinctList[0]);
             SetupVoteList();//clear old votes
@@ -578,6 +624,17 @@ public class CollaborativeManager : MonoBehaviour
 
     #endregion
     // Update is called once per frame
+
+    //function to remove the user from the CurStudents list upon disconnection or leaving the booth
+    //if the user manages to leave the booth and is not disconnected, not sure how to reset the test
+    public IEnumerator CheckForUserDisconnection(){
+        foreach (float _f in curStudents){
+            if(!BZM.currentUsers.Contains(GameManager.players[(int)_f])){
+                curStudents.Remove(_f);
+            }
+        }
+        yield return new WaitForSeconds(5.0f);
+    }
     void Update()
     {
         if(curStudents.Count >= MaxStudents && _myAssessmentManager.pnl_Start.active){
@@ -585,5 +642,6 @@ public class CollaborativeManager : MonoBehaviour
             _myAssessmentManager.pnl_Start.SetActive(false);
                 //_myBooth.lockToggle.Lock();
         }
+        StartCoroutine(CheckForUserDisconnection());
     }
 }
