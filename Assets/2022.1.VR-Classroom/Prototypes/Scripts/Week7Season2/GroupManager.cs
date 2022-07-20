@@ -65,10 +65,3 @@ public class GroupManager : MonoBehaviour
         addPlayerContainer.SetActive(true);
     }
 }
-
-[System.Serializable]
-public class Group
-{
-    public string name;
-    public List<string> members = new List<string>();
-}
