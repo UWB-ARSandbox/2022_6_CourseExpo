@@ -629,8 +629,14 @@ public class CollaborativeManager : MonoBehaviour
     //if the user manages to leave the booth and is not disconnected, not sure how to reset the test
     public IEnumerator CheckForUserDisconnection(){
         foreach (float _f in curStudents){
+            //Use a different system to check if the users are still in the room -- since BZM.currentUsers will not be updated if the user disconnects
+            //try to look at the ghosts or tie into the disconnect function
             if(!BZM.currentUsers.Contains(GameManager.players[(int)_f])){
+                if(_f == (float)GameManager.MyID){
+                    //reset test since i managed to escape
+                }
                 curStudents.Remove(_f);
+                yield return null;
             }
         }
         yield return new WaitForSeconds(5.0f);
