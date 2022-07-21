@@ -17,6 +17,8 @@ public class GroupManager : MonoBehaviour
 
     void Start()
     {
+        groupName.enabled = false;
+        groupMembers.enabled = false;
         addPlayerContainer.SetActive(false);
         if (GameManager.AmTeacher)
         {
@@ -45,18 +47,36 @@ public class GroupManager : MonoBehaviour
 
     public void ValueChanged()
     {
-        groupName.text = "";
-        groupMembers.text = "";
+        if (groupList.value == 0)
+        {
+            groupName.enabled = false;
+            groupMembers.enabled = false;
+        }
+        else
+        {
+            groupName.enabled = true;
+            groupMembers.enabled = true;
+            groupName.text = "";
+            groupMembers.text = "";            
+            LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
+        }
+
         Debug.Log("Value changed to " + groupList.options[groupList.value].text);
-        LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
     }
 
     public void LoadGroupData(int index)
     {
         groupName.text = groups[index].name;
-        foreach (string member in groups[index].members)
+        if (groups[index].members.Count > 0)
         {
-            groupMembers.text += (member + "\n");
+            foreach (string member in groups[index].members)
+            {
+                groupMembers.text += (member + "\n");
+            }
+        }
+        else
+        {
+            groupMembers.text = "There are no members in this group!";
         }
     }
 
