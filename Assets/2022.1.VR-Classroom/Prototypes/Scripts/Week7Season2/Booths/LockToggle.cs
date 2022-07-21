@@ -18,6 +18,7 @@ public class LockToggle : MonoBehaviour
     public LockToggle Pair;
     ASLObject m_ASLObject;
     private string boothName = "";
+    MaxStudents studentLimit;
     
     void Start()
     {
@@ -29,6 +30,7 @@ public class LockToggle : MonoBehaviour
         }
 
         m_ASLObject = GetComponent<ASLObject>();
+        studentLimit = GetComponent<MaxStudents>();
         m_ASLObject._LocallySetFloatCallback(floatFunction);
 
         defaultLockedTransparency = boothRenderer.material.color.a;
@@ -72,6 +74,12 @@ public class LockToggle : MonoBehaviour
             case 101: //lock
                 Lock();
                 break;
+            case 102: // increment max students
+                studentLimit.Incremenent();
+                break;
+            case 103: // decrement max students
+                studentLimit.Decrement();
+                break;
         }
         
         //TODO for connor: will probably need to rework this if we still want it
@@ -108,7 +116,8 @@ public class LockToggle : MonoBehaviour
         }
         locked = false;
         foreach (ChatManager cm in BoothManager.chatManagers) {
-            cm.AddMessage("\n\"<color=#00ffffff>" + boothName + "</color>\" has been <color=#00ff00ff>unlocked</color>.");
+            if(cm.gameObject.active)
+                cm.AddMessage("\n\"<color=#00ffffff>" + boothName + "</color>\" has been <color=#00ff00ff>unlocked</color>.");
         }
         boothRenderer.enabled = false;
         boothCollider.enabled = false;

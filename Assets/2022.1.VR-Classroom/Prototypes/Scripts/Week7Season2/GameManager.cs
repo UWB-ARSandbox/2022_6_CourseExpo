@@ -1045,7 +1045,7 @@ public class GameManager : MonoBehaviour {
                     for (int i = 3; i < 3 + nameLength; i++) {
                         boothName += (char)(int)_f[i];
                     }
-                    Debug.LogError("FloatReceive ASMT playerId: " + playerId);
+                    Debug.LogWarning("FloatReceive ASMT playerId: " + playerId);
                     SendAssessment(playerId, boothName);
                     break;
                 case CONT: //2960 = CONT = Content Request
@@ -1054,7 +1054,7 @@ public class GameManager : MonoBehaviour {
                     for (int i = 3; i < 3 + nameLength; i++) {
                         boothName += (char)(int)_f[i];
                     }
-                    Debug.LogError("FloatReceive CONT playerId: " + playerId);
+                    Debug.LogWarning("FloatReceive CONT playerId: " + playerId);
                     SendContent(playerId, boothName);
                     break;
             }

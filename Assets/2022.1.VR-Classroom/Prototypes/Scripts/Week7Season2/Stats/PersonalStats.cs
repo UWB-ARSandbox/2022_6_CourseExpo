@@ -16,13 +16,15 @@ public class PersonalStats : MonoBehaviour
         public float percentageScore { get; set; }
         public float timeTaken { get; set; }
         public bool completed { get; set; }
-
+        public string GroupMembers;
+        public float GroupNumber { get; set; }
+        //public List<string> GroupMembers = new List<string>();
 
         //writer.AppendLine($"{item.Key},Time in booth,Time taken to complete,Questions timed out,Score,Completed");
 
         public override string OutputStats()
         {
-            return $"{timeInBooth},{timeTaken},,{percentageScore},{completed}";
+            return $"{timeInBooth},{timeTaken},,{percentageScore},{completed},{GroupNumber}";
         }
 
     }
@@ -30,7 +32,7 @@ public class PersonalStats : MonoBehaviour
         public int questionsTimedOut { get; set; }
         public override string OutputStats()
         {
-            return $"{timeInBooth},{timeTaken},{questionsTimedOut},{percentageScore},{completed}";
+            return $"{timeInBooth},{timeTaken},{questionsTimedOut},{percentageScore},{completed},{GroupNumber}";
         }
     }
     #endregion
@@ -145,11 +147,17 @@ public class PersonalStats : MonoBehaviour
 
     #region Setters
     public void SetTimeInBooth(string boothName, int time) {
-        Debug.LogError(boothName);
+        Debug.LogWarning(boothName);
         boothStats[boothName].timeInBooth = time;
     }
     public void SetPercentageScore(string boothName, float score) {
         ((AssessmentStats)boothStats[boothName]).percentageScore = score;
+    }
+    public void SetGroupMembers(string boothName, string members){
+        ((AssessmentStats)boothStats[boothName]).GroupMembers = members;
+    }
+    public void SetGroupNumber(string boothName, float Number){
+        ((AssessmentStats)boothStats[boothName]).GroupNumber = Number;
     }
     public void SetCompleted(string boothName, bool completed) {
         try {
@@ -202,6 +210,22 @@ public class PersonalStats : MonoBehaviour
         }
         catch (Exception e) {
             return -1;
+        }
+    }
+    public float GetGroupNumber(string boothName){
+        try{
+            return ((AssessmentStats)boothStats[boothName]).GroupNumber;
+        }
+        catch (Exception e){
+            return -1f;
+        }
+    }
+    public string GetGroupMembers(string boothName){
+        try{
+            return ((AssessmentStats)boothStats[boothName]).GroupMembers;
+        }
+        catch (Exception e) {
+            return GameManager.players[GameManager.MyID];
         }
     }
     #endregion

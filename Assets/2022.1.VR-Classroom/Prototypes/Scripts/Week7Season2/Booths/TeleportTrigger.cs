@@ -7,6 +7,7 @@ public class TeleportTrigger : MonoBehaviour
     public Collider CharacterCollider;
     public string BoothName;
     public AudioManager _myAudioManager;
+    public bool Active = false;
 
     //booth must have a collider and have trigger on
     //Expected to be placed on the "BoothZone" object
@@ -17,7 +18,7 @@ public class TeleportTrigger : MonoBehaviour
         if(_myAudioManager == null){
             _myAudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
         }
-        if(BoothName.Contains("Quiz") || BoothName.Contains("Test") || BoothName.Contains("Assessment"))
+        if(BoothName.Contains("Quiz") || BoothName.Contains("Test") || BoothName.Contains("Assessment") || BoothName.Contains("Assignment"))
             _myAudioManager.ChannelToBeCreated(BoothName);
         else
             Destroy(this);
@@ -35,14 +36,14 @@ public class TeleportTrigger : MonoBehaviour
 
     private void OnTriggerEnter(Collider other) {
         Debug.Log(other.name+" Has entered trigger");
-        if(other == CharacterCollider){
+        if(other == CharacterCollider && Active){
             _myAudioManager.moveChannel(BoothName);
         }
     }
     
     //ensures the user is in the appropriate channel
     private void OnTriggerStay(Collider other) {
-        if(other == CharacterCollider){
+        if(other == CharacterCollider && Active){
             _myAudioManager.moveChannel(BoothName);
         }
     }
