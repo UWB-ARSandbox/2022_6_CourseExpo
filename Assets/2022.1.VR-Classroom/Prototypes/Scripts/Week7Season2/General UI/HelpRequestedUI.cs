@@ -11,7 +11,7 @@ public class HelpRequestedUI : MonoBehaviour
     public GameObject buttonPrefab;
     ASLObject m_ASLObject;
     float[] id = new float[2];
-    GameObject requestHelpButton;
+    public GameObject requestHelpButton;
 
     public bool CurrentlyHelping = false;
     public float CurrentlyHelping_id = -1;
@@ -20,7 +20,7 @@ public class HelpRequestedUI : MonoBehaviour
 
     void Start()
     {
-        requestHelpButton = GameObject.Find("RequestHelpButton");
+        // requestHelpButton = GameObject.Find("RequestHelpButton");
         m_ASLObject = GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
 

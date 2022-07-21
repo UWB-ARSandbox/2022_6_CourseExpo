@@ -9,8 +9,10 @@ public class MenuScreen : MonoBehaviour
     public GameObject Announcement;
     public GameObject Controls;
     public GameObject ChangeColor;
+    public GameObject Groups;
     public GameObject Quit;
     public GameObject PlayerList;
+    public GameObject AddPlayerScreen;
     public Button Refresh;
     public List<GameObject> Screens;
     public AudioClip flipAudio;
@@ -32,7 +34,9 @@ public class MenuScreen : MonoBehaviour
             Announcement.SetActive(false);
             Controls.SetActive(false);
             ChangeColor.SetActive(false);
+            Groups.SetActive(false);
             Quit.SetActive(false);
+            AddPlayerScreen.SetActive(false);
             PlayerList.SetActive(true);
             if (PlayerList.GetComponent<PlayerListScreen>().GenerateType)
             {
@@ -58,8 +62,10 @@ public class MenuScreen : MonoBehaviour
             Announcement.SetActive(false);
             Controls.SetActive(false);
             ChangeColor.SetActive(false);
+            Groups.SetActive(false);
             Quit.SetActive(false);
             PlayerList.SetActive(false);
+            AddPlayerScreen.SetActive(false);
             gameObject.SetActive(false);
         }
     }
