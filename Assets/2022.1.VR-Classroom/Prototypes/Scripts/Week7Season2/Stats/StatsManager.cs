@@ -12,7 +12,8 @@ public class StatsManager : MonoBehaviour
         percentageScore,
         timeTaken,
         completed,
-        questionsTimedOut
+        questionsTimedOut,
+        GroupNumber
     }
 
     public Dictionary<string, PersonalStats> studentStats = new Dictionary<string, PersonalStats>();
@@ -30,7 +31,7 @@ public class StatsManager : MonoBehaviour
                 if (studentIdToName.Key != 1) { //Don't add teacher/host to list
                     var newObject = new GameObject("PersonalStats_for_" + studentIdToName.Value);
                     studentStats.Add(studentIdToName.Value, newObject.AddComponent<PersonalStats>());
-                    Debug.LogError($"ID: {studentIdToName.Key}, Name: {studentIdToName.Value}");
+                    Debug.LogWarning($"ID: {studentIdToName.Key}, Name: {studentIdToName.Value}");
                 }
             }
         }
@@ -76,6 +77,7 @@ public class StatsManager : MonoBehaviour
         //2 = timeTaken
         //3 = completed
         //4 = questionsTimedOut
+        //5 = GroupMembers //How do I send this, can I send as a string after name of booth? assign length after name of booth
     //In _f[4] number/value associated with the stat 
     //In _f[5+] the name of the booth
 
@@ -98,7 +100,10 @@ public class StatsManager : MonoBehaviour
             for (int i = 5; (i - 5) < boothStats.Key.Length; i++) { //booth name
                 statInfoToSend[i] = (float)(int)boothStats.Key[i - 5];
             }
-            Debug.LogError("SENT " + statInfoToSend.ToString());
+            // for (int i = (5+boothStats.Key.Length);(i - (5+boothStats.Key.Length)) < GroupMembers.Length;i++){
+
+            // }
+            Debug.LogWarning("SENT " + statInfoToSend.ToString());
 
             //Send information
             m_ASLObject.SendAndSetClaim(() => {
@@ -135,6 +140,9 @@ public class StatsManager : MonoBehaviour
             case (int)BoothStatType.questionsTimedOut:
                 return (float)myStats.GetNumQuestionsTimedOut(boothName);
 
+            case (int)BoothStatType.GroupNumber:
+                return myStats.GetGroupNumber(boothName);//cannot convert from List<float> to float what if we just do groupNumber
+            //Group Member functions
             default:
                 return -1f;
         }
@@ -148,7 +156,7 @@ public class StatsManager : MonoBehaviour
         if (GameManager.AmTeacher) {
             switch (_f[0]) {
                 case STATS:
-                    Debug.LogError("RECIEVED " + _f.ToString());
+                    Debug.LogWarning("RECIEVED " + _f.ToString());
                     StoreReceivedStats(_f);
                     break;
             }
@@ -182,6 +190,13 @@ public class StatsManager : MonoBehaviour
             case (int)BoothStatType.questionsTimedOut:
                 studentStats[playerName].SetNumQuestionsTimedOut(boothName, (int)statValue);
                 break;
+            case (int)BoothStatType.GroupNumber:
+                studentStats[playerName].SetGroupNumber(boothName, statValue);
+                break;
+            // case (int)BoothStatType.GroupMembers:
+            //     studentStats[playerName].SetGroupMembers(boothName, (int)statValue);
+            //     break;
+            //Group Members
         }
     }
 

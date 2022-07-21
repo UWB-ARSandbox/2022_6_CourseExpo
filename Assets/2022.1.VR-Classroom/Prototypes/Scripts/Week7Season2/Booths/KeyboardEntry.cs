@@ -12,9 +12,12 @@ public class KeyboardEntry : MonoBehaviour
     public Button btnBackspace;
     public Button btnSpacebar;
 
+    public CollaborativeManager _InputInterceptor;
+
     // Start is called before the first frame update
     void Start()
     {
+        _InputInterceptor = gameObject.transform.parent.transform.parent.transform.parent.transform.parent.GetComponent<CollaborativeManager>();
         txtField = GetComponentInChildren<InputField>();
         A.onClick.AddListener(() => AddChar("A"));
         B.onClick.AddListener(() => AddChar("B"));
@@ -60,13 +63,27 @@ public class KeyboardEntry : MonoBehaviour
         equals.onClick.AddListener(() => AddChar("="));
         btnSpacebar.onClick.AddListener(() => AddChar(" "));
         btnBackspace.onClick.AddListener(Backspace);
-}
-
-    public void AddChar(string character) {
-        txtField.text += character;
+        if(_InputInterceptor != null){
+            _InputInterceptor.txtField = txtField;
+        }
     }
 
-    public void Backspace() {
-        txtField.text = txtField.text.Remove(txtField.text.Length - 1);
+    public void AddChar(string character) {
+        if(_InputInterceptor != null){
+            ExternalUpdate(character);
+        }
+        else
+            txtField.text += character;
+    }
+    public void ExternalUpdate(string character){
+        _InputInterceptor.SendTextUpdates(character);
+    }
+
+    public void Backspace() {        
+        if(_InputInterceptor != null){
+            _InputInterceptor.SendBackSpace();
+        }
+        else
+            txtField.text = txtField.text.Remove(txtField.text.Length - 1);
     }
 }

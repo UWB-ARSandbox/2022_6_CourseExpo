@@ -65,8 +65,10 @@ public class AudioManager : MonoBehaviour
         GameObject[] BoothZones = GameObject.FindGameObjectsWithTag("BoothZone");
         foreach(GameObject BoothZone in BoothZones ){
             BoothZone.AddComponent<TeleportTrigger>();
+            BoothZone.AddComponent<BoothZoneManager>();
         }
         #endregion
+        TestConnection(HostName, Password);
     }
 
     #region MuteUser
@@ -278,7 +280,7 @@ public class AudioManager : MonoBehaviour
 
     //Intent is to create a list of channels that meet a specific criteria to reduce the amount of channels to be created
     public void ChannelToBeCreated(string channelName){
-        if(channelName.Contains("Quiz") || channelName.Contains("Test") || channelName.Contains("Assessment"))
+        if(channelName.Contains("Quiz") || channelName.Contains("Test") || channelName.Contains("Assignment"))
             ChannelList.Add(channelName);
     }
 
@@ -367,7 +369,11 @@ public class AudioManager : MonoBehaviour
             _mumbleClient = null;
         runningTest = false;
         TestSuccess_bool = true;
-        VoiceUI.GetComponent<VoiceUI>().TestConnectionSuccess();
+        if(VoiceUI != null)
+            VoiceUI.GetComponent<VoiceUI>().TestConnectionSuccess();
+        else{
+            GameManager.SendEnableMessage(HostName + ":" + Password);
+        }
     }
     //if test fails initiate error message, lock Enable Voice Chat button
     public void TestFailure(){
@@ -375,7 +381,8 @@ public class AudioManager : MonoBehaviour
         if(_mumbleClient != null)
             _mumbleClient = null;
         runningTest = false;
-        VoiceUI.GetComponent<VoiceUI>().TestConnectionFailure();
+        if(VoiceUI != null)
+            VoiceUI.GetComponent<VoiceUI>().TestConnectionFailure();
     }
     #endregion 
 

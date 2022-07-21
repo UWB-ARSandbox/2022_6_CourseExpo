@@ -42,6 +42,9 @@ public class ForumManager : MonoBehaviour
             if (Keyboard.current[Key.Enter].wasPressedThisFrame) {
                 StartCoroutine(TrySendMessage());
             }
+            //to send every key press
+            // if(Keyboard.current.anyKey.wasPressedThisFrame)
+            //     StartCoroutine(TrySendMessage());
         }
     }
 

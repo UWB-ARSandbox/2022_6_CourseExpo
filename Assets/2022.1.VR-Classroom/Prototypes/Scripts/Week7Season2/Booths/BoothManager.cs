@@ -17,7 +17,7 @@ public class BoothManager : MonoBehaviour
     public static bool verified = false;
     public bool boothVerified = false;
 
-    private LockToggle lockToggle;
+    public LockToggle lockToggle;
     public bool startUnlocked = false;
 
     // Start is called before the first frame update
