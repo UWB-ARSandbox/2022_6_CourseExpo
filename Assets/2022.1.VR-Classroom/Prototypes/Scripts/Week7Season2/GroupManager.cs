@@ -28,25 +28,19 @@ public class GroupManager : MonoBehaviour
                 groups.Add(group);
                 groupList.options.Add(new TMP_Dropdown.OptionData() { text = group.name });
             }
-            groups[0].members.Add("Bobby 1");
-            groups[0].members.Add("Bobby 2");
-            groups[0].members.Add("Bobby 3");
-            groups[1].members.Add("Dobby 1");
-            groups[1].members.Add("Dobby 2");
-            groups[1].members.Add("Dobby 3");
+            // groups[0].members.Add("Bobby 1");
+            // groups[0].members.Add("Bobby 2");
+            // groups[0].members.Add("Bobby 3");
         }
-    }
-
-    // Update is called once per frame
-    void Update()
-    {
-        
     }
 
     public void AddPlayer(string playerName)
     {
-        groups[groupList.value - 1].members.Add(playerName);
-        ValueChanged();
+        if (!groups[groupList.value - 1].members.Contains(playerName))
+        {
+            groups[groupList.value - 1].members.Add(playerName);
+            ValueChanged();
+        }
     }
 
     public void ValueChanged()
