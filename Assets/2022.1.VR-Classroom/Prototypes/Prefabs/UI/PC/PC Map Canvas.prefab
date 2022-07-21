@@ -2204,14 +2204,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Target
       value: 
       objectReference: {fileID: 8047757465855232790}
-    - target: {fileID: 8249598476010837566, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8249598476010837566, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
     - target: {fileID: 8566890927291409428, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
@@ -2356,18 +2348,6 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[1].m_Target
       value: 
       objectReference: {fileID: 8538072983554491019}
-    - target: {fileID: 8722574285244110423, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
-      propertyPath: m_AnchorMax.x
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8722574285244110423, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
-      propertyPath: m_AnchorMax.y
-      value: 0
-      objectReference: {fileID: 0}
-    - target: {fileID: 8722574285244110423, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
-      propertyPath: m_AnchorMin.x
-      value: 0
-      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: bc1cede53b9001d47a62291a57dcd229, type: 3}
 --- !u!1 &6055524454025668836 stripped
@@ -2441,6 +2421,14 @@ PrefabInstance:
       propertyPath: m_OnClick.m_PersistentCalls.m_Calls.Array.data[0].m_Arguments.m_ObjectArgumentAssemblyTypeName
       value: UnityEngine.Object, UnityEngine
       objectReference: {fileID: 0}
+    - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
+      propertyPath: List
+      value: 
+      objectReference: {fileID: 5145825496394848582}
+    - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
+      propertyPath: BoothObject
+      value: 
+      objectReference: {fileID: 5285720904513934708, guid: 92c061a7fcb99a545bcc6de44f72ec68, type: 3}
     - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
       propertyPath: groupsButton
       value: 
@@ -3449,7 +3437,7 @@ MonoBehaviour:
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 5145825495504486699}
-  m_Enabled: 1
+  m_Enabled: 0
   m_EditorHideFlags: 0
   m_Script: {fileID: 11500000, guid: a451f3247d55aed44980bf751858f2f2, type: 3}
   m_Name: 

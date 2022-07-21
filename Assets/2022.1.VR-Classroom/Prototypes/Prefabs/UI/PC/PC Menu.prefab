@@ -2759,6 +2759,7 @@ MonoBehaviour:
   Groups: {fileID: 0}
   Quit: {fileID: 0}
   PlayerList: {fileID: 0}
+  AddPlayerScreen: {fileID: 0}
   Refresh: {fileID: 8566890927457143433}
   Screens: []
   flipAudio: {fileID: 8300000, guid: b72fec190d176d24ebd20d159fffc383, type: 3}

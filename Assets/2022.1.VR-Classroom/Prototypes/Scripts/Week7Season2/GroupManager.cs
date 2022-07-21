@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
+using ASL;
 
 public class GroupManager : MonoBehaviour
 {
@@ -15,10 +16,15 @@ public class GroupManager : MonoBehaviour
     public TMP_Text groupMembers;
     public GameObject addPlayerContainer;
 
+    public Dictionary<int, string> playerList;
+    public GameObject List;
+    public GameObject BoothObject;
+
     void Start()
     {
         groupName.enabled = false;
         groupMembers.enabled = false;
+        groupsButton.enabled = false;
         addPlayerContainer.SetActive(false);
         if (GameManager.AmTeacher)
         {
@@ -51,9 +57,11 @@ public class GroupManager : MonoBehaviour
         {
             groupName.enabled = false;
             groupMembers.enabled = false;
+            groupsButton.enabled = false;
         }
         else
         {
+            groupsButton.enabled = true;
             groupName.enabled = true;
             groupMembers.enabled = true;
             groupName.text = "";
@@ -78,11 +86,30 @@ public class GroupManager : MonoBehaviour
         {
             groupMembers.text = "There are no members in this group!";
         }
+        UpdateAddPlayerList();
     }
 
     public void ShowAddPlayerScreen()
     {
+        UpdateAddPlayerList();
         addPlayerContainer.SetActive(true);
+    }
+
+    void UpdateAddPlayerList()
+    {
+        foreach (Transform child in List.transform)
+        {
+            GameObject.Destroy(child.gameObject);
+        }
+        playerList = GameLiftManager.GetInstance().m_Players;
+        foreach (string item in playerList.Values)
+        {
+            if (!groups[groupList.value - 1].members.Contains(item))
+            {
+                var PlayerName = Instantiate(BoothObject, List.transform, false) as GameObject;
+                PlayerName.GetComponent<SinglelineContainer>().setText(item);
+            }
+        }
     }
 
     public void CloseAddPlayerScreen()
