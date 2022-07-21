@@ -12,6 +12,7 @@ public class GroupManager : MonoBehaviour
     public List<Group> groups = new List<Group>();
     public TMP_Dropdown groupList;
     public Button groupsButton;
+    public Button addMemberButton;
     public TMP_Text groupName;
     public TMP_Text groupMembers;
     public GameObject addPlayerContainer;
@@ -24,7 +25,7 @@ public class GroupManager : MonoBehaviour
     {
         groupName.enabled = false;
         groupMembers.enabled = false;
-        groupsButton.enabled = false;
+        addMemberButton.gameObject.SetActive(false);
         addPlayerContainer.SetActive(false);
         if (GameManager.AmTeacher)
         {
@@ -57,11 +58,11 @@ public class GroupManager : MonoBehaviour
         {
             groupName.enabled = false;
             groupMembers.enabled = false;
-            groupsButton.enabled = false;
+            addMemberButton.gameObject.SetActive(false);
         }
         else
         {
-            groupsButton.enabled = true;
+            addMemberButton.gameObject.SetActive(true);
             groupName.enabled = true;
             groupMembers.enabled = true;
             groupName.text = "";
