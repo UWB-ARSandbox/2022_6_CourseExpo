@@ -124,9 +124,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: PlayerTP, Assembly-CSharp
-        m_MethodName: FindPlayer
+      - m_Target: {fileID: -6418763188504563983}
+        m_TargetAssemblyTypeName: AddPlayerListItem, Assembly-CSharp
+        m_MethodName: AddPlayer
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}

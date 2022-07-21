@@ -43,6 +43,12 @@ public class GroupManager : MonoBehaviour
         
     }
 
+    public void AddPlayer(string playerName)
+    {
+        groups[groupList.value - 1].members.Add(playerName);
+        ValueChanged();
+    }
+
     public void ValueChanged()
     {
         groupName.text = "";
