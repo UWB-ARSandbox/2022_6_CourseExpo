@@ -18,8 +18,86 @@ using SimpleFileBrowser;
 
 public class NewPaint : MonoBehaviour
 {
-	public bool[] allowedPlayers;
+	bool allowedPlayer;
 
+	[SerializeField] bool allowForEveryone;
+	[SerializeField] bool visibleForEveryone;
+	[SerializeField] List<int> startingAllowedPlayers;
+	[SerializeField] List<int> startingAllowedViewers;
+	public void enableCanvasLocal()
+	{
+		allowedPlayer = true;
+		
+
+	}
+	public void disableCanvasLocal()
+	{
+		allowedPlayer = false;
+		
+	}
+	public void enableViewingLocal()
+	{
+		gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
+		canvasTextureSwitch.Invoke(studentCanvas);
+	}
+	public void disableViewingLocal()
+	{
+		gameObject.GetComponent<Renderer>().material.mainTexture = blankCanvas;
+		canvasTextureSwitch.Invoke(blankCanvas);
+	}
+	public IEnumerator enableCanvasForPlayer(int peerID)
+	{
+		yield return new WaitForSeconds(1);
+		float[] fArray = {1, peerID};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+            {
+				
+                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+            });
+	}
+	public IEnumerator disableCanvasForPlayer(int peerID)
+	{
+		yield return new WaitForSeconds(1);
+		float[] fArray = {2, peerID};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+            {
+                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+            });
+	}
+	public IEnumerator enableViewingForPlayer(int peerID)
+	{
+		yield return new WaitForSeconds(1);
+		float[] fArray = {3, peerID};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+            {
+                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+            });
+	}
+	public IEnumerator disableViewingForPlayer(int peerID)
+	{
+		yield return new WaitForSeconds(1);
+		float[] fArray = {4, peerID};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+            {
+                GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+            });
+	}
+
+	public Texture2D getTexture()
+	{
+		if(allowedPlayer)
+		{
+			return studentCanvas;
+		}
+		else
+		{
+			return blankCanvas;
+		}
+	}
+
+	public event Action<Texture2D> canvasTextureSwitch;
+
+	
 	
 
     struct InputInformation //: IEquatable<InputInformation>, IComparable<InputInformation>
@@ -56,7 +134,9 @@ public class NewPaint : MonoBehaviour
     Queue<InputInformation> myQueue;
 
 	//the canvas of the students
-	Texture2D studentCanvas;
+	public Texture2D studentCanvas;
+
+	Texture2D blankCanvas;
 
     int brushSize;
 
@@ -169,12 +249,6 @@ public class NewPaint : MonoBehaviour
         GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(recieveInput);
 
 		int numOfPlayers = ASL.GameLiftManager.GetInstance().m_Players.Count;
-		allowedPlayers = new bool[numOfPlayers];
-		for (int i= 0; i < allowedPlayers.Length; i++)
-		{
-			allowedPlayers[i] = true;
-			
-		}
 		
 
         myQueue = new Queue<InputInformation>();
@@ -196,6 +270,8 @@ public class NewPaint : MonoBehaviour
 		pixelToDraw = new Vector2(0, 0);
         previousCoord = new Vector2(0, 0);
 
+		allowedPlayer = true;
+
         alphabet = Resources.Load("alphabet", typeof(Texture2D)) as Texture2D;
 		alphabet2 = Resources.Load("alphabet2", typeof(Texture2D)) as Texture2D;
 
@@ -210,6 +286,7 @@ public class NewPaint : MonoBehaviour
         //Texture stuff
         studentCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 		maskCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
+		blankCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 
         for (int x = 0; x < canvasWidth; x++)
 		{
@@ -217,10 +294,13 @@ public class NewPaint : MonoBehaviour
 			{
 				studentCanvas.SetPixel(x, y, Color.white);
 				maskCanvas.SetPixel(x, y, Color.clear);
+				blankCanvas.SetPixel(x,y, Color.black );
 
 			}
 		}
+		studentCanvas.Apply();
 		maskCanvas.Apply();
+		blankCanvas.Apply();
 
         gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
 		maskRenderer.material.mainTexture = maskCanvas;
@@ -279,23 +359,52 @@ public class NewPaint : MonoBehaviour
 
 		loadB.onClick.AddListener(SetCanLoad);
 
-        
+    
+		if(!allowForEveryone)
+		{
+			StartCoroutine(UpdateCanvas());
 
-        StartCoroutine(UpdateCanvas());
+			//enableCanvasLocal();
+			disableCanvasLocal();
+			
+			for(int i = 0; i < startingAllowedPlayers.Count; i++)
+			{
+				
+				StartCoroutine(enableCanvasForPlayer(startingAllowedPlayers[i])); 
+				
+			}
+		}
+		else{
+			enableCanvasLocal();
+		}
+        
+		if(!visibleForEveryone)
+			{
+			disableViewingLocal();
+			for(int i = 0; i < startingAllowedViewers.Count; i++)
+			{
+				StartCoroutine(enableViewingForPlayer(startingAllowedViewers[i]));
+			}
+		}
+		else{
+			enableViewingLocal();
+		}
+		
     }
 
     // Update is called once per frame
     void Update()
     {
         // Makes sure that the paint brush mask is not applied every frame
-        UpdateMask();
-
-        //Get inputs to send over for the canvas
-		int playerID = ASL.GameLiftManager.GetInstance().m_PeerId;
-		if(allowedPlayers[playerID - 1])
+		if(allowedPlayer)
 		{
+			UpdateMask();
 
-		
+			//Get inputs to send over for the canvas
+			int playerID = ASL.GameLiftManager.GetInstance().m_PeerId;
+			
+
+			
 			if (!EventSystem.current.IsPointerOverGameObject())
 			{
 				if (Input.GetMouseButton(0) == true && !textMode)
@@ -340,7 +449,7 @@ public class NewPaint : MonoBehaviour
 								previousCoord = pixelCoord;
 							}
 							previousMouseDown = true;
-							if(!lineMode && !textMode)
+							if(!lineMode)
 							{
 								SendInput(inputInfo);
 							}
@@ -407,8 +516,9 @@ public class NewPaint : MonoBehaviour
 				}
 				
 			}
-			
 		}
+			
+		
 
     }
     IEnumerator UpdateCanvas()
@@ -540,8 +650,9 @@ public class NewPaint : MonoBehaviour
                 
                 
             }
-            studentCanvas.Apply();
+            
         }
+		studentCanvas.Apply();
 	}
 	void DrawText(InputInformation inp)
 	{
@@ -1061,13 +1172,15 @@ public class NewPaint : MonoBehaviour
 	}
 	void applyTexture(Texture2D tex)
 	{
-		for (int x = 0; x < tex.width; x++)
+		for (int x = 0; x < canvasWidth; x++)
 		{
-			for (int y = 0; y < tex.height; y++)
+			for (int y = 0; y < canvasHeight; y++)
 			{
 				if (x < studentCanvas.width && y < studentCanvas.height)
 				{
-					studentCanvas.SetPixel(x, y, tex.GetPixel(x, y));
+					float x0 = (float)tex.width/(float)canvasWidth;
+					float y0 = (float)tex.height/(float)canvasHeight;
+					studentCanvas.SetPixel(x, y, tex.GetPixel((int)(x * x0), (int)(y * y0)));
 				}
 			}
 		}
@@ -1114,10 +1227,36 @@ public class NewPaint : MonoBehaviour
     }
     public void recieveInput(string id, float[] i)
 	{
-        
-		InputInformation theInput = ConstructInputFromFloats(i);
+		
+        if(i.Length == 2) //Special case for allowing players access to the canvas
+		{
+			
+			if(ASL.GameLiftManager.GetInstance().m_PeerId == i[1])
+			{
+				if(i[0] == 1)
+				{
+					enableCanvasLocal();
+				}
+				else if(i[0] == 2)
+				{
+					disableCanvasLocal();
+				}
+				else if(i[0] == 3)
+				{
+					enableViewingLocal();
+				}
+				else if(i[0] == 4)
+				{
+					disableViewingLocal();
+				}
+			}
+		}
+		else{
+			InputInformation theInput = ConstructInputFromFloats(i);
         //Queues up the input to be built
-        myQueue.Enqueue(theInput);
+        	myQueue.Enqueue(theInput);
+		}
+		
 		
 	}
 
@@ -1155,7 +1294,9 @@ public class NewPaint : MonoBehaviour
 		if(i.Length == 1) //Special case for clear command
 		{
 			inputInfoNew.ClearCanvas = true;
+			
 		}
+		
 		else{
 
 		
@@ -1176,7 +1317,9 @@ public class NewPaint : MonoBehaviour
 			}
 
 			inputInfoNew.textInput = text;
-			inputInfoNew.ClearCanvas = false;
+
+			//Unecessary dead code (I think)
+			inputInfoNew.ClearCanvas = false; 
 			inputInfo.loadTexture = false;
 			
 
