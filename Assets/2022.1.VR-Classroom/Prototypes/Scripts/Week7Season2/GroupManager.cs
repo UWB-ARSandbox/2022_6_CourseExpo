@@ -31,9 +31,9 @@ public class GroupManager : MonoBehaviour
             for (int i = 0; i < 5; i++)
             {
                 Group group = new Group();
-                group.groupName = "Group " + (i + 1);
+                group.name = "Group " + (i + 1);
                 groups.Add(group);
-                groupList.options.Add(new TMP_Dropdown.OptionData() { text = group.groupName });
+                groupList.options.Add(new TMP_Dropdown.OptionData() { text = group.name });
             }
             // groups[0].members.Add("Bobby 1");
             // groups[0].members.Add("Bobby 2");
