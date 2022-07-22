@@ -17,4 +17,9 @@ public class AddPlayerListItem : MonoBehaviour
         GameObject.Find("GroupsContainer").GetComponent<GroupManager>().AddPlayer(username);
         Destroy(gameObject);
     }
+    public void RemovePlayer()
+    {
+        GameObject.Find("GroupsContainer").GetComponent<GroupManager>().RemovePlayer(username);
+        Destroy(gameObject);
+    }
 }

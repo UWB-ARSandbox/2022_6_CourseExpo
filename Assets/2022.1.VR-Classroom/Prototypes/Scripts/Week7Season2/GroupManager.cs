@@ -18,6 +18,8 @@ public class GroupManager : MonoBehaviour
     public Dictionary<int, string> playerList;
     public GameObject addPlayerList;
     public GameObject addPlayerListItem;
+    public GameObject memberListItem;
+    public GameObject memberList;
 
     void Start()
     {
@@ -58,6 +60,12 @@ public class GroupManager : MonoBehaviour
         }
     }
 
+    public void RemovePlayer(string playerName)
+    {
+        groups[groupList.value - 1].members.Remove(playerName);
+        ValueChanged();
+    }
+
     public void ValueChanged()
     {
         if (groupList.value == 0)
@@ -72,7 +80,10 @@ public class GroupManager : MonoBehaviour
             groupName.enabled = true;
             groupMembers.enabled = true;
             groupName.text = "";
-            groupMembers.text = "";            
+            // groupMembers.text = "";
+            foreach (Transform child in memberList.transform) {
+                GameObject.Destroy(child.gameObject);
+            }
             LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
         }
 
@@ -86,13 +97,15 @@ public class GroupManager : MonoBehaviour
         {
             foreach (string member in groups[index].members)
             {
-                groupMembers.text += (member + "\n");
+                // groupMembers.text += (member + "\n");
+                var listItem = Instantiate(memberListItem, memberList.transform, false) as GameObject;
+                listItem.GetComponent<SinglelineContainer>().setText(member);
             }
         }
-        else
-        {
-            groupMembers.text = "There are no members in this group!";
-        }
+        // else
+        // {
+        //     groupMembers.text = "There are no members in this group!";
+        // }
         UpdateAddPlayerList();
     }
 
@@ -117,8 +130,8 @@ public class GroupManager : MonoBehaviour
             }
             if (!groups[groupList.value - 1].members.Contains(item))
             {
-                var PlayerName = Instantiate(addPlayerListItem, addPlayerList.transform, false) as GameObject;
-                PlayerName.GetComponent<SinglelineContainer>().setText(item);
+                var listItem = Instantiate(addPlayerListItem, addPlayerList.transform, false) as GameObject;
+                listItem.GetComponent<SinglelineContainer>().setText(item);
             }
         }
     }
