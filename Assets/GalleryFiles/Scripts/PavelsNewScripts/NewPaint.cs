@@ -15,6 +15,7 @@ using UnityEngine.UI;
 using UnityEngine.Windows;
 using UnityEngine.EventSystems;
 using SimpleFileBrowser;
+using UnityEngine.XR;
 
 public class NewPaint : MonoBehaviour
 {
@@ -240,6 +241,15 @@ public class NewPaint : MonoBehaviour
 
 	bool OnCanvas;
 
+	List<InputDevice>  leftDevices;
+
+	List<InputDevice>  rightDevices;
+
+	bool previousTriggerDownLeft;
+
+	bool previousTriggerDownRight;
+
+
 	
 	
     // Start is called before the first frame update
@@ -248,6 +258,15 @@ public class NewPaint : MonoBehaviour
 
         
         GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(recieveInput);
+
+		leftDevices = new List<InputDevice>();
+		var desiredCharacteristicsLeft = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Left | UnityEngine.XR.InputDeviceCharacteristics.Controller;
+		InputDevices.GetDevicesWithCharacteristics(desiredCharacteristicsLeft, leftDevices);
+
+		rightDevices = new List<InputDevice>();
+		var desiredCharacteristicsRight = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Right | UnityEngine.XR.InputDeviceCharacteristics.Controller;
+		InputDevices.GetDevicesWithCharacteristics(desiredCharacteristicsRight, leftDevices);
+		
 
 		int numOfPlayers = ASL.GameLiftManager.GetInstance().m_Players.Count;
 		
@@ -514,7 +533,8 @@ public class NewPaint : MonoBehaviour
 	}
 	void GetAndSendInputsVR()
 	{
-		if (Input.GetMouseButton(0) == true && !textMode)
+		bool triggerDownLeft;
+		if (leftDevices[0].TryGetFeatureValue(CommonUsages.triggerButton, out triggerDownLeft) && triggerDownLeft)
 		{
 			
 			if(CanvasInput.Instance.getRaycastHitObjectVR(0))
@@ -536,16 +556,17 @@ public class NewPaint : MonoBehaviour
 					inputInfo.eraseMode = this.eraseMode;
 					inputInfo.lineMode = this.lineMode;
 					inputInfo.previousCanvasClick = this.previousCoord;
-					inputInfo.previousMouseDown = this.previousMouseDown;
+					inputInfo.previousMouseDown = this.previousTriggerDownLeft;
 					inputInfo.brushColor = this.brushColor;
 					inputInfo.textInput = textOnType;
 					inputInfo.brushSize = this.brushSize;
 					inputInfo.alphabetNumber = alphabetNumber;
 					
 
+					
 					if(lineMode)
 					{
-						if(!previousMouseDown)
+						if(!previousTriggerDownLeft)
 						{
 							previousCoord = pixelCoord;
 						}
@@ -554,7 +575,7 @@ public class NewPaint : MonoBehaviour
 					{
 						previousCoord = pixelCoord;
 					}
-					previousMouseDown = true;
+					previousTriggerDownLeft = true;
 					if(!lineMode)
 					{
 						SendInput(inputInfo);
@@ -565,12 +586,13 @@ public class NewPaint : MonoBehaviour
 				{
 					
 					selected = false;
-					previousMouseDown = false;
+					previousTriggerDownLeft = false;
 				}
 			}
 			
 		}
-		if(Input.GetMouseButtonUp(0))
+		
+		if(!triggerDownLeft && previousTriggerDownLeft)
 		{
 			if(textMode || lineMode)
 			{
@@ -596,7 +618,7 @@ public class NewPaint : MonoBehaviour
 						inputInfo.eraseMode = this.eraseMode;
 						inputInfo.lineMode = this.lineMode;
 						inputInfo.previousCanvasClick = this.previousCoord;
-						inputInfo.previousMouseDown = this.previousMouseDown;
+						inputInfo.previousMouseDown = this.previousTriggerDownLeft;
 						inputInfo.brushColor = this.brushColor;
 						inputInfo.textInput = textOnType;
 						inputInfo.brushSize = this.brushSize;
@@ -617,10 +639,12 @@ public class NewPaint : MonoBehaviour
 				
 
 			}
-			previousMouseDown = false;
+			previousTriggerDownLeft = false;
 			
 		}
-		if (Input.GetMouseButton(0) == true && !textMode)
+
+		bool triggerDownRight;
+		if (rightDevices[0].TryGetFeatureValue(CommonUsages.triggerButton, out triggerDownRight) && triggerDownRight)
 		{
 			
 			if(CanvasInput.Instance.getRaycastHitObjectVR(1))
@@ -642,25 +666,27 @@ public class NewPaint : MonoBehaviour
 					inputInfo.eraseMode = this.eraseMode;
 					inputInfo.lineMode = this.lineMode;
 					inputInfo.previousCanvasClick = this.previousCoord;
-					inputInfo.previousMouseDown = this.previousMouseDown;
+					inputInfo.previousMouseDown = this.previousTriggerDownRight;
 					inputInfo.brushColor = this.brushColor;
 					inputInfo.textInput = textOnType;
 					inputInfo.brushSize = this.brushSize;
 					inputInfo.alphabetNumber = alphabetNumber;
 					
 
+					
 					if(lineMode)
 					{
-						if(!previousMouseDown)
+						if(!previousTriggerDownRight)
 						{
 							previousCoord = pixelCoord;
 						}
 					}
+					
 					else 
 					{
 						previousCoord = pixelCoord;
 					}
-					previousMouseDown = true;
+					previousTriggerDownRight = true;
 					if(!lineMode)
 					{
 						SendInput(inputInfo);
@@ -671,12 +697,13 @@ public class NewPaint : MonoBehaviour
 				{
 					
 					selected = false;
-					previousMouseDown = false;
+					previousTriggerDownRight = false;
 				}
 			}
 			
 		}
-		if(Input.GetMouseButtonUp(0))
+		
+		if(!triggerDownRight && previousTriggerDownRight)
 		{
 			if(textMode || lineMode)
 			{
@@ -702,7 +729,7 @@ public class NewPaint : MonoBehaviour
 						inputInfo.eraseMode = this.eraseMode;
 						inputInfo.lineMode = this.lineMode;
 						inputInfo.previousCanvasClick = this.previousCoord;
-						inputInfo.previousMouseDown = this.previousMouseDown;
+						inputInfo.previousMouseDown = this.previousTriggerDownRight;
 						inputInfo.brushColor = this.brushColor;
 						inputInfo.textInput = textOnType;
 						inputInfo.brushSize = this.brushSize;
@@ -723,7 +750,7 @@ public class NewPaint : MonoBehaviour
 				
 
 			}
-			previousMouseDown = false;
+			previousTriggerDownRight = false;
 			
 		}
 			
