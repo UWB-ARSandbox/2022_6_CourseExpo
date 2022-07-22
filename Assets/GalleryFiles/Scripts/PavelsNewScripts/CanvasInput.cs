@@ -41,10 +41,12 @@ public class CanvasInput : MonoBehaviour
     {
         if(PlayerController.isXRActive)
         {
+            
             if(foundPlayer)
             {
                 for(int i = 0; i < VRRaycasters.Length; i++)
                 {
+                    
                     raycastHitObjectVR[i] = VRRaycasters[i].TryGetCurrent3DRaycastHit(out raycastHitsVR[i]);
                      
                 }
@@ -85,16 +87,17 @@ public class CanvasInput : MonoBehaviour
     }
     public bool getRaycastHitObjectVR(int i)
     {
-        return raycastHitObject;
+        return raycastHitObjectVR[i];
     }
     IEnumerator findPlayer()
     {
         while(!foundPlayer)
         {
-            if(GameObject.Find("FirstPersonPlayer") != null)
+            
+            if(GameObject.FindGameObjectWithTag("Player") != null)
             {
                 
-                VRRaycasters = GameObject.Find("FirstPersonPlayer").GetComponentsInChildren<XRRayInteractor>(); 
+                VRRaycasters = GameObject.FindGameObjectWithTag("Player").GetComponentsInChildren<XRRayInteractor>(); 
                 foundPlayer = true;
 
             }
