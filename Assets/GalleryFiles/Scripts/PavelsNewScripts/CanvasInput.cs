@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
-
+using UnityEngine.XR.Interaction.Toolkit;
 public class CanvasInput : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -11,7 +11,14 @@ public class CanvasInput : MonoBehaviour
     public static CanvasInput Instance {get; private set; }
 
     RaycastHit raycastHit;
+
+    RaycastHit[] raycastHitsVR = new RaycastHit[2];
     bool raycastHitObject;
+    bool[] raycastHitObjectVR = new bool[2];
+
+    bool foundPlayer = false;
+
+    XRRayInteractor[] VRRaycasters;
 
     private void Awake() {
         if (Instance != null && Instance != this) 
@@ -25,36 +32,75 @@ public class CanvasInput : MonoBehaviour
     }
     void Start()
     {
+        StartCoroutine(findPlayer());
         
     }
 
     //Casts a ray on each update
     void Update()
     {
-        if (!EventSystem.current.IsPointerOverGameObject())
+        if(PlayerController.isXRActive)
         {
-            
+            if(foundPlayer)
+            {
+                for(int i = 0; i < VRRaycasters.Length; i++)
+                {
+                    raycastHitObjectVR[i] = VRRaycasters[i].TryGetCurrent3DRaycastHit(out raycastHitsVR[i]);
+                     
+                }
+            }
+        }
+        else{
+
+        
+            if (!EventSystem.current.IsPointerOverGameObject())
+            {
                 
-            
-            Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
+                    
+                
+                Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 
-            int layerMask = 1 << 30;
-            
-            layerMask = ~layerMask;
-            raycastHitObject = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask);
+                int layerMask = 1 << 30;
+                
+                layerMask = ~layerMask;
+                raycastHitObject = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask);
+            }
         }
     }
     public RaycastHit GetRaycastHit()
     {
         return raycastHit;
     }
+    public RaycastHit[] GetRaycastHitVR()
+    {
+        return raycastHitsVR;
+    }
     public bool getRaycastHitObject()
     {
         
         
         
-        return raycastHitObject && raycastHit.transform.GetComponent<NewPaint>() && !EventSystem.current.IsPointerOverGameObject();
+        return raycastHitObject && !EventSystem.current.IsPointerOverGameObject();
+    }
+    public bool getRaycastHitObjectVR(int i)
+    {
+        return raycastHitObject;
+    }
+    IEnumerator findPlayer()
+    {
+        while(!foundPlayer)
+        {
+            if(GameObject.Find("FirstPersonPlayer") != null)
+            {
+                
+                VRRaycasters = GameObject.Find("FirstPersonPlayer").GetComponentsInChildren<XRRayInteractor>(); 
+                foundPlayer = true;
+
+            }
+            yield return null;
+        }
+        
     }
 
     

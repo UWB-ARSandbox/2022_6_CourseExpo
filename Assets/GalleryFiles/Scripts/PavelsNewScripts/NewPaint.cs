@@ -18,6 +18,7 @@ using SimpleFileBrowser;
 
 public class NewPaint : MonoBehaviour
 {
+	
 	bool allowedPlayer;
 
 	[SerializeField] bool allowForEveryone;
@@ -393,28 +394,84 @@ public class NewPaint : MonoBehaviour
     }
 
     // Update is called once per frame
-    void Update()
-    {
-        // Makes sure that the paint brush mask is not applied every frame
-		if(allowedPlayer)
+	void GetAndSendInputs()
+	{
+		UpdateMask();
+
+		//Get inputs to send over for the canvas
+		int playerID = ASL.GameLiftManager.GetInstance().m_PeerId;
+		if (!EventSystem.current.IsPointerOverGameObject())
 		{
-			UpdateMask();
-
-			//Get inputs to send over for the canvas
-			int playerID = ASL.GameLiftManager.GetInstance().m_PeerId;
-			
-
-			
-			if (!EventSystem.current.IsPointerOverGameObject())
+			if (Input.GetMouseButton(0) == true && !textMode)
 			{
-				if (Input.GetMouseButton(0) == true && !textMode)
+				
+				
+				if(CanvasInput.Instance.getRaycastHitObject())
 				{
 					
-					
+					RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHit();
+
+					if (raycastHit.transform == this.transform)
+					{
+						selected = true;
+						Vector2 uv = raycastHit.textureCoord;
+						
+						Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+						
+						
+						inputInfo.canvasClick = pixelCoord;
+						inputInfo.textMode = this.textMode;
+						inputInfo.eraseMode = this.eraseMode;
+						inputInfo.lineMode = this.lineMode;
+						inputInfo.previousCanvasClick = this.previousCoord;
+						inputInfo.previousMouseDown = this.previousMouseDown;
+						inputInfo.brushColor = this.brushColor;
+						inputInfo.textInput = textOnType;
+						inputInfo.brushSize = this.brushSize;
+						inputInfo.alphabetNumber = alphabetNumber;
+						
+
+						if(lineMode)
+						{
+							if(!previousMouseDown)
+							{
+								previousCoord = pixelCoord;
+							}
+						}
+						else 
+						{
+							previousCoord = pixelCoord;
+						}
+						previousMouseDown = true;
+						if(!lineMode)
+						{
+							SendInput(inputInfo);
+						}
+						
+					}
+					else
+					{
+						
+						selected = false;
+						previousMouseDown = false;
+					}
+				}
+				
+			}
+			if(Input.GetMouseButtonUp(0))
+			{
+				if(textMode || lineMode)
+				{
 					if(CanvasInput.Instance.getRaycastHitObject())
 					{
 						
 						RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHit();
+						
+						
+						
+
+
 
 						if (raycastHit.transform == this.transform)
 						{
@@ -423,8 +480,6 @@ public class NewPaint : MonoBehaviour
 							
 							Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
 
-							
-							
 							inputInfo.canvasClick = pixelCoord;
 							inputInfo.textMode = this.textMode;
 							inputInfo.eraseMode = this.eraseMode;
@@ -437,85 +492,260 @@ public class NewPaint : MonoBehaviour
 							inputInfo.alphabetNumber = alphabetNumber;
 							
 
-							if(lineMode)
-							{
-								if(!previousMouseDown)
-								{
-									previousCoord = pixelCoord;
-								}
-							}
-							else 
-							{
-								previousCoord = pixelCoord;
-							}
-							previousMouseDown = true;
-							if(!lineMode)
-							{
-								SendInput(inputInfo);
-							}
+							SendInput(inputInfo);
+							
+							
+							
 							
 						}
 						else
 						{
-							
 							selected = false;
-							previousMouseDown = false;
 						}
 					}
 					
+
 				}
-				if(Input.GetMouseButtonUp(0))
-				{
-					if(textMode || lineMode)
-					{
-						if(CanvasInput.Instance.getRaycastHitObject())
-						{
-							
-							RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHit();
-							
-							
-							
-
-
-
-							if (raycastHit.transform == this.transform)
-							{
-								selected = true;
-								Vector2 uv = raycastHit.textureCoord;
-								
-								Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
-
-								inputInfo.canvasClick = pixelCoord;
-								inputInfo.textMode = this.textMode;
-								inputInfo.eraseMode = this.eraseMode;
-								inputInfo.lineMode = this.lineMode;
-								inputInfo.previousCanvasClick = this.previousCoord;
-								inputInfo.previousMouseDown = this.previousMouseDown;
-								inputInfo.brushColor = this.brushColor;
-								inputInfo.textInput = textOnType;
-								inputInfo.brushSize = this.brushSize;
-								inputInfo.alphabetNumber = alphabetNumber;
-								
-
-								SendInput(inputInfo);
-								
-								
-								
-								
-							}
-							else
-							{
-								selected = false;
-							}
-						}
-						
-
-					}
-					previousMouseDown = false;
-					
-				}
+				previousMouseDown = false;
 				
 			}
+			
+		}
+	}
+	void GetAndSendInputsVR()
+	{
+		if (Input.GetMouseButton(0) == true && !textMode)
+		{
+			
+			if(CanvasInput.Instance.getRaycastHitObjectVR(0))
+			{
+				
+				RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[0];
+
+				if (raycastHit.transform == this.transform)
+				{
+					selected = true;
+					Vector2 uv = raycastHit.textureCoord;
+					
+					Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+					
+					
+					inputInfo.canvasClick = pixelCoord;
+					inputInfo.textMode = this.textMode;
+					inputInfo.eraseMode = this.eraseMode;
+					inputInfo.lineMode = this.lineMode;
+					inputInfo.previousCanvasClick = this.previousCoord;
+					inputInfo.previousMouseDown = this.previousMouseDown;
+					inputInfo.brushColor = this.brushColor;
+					inputInfo.textInput = textOnType;
+					inputInfo.brushSize = this.brushSize;
+					inputInfo.alphabetNumber = alphabetNumber;
+					
+
+					if(lineMode)
+					{
+						if(!previousMouseDown)
+						{
+							previousCoord = pixelCoord;
+						}
+					}
+					else 
+					{
+						previousCoord = pixelCoord;
+					}
+					previousMouseDown = true;
+					if(!lineMode)
+					{
+						SendInput(inputInfo);
+					}
+					
+				}
+				else
+				{
+					
+					selected = false;
+					previousMouseDown = false;
+				}
+			}
+			
+		}
+		if(Input.GetMouseButtonUp(0))
+		{
+			if(textMode || lineMode)
+			{
+				if(CanvasInput.Instance.getRaycastHitObjectVR(0))
+				{
+					
+					RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[0];
+					
+					
+					
+
+
+
+					if (raycastHit.transform == this.transform)
+					{
+						selected = true;
+						Vector2 uv = raycastHit.textureCoord;
+						
+						Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+						inputInfo.canvasClick = pixelCoord;
+						inputInfo.textMode = this.textMode;
+						inputInfo.eraseMode = this.eraseMode;
+						inputInfo.lineMode = this.lineMode;
+						inputInfo.previousCanvasClick = this.previousCoord;
+						inputInfo.previousMouseDown = this.previousMouseDown;
+						inputInfo.brushColor = this.brushColor;
+						inputInfo.textInput = textOnType;
+						inputInfo.brushSize = this.brushSize;
+						inputInfo.alphabetNumber = alphabetNumber;
+						
+
+						SendInput(inputInfo);
+						
+						
+						
+						
+					}
+					else
+					{
+						selected = false;
+					}
+				}
+				
+
+			}
+			previousMouseDown = false;
+			
+		}
+		if (Input.GetMouseButton(0) == true && !textMode)
+		{
+			
+			if(CanvasInput.Instance.getRaycastHitObjectVR(1))
+			{
+				
+				RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[1];
+
+				if (raycastHit.transform == this.transform)
+				{
+					selected = true;
+					Vector2 uv = raycastHit.textureCoord;
+					
+					Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+					
+					
+					inputInfo.canvasClick = pixelCoord;
+					inputInfo.textMode = this.textMode;
+					inputInfo.eraseMode = this.eraseMode;
+					inputInfo.lineMode = this.lineMode;
+					inputInfo.previousCanvasClick = this.previousCoord;
+					inputInfo.previousMouseDown = this.previousMouseDown;
+					inputInfo.brushColor = this.brushColor;
+					inputInfo.textInput = textOnType;
+					inputInfo.brushSize = this.brushSize;
+					inputInfo.alphabetNumber = alphabetNumber;
+					
+
+					if(lineMode)
+					{
+						if(!previousMouseDown)
+						{
+							previousCoord = pixelCoord;
+						}
+					}
+					else 
+					{
+						previousCoord = pixelCoord;
+					}
+					previousMouseDown = true;
+					if(!lineMode)
+					{
+						SendInput(inputInfo);
+					}
+					
+				}
+				else
+				{
+					
+					selected = false;
+					previousMouseDown = false;
+				}
+			}
+			
+		}
+		if(Input.GetMouseButtonUp(0))
+		{
+			if(textMode || lineMode)
+			{
+				if(CanvasInput.Instance.getRaycastHitObjectVR(1))
+				{
+					
+					RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[1];
+					
+					
+					
+
+
+
+					if (raycastHit.transform == this.transform)
+					{
+						selected = true;
+						Vector2 uv = raycastHit.textureCoord;
+						
+						Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+
+						inputInfo.canvasClick = pixelCoord;
+						inputInfo.textMode = this.textMode;
+						inputInfo.eraseMode = this.eraseMode;
+						inputInfo.lineMode = this.lineMode;
+						inputInfo.previousCanvasClick = this.previousCoord;
+						inputInfo.previousMouseDown = this.previousMouseDown;
+						inputInfo.brushColor = this.brushColor;
+						inputInfo.textInput = textOnType;
+						inputInfo.brushSize = this.brushSize;
+						inputInfo.alphabetNumber = alphabetNumber;
+						
+
+						SendInput(inputInfo);
+						
+						
+						
+						
+					}
+					else
+					{
+						selected = false;
+					}
+				}
+				
+
+			}
+			previousMouseDown = false;
+			
+		}
+			
+		
+	}
+
+    void Update()
+    {
+        // Makes sure that the paint brush mask is not applied every frame
+		if(allowedPlayer)
+		{
+			
+			if(PlayerController.isXRActive)
+			{
+				GetAndSendInputsVR();
+			}
+			else{
+				GetAndSendInputs();
+			}
+
+			
+			
 		}
 			
 		
