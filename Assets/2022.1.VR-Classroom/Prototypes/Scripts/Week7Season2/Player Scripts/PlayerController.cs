@@ -49,7 +49,7 @@ public class PlayerController : MonoBehaviour {
     /// <summary>
     /// Checks if there is an XR device plugged in
     /// </summary>
-    private bool isXRActive => XRSettings.isDeviceActive;
+    public static bool isXRActive => XRSettings.isDeviceActive;
 
     /// <summary>
     /// Checks if the cursor is locked

@@ -68,7 +68,9 @@ public class AudioManager : MonoBehaviour
             BoothZone.AddComponent<BoothZoneManager>();
         }
         #endregion
-        TestConnection(HostName, Password);
+        if(GameManager.AmTeacher){
+            TestConnection(HostName, Password);
+        }
     }
 
     #region MuteUser
@@ -341,6 +343,7 @@ public class AudioManager : MonoBehaviour
     }
 
     IEnumerator StartConnectionTest(){
+        yield return new WaitForSeconds(2f);
         runningTest = true;
         my_Controller.CreateMumbleObject();
         yield return new WaitForSeconds(4f);
