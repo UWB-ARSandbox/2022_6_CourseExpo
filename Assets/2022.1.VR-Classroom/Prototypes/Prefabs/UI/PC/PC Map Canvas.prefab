@@ -774,7 +774,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 35.6
+  m_fontSize: 38.5
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -908,7 +908,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 44.6
+  m_fontSize: 41.05
   m_fontSizeBase: 36
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1325,7 +1325,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 23.8
+  m_fontSize: 21.45
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -1992,7 +1992,7 @@ MonoBehaviour:
   m_faceColor:
     serializedVersion: 2
     rgba: 4294967295
-  m_fontSize: 36.2
+  m_fontSize: 36.85
   m_fontSizeBase: 24
   m_fontWeight: 400
   m_enableAutoSizing: 1
@@ -2434,9 +2434,17 @@ PrefabInstance:
       value: 
       objectReference: {fileID: 1456345052659569064}
     - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
+      propertyPath: addPlayerList
+      value: 
+      objectReference: {fileID: 5145825496394848582}
+    - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
       propertyPath: addMemberButton
       value: 
       objectReference: {fileID: 4506771784712968363}
+    - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
+      propertyPath: addPlayerListItem
+      value: 
+      objectReference: {fileID: 5285720904513934708, guid: 92c061a7fcb99a545bcc6de44f72ec68, type: 3}
     - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
       propertyPath: addPlayerContainer
       value: 
@@ -3393,7 +3401,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 1486935782681323232, guid: 549d9c8630bf09148be21766a0a1cdb4, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 1486935783061661164, guid: 549d9c8630bf09148be21766a0a1cdb4, type: 3}
       propertyPath: m_AnchorMax.x

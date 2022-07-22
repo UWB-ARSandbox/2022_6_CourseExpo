@@ -16,8 +16,8 @@ public class GroupManager : MonoBehaviour
     public GameObject addPlayerContainer;
 
     public Dictionary<int, string> playerList;
-    public GameObject List;
-    public GameObject BoothObject;
+    public GameObject addPlayerList;
+    public GameObject addPlayerListItem;
 
     void Start()
     {
@@ -43,6 +43,14 @@ public class GroupManager : MonoBehaviour
 
     public void AddPlayer(string playerName)
     {
+        foreach (Group group in groups)
+        {
+            if (group.members.Contains(playerName))
+            {
+                group.members.Remove(playerName);
+            }
+        }
+
         if (!groups[groupList.value - 1].members.Contains(playerName))
         {
             groups[groupList.value - 1].members.Add(playerName);
@@ -96,16 +104,20 @@ public class GroupManager : MonoBehaviour
 
     void UpdateAddPlayerList()
     {
-        foreach (Transform child in List.transform)
+        foreach (Transform child in addPlayerList.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
         playerList = GameLiftManager.GetInstance().m_Players;
         foreach (string item in playerList.Values)
         {
+            if (item != GameManager.players[1])
+            {
+                return;
+            }
             if (!groups[groupList.value - 1].members.Contains(item))
             {
-                var PlayerName = Instantiate(BoothObject, List.transform, false) as GameObject;
+                var PlayerName = Instantiate(addPlayerListItem, addPlayerList.transform, false) as GameObject;
                 PlayerName.GetComponent<SinglelineContainer>().setText(item);
             }
         }

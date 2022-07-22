@@ -991,7 +991,10 @@ public class GameManager : MonoBehaviour {
                 for (int i = 1; i < _f.Length; i++) {
                     username += (char)(int)_f[i];
                 }
-                GameObject.Find(username + "_GhostPlayer").gameObject.SetActive(false);
+                if (GameObject.Find(username + "_GhostPlayer"))
+                {
+                    GameObject.Find(username + "_GhostPlayer").gameObject.SetActive(false);
+                }
                 break;
         }
 
