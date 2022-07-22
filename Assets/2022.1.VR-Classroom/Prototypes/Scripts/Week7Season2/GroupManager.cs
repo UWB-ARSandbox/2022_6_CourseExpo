@@ -16,8 +16,10 @@ public class GroupManager : MonoBehaviour
     public GameObject addPlayerContainer;
 
     public Dictionary<int, string> playerList;
-    public GameObject List;
-    public GameObject BoothObject;
+    public GameObject addPlayerList;
+    public GameObject addPlayerListItem;
+    public GameObject memberListItem;
+    public GameObject memberList;
 
     void Start()
     {
@@ -43,11 +45,25 @@ public class GroupManager : MonoBehaviour
 
     public void AddPlayer(string playerName)
     {
+        foreach (Group group in groups)
+        {
+            if (group.members.Contains(playerName))
+            {
+                group.members.Remove(playerName);
+            }
+        }
+
         if (!groups[groupList.value - 1].members.Contains(playerName))
         {
             groups[groupList.value - 1].members.Add(playerName);
             ValueChanged();
         }
+    }
+
+    public void RemovePlayer(string playerName)
+    {
+        groups[groupList.value - 1].members.Remove(playerName);
+        ValueChanged();
     }
 
     public void ValueChanged()
@@ -64,7 +80,10 @@ public class GroupManager : MonoBehaviour
             groupName.enabled = true;
             groupMembers.enabled = true;
             groupName.text = "";
-            groupMembers.text = "";            
+            // groupMembers.text = "";
+            foreach (Transform child in memberList.transform) {
+                GameObject.Destroy(child.gameObject);
+            }
             LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
         }
 
@@ -78,13 +97,15 @@ public class GroupManager : MonoBehaviour
         {
             foreach (string member in groups[index].members)
             {
-                groupMembers.text += (member + "\n");
+                // groupMembers.text += (member + "\n");
+                var listItem = Instantiate(memberListItem, memberList.transform, false) as GameObject;
+                listItem.GetComponent<SinglelineContainer>().setText(member);
             }
         }
-        else
-        {
-            groupMembers.text = "There are no members in this group!";
-        }
+        // else
+        // {
+        //     groupMembers.text = "There are no members in this group!";
+        // }
         UpdateAddPlayerList();
     }
 
@@ -96,7 +117,7 @@ public class GroupManager : MonoBehaviour
 
     void UpdateAddPlayerList()
     {
-        foreach (Transform child in List.transform)
+        foreach (Transform child in addPlayerList.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
@@ -105,8 +126,8 @@ public class GroupManager : MonoBehaviour
         {
             if (!groups[groupList.value - 1].members.Contains(item))
             {
-                var PlayerName = Instantiate(BoothObject, List.transform, false) as GameObject;
-                PlayerName.GetComponent<SinglelineContainer>().setText(item);
+                var listItem = Instantiate(addPlayerListItem, addPlayerList.transform, false) as GameObject;
+                listItem.GetComponent<SinglelineContainer>().setText(item);
             }
         }
     }
