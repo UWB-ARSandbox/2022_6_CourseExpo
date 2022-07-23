@@ -48,6 +48,8 @@ public class CollaborativeManager : MonoBehaviour
     public const float TestFinished = 110;
     public const float SendTextField = 111;
     public const float BackSpace = 112;
+
+    public const float FinalSubmit = 113;
     #endregion
     // Need to sync the randomize result IE need to take the result from the first student in curStudents
     //
@@ -66,6 +68,7 @@ public class CollaborativeManager : MonoBehaviour
         Debug.Assert(TimerText != null);
         Player = GameObject.Find("FirstPersonPlayer(Clone)");
         TPChannelTrigger = gameObject.GetComponentInChildren<TeleportTrigger>();
+        FinalSubmitButton.GetComponent<Button>().onClick.AddListener(() => SendInput(FinalSubmit));
     }
 
     public void SetMaxStudents(int maxStudents){
@@ -283,12 +286,19 @@ public class CollaborativeManager : MonoBehaviour
                     for (int i = 4; i < length + 4; i++) {
                         NewText += (char)(int)_f[i];
                     }
-                    //txtField.text = NewText;
+                    if(_f[2] == GameManager.MyID)
+                        txtField.text = NewText;
                     CreateShortAnswerPrefab(NewText, _f[2]);
                     break;
                 }
                 case BackSpace:{
                     //txtField.text = txtField.text.Remove(txtField.text.Length - 1);
+                    break;
+                }
+                case FinalSubmit:{
+                    Debug.Log(GameManager.players[(int)_f[2]] + " Has hit the final submit button");
+                    FinalSubmitBool[GameManager.players[(int)_f[2]]] = true;
+                    CheckVotes();
                     break;
                 }
                 default:{
@@ -328,6 +338,21 @@ public class CollaborativeManager : MonoBehaviour
     public GameObject TextAreaOptionSubmit;
     public GameObject ShortAnswerPrefab;
 
+    //intent is to check to see that all students have hit that final submit button
+    public Dictionary<string, bool> FinalSubmitBool = new Dictionary<string, bool>();
+    public GameObject FinalSubmitButton;
+
+    public void SubmitTextButtonClick(Button buttonObj){
+        string ToSend = buttonObj.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text;
+        SendText(ToSend);
+
+        StartCoroutine(SendInputDelayed());
+    }
+    public IEnumerator SendInputDelayed(){
+        yield return new WaitForSeconds(1.0f);
+        SendInput(buttonSubmit);
+        yield return null;
+    }
 
     public void SetupVoteList(){
         ClearVotes();
@@ -361,12 +386,16 @@ public class CollaborativeManager : MonoBehaviour
             ShortAnswerP.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = text;
             ShortAnswer[studentName] = ShortAnswerP;
             ShortAnswerP.SetActive(false);
+            Button btn_Submit = ShortAnswerP.GetComponent<Button>();
+            btn_Submit.onClick.AddListener(() => SubmitTextButtonClick(btn_Submit));
         }
         else{
             GameObject ShortAnswerP = (GameObject)Instantiate(ShortAnswerPrefab, TextAreaOptionSubmit.transform, false);
             ShortAnswerP.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = text;
             ShortAnswer.Add(studentName, ShortAnswerP);
             ShortAnswerP.SetActive(false);
+            Button btn_Submit = ShortAnswerP.GetComponent<Button>();
+            btn_Submit.onClick.AddListener(() => SubmitTextButtonClick(btn_Submit));
         }
     }
 
@@ -560,6 +589,11 @@ public class CollaborativeManager : MonoBehaviour
                 Destroy(res.Value);
         }
         ShortAnswer.Clear();
+        FinalSubmitBool.Clear();
+        FinalSubmitButton.SetActive(false);
+        for(int i = 0; i < curStudents.Count; i++){
+                FinalSubmitBool.Add(GameManager.players[(int)curStudents[i]],false);
+        }
     }
 
     public void CheckVotes(){
@@ -582,11 +616,30 @@ public class CollaborativeManager : MonoBehaviour
                  }
             }
             Debug.Log("Votes are unanimous");
+            
+            FinalSubmitButton.SetActive(true);
+            for(int i = 0; i < curStudents.Count; i++){
+                if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
+                    return;
+            }
+
+            FinalSubmitButton.SetActive(false);
+            //Spawn final submit button and when that is pressed submit inputs
+            //When submit button is pressed check votes again to make sure they are still distinct
             SubmitInputs(distinctList[0]);
             SetupVoteList();//clear old votes
         }
-        else
+        else{
             Debug.Log("Votes are divided");
+            FinalSubmitButton.SetActive(false);
+            for(int i = 0; i < curStudents.Count; i++){
+                if(FinalSubmitBool.ContainsKey(GameManager.players[(int)curStudents[i]])){
+                    FinalSubmitBool[GameManager.players[(int)curStudents[i]]] = false;
+                }
+                else
+                    FinalSubmitBool.Add(GameManager.players[(int)curStudents[i]],false);
+            }
+        }
     }
 
     public void SubmitInputs(float _f){
@@ -648,6 +701,6 @@ public class CollaborativeManager : MonoBehaviour
             _myAssessmentManager.pnl_Start.SetActive(false);
                 //_myBooth.lockToggle.Lock();
         }
-        StartCoroutine(CheckForUserDisconnection());
+        //StartCoroutine(CheckForUserDisconnection());
     }
 }
