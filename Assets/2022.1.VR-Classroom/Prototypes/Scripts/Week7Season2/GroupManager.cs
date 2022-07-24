@@ -23,9 +23,9 @@ public class GroupManager : MonoBehaviour
     public GameObject currentGroupWindow;
     public GameObject currentGroupListItem;
     public GameObject currentGroupList;
+    public Text groupNameText;
 
     ASLObject m_ASLObject;
-
     void Start()
     {
         groupName.enabled = false;
@@ -37,11 +37,12 @@ public class GroupManager : MonoBehaviour
         for (int i = 0; i < 5; i++)
         {
             Group group = new Group();
-            group.name = "Group " + (i + 1);
+            group.groupName = "Group " + (i + 1);
+            group.groupNumber = (i + 1);
             groups.Add(group);
             if (GameManager.AmTeacher)
             {
-                groupList.options.Add(new TMP_Dropdown.OptionData() { text = group.name });
+                groupList.options.Add(new TMP_Dropdown.OptionData() { text = group.groupName });
             }
         }
         if (GameManager.AmTeacher)
@@ -58,8 +59,8 @@ public class GroupManager : MonoBehaviour
             if (group.members.Contains(playerName))
             {
                 List<float> myFloats = new List<float>();
-                myFloats.Add(501);
-                myFloats.Add(groupList.value - 1);
+                myFloats.Add(502);
+                myFloats.Add(group.groupNumber);
                 myFloats.AddRange(GameManager.stringToFloats(playerName));
                 var myFloatsArray = myFloats.ToArray();
                 m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
@@ -109,14 +110,16 @@ public class GroupManager : MonoBehaviour
 
         if (!GameManager.AmTeacher)
         {
+            groupNameText.text = "Group: None";
+            foreach (Transform child in currentGroupList.transform)
+            {
+                GameObject.Destroy(child.gameObject);
+            }
             foreach (var group in groups)
             {
                 if (group.members.Contains(GameManager.players[GameManager.MyID]))
                 {
-                    foreach (Transform child in currentGroupList.transform)
-                    {
-                        GameObject.Destroy(child.gameObject);
-                    }
+                    groupNameText.text = group.groupName;
                     foreach (string item in group.members)
                     {
                         var listItem = Instantiate(currentGroupListItem, currentGroupList.transform, false) as GameObject;
@@ -131,7 +134,7 @@ public class GroupManager : MonoBehaviour
 
     public void LoadGroupData(int index)
     {
-        groupName.text = groups[index].name;
+        groupName.text = groups[index].groupName;
         if (groups[index].members.Count > 0)
         {
             foreach (string member in groups[index].members)
@@ -189,6 +192,14 @@ public class GroupManager : MonoBehaviour
                     username += (char)(int)_f[i];
                 }
                 groups[(int)_f[1]].members.Remove(username);
+                ValueChanged();
+                break;
+            case 502:
+                username = "";
+                for (int i = 2; i < _f.Length; i++) {
+                    username += (char)(int)_f[i];
+                }
+                groups[(int)_f[1] - 1].members.Remove(username);
                 ValueChanged();
                 break;
         }
