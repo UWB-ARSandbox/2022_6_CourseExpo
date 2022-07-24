@@ -203,7 +203,7 @@ public class CollaborativeManager : MonoBehaviour
     }
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
-        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)){
+        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && _myAssessmentManager.pnl_Start.active){
             _myAssessmentManager.pnl_Start.SetActive(false);
             List<float> NewFloats = new List<float>();
             NewFloats.Add(-1);
@@ -295,7 +295,8 @@ public class CollaborativeManager : MonoBehaviour
                     curStudents.Add(_f[2]);
                     Debug.Log("Student ID:" +_f[2] +"started test");
                     SyncedTimer();
-                    if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])){
+                    if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
+                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& _myAssessmentManager.pnl_Start.active){
                         //teleport user infront of lectern
                         GameObject player = FindObjectOfType<XpoPlayer>().gameObject;
                         player.GetComponent<CharacterController>().enabled = false;
