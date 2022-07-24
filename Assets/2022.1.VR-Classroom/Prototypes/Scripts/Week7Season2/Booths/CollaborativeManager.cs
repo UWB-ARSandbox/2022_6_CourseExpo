@@ -155,6 +155,8 @@ public class CollaborativeManager : MonoBehaviour
         if(m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Count <= _myAssessmentManager.NumberOfConcurrentUsers && curStudents.Count == 0){
             if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)){
                 Debug.Log("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
+                // AnnouncementDisplay Dspl = AnnouncementManager.pnl_PCAnnouncement;
+                // Dspl.DisplayAnnouncement("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
                 _myAssessmentManager.pnl_Start.SetActive(false);
                 List<float> NewFloats = new List<float>();
                 NewFloats.Add(-1);
