@@ -3302,6 +3302,14 @@ PrefabInstance:
       propertyPath: addPlayerContainer
       value: 
       objectReference: {fileID: 5145825495504486699}
+    - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
+      propertyPath: currentGroupWindow
+      value: 
+      objectReference: {fileID: 5734724705967794834}
+    - target: {fileID: 4475958504190572008, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
+      propertyPath: currentGroupMemberListItem
+      value: 
+      objectReference: {fileID: 1475901580755925376, guid: fe9303f73187ea048bdc02aceeaf5e4b, type: 3}
     - target: {fileID: 4750376275372073032, guid: 7c49bf0a7658d1041af71e4ed25ee84d, type: 3}
       propertyPath: m_SizeDelta.y
       value: 378.384
