@@ -21,7 +21,8 @@ public class GroupManager : MonoBehaviour
     public GameObject memberListItem;
     public GameObject memberList;
     public GameObject currentGroupWindow;
-    public GameObject currentGroupMemberListItem;
+    public GameObject currentGroupListItem;
+    public GameObject currentGroupList;
 
     ASLObject m_ASLObject;
 
@@ -104,6 +105,25 @@ public class GroupManager : MonoBehaviour
                 GameObject.Destroy(child.gameObject);
             }
             LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
+        }
+
+        if (!GameManager.AmTeacher)
+        {
+            foreach (var group in groups)
+            {
+                if (group.members.Contains(GameManager.players[GameManager.MyID]))
+                {
+                    foreach (Transform child in currentGroupList.transform)
+                    {
+                        GameObject.Destroy(child.gameObject);
+                    }
+                    foreach (string item in group.members)
+                    {
+                        var listItem = Instantiate(currentGroupListItem, currentGroupList.transform, false) as GameObject;
+                        listItem.GetComponent<SinglelineContainer>().setText(item);
+                    }
+                }
+            }
         }
 
         Debug.Log("Value changed to " + groupList.options[groupList.value].text);
