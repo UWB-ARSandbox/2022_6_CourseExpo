@@ -20,6 +20,8 @@ public class GroupManager : MonoBehaviour
     public GameObject addPlayerListItem;
     public GameObject memberListItem;
     public GameObject memberList;
+    public GameObject currentGroupWindow;
+    public GameObject currentGroupMemberListItem;
 
     ASLObject m_ASLObject;
 
@@ -30,6 +32,7 @@ public class GroupManager : MonoBehaviour
         addMemberButton.gameObject.SetActive(false);
         addPlayerContainer.SetActive(false);
         m_ASLObject = GetComponent<ASLObject>();
+        m_ASLObject._LocallySetFloatCallback(FloatReceive);
         for (int i = 0; i < 5; i++)
         {
             Group group = new Group();
@@ -40,6 +43,11 @@ public class GroupManager : MonoBehaviour
                 groupList.options.Add(new TMP_Dropdown.OptionData() { text = group.name });
             }
         }
+        if (GameManager.AmTeacher)
+        {
+            groupsButton.gameObject.SetActive(true);
+            currentGroupWindow.SetActive(false);
+        }
     }
 
     public void AddPlayer(string playerName)
@@ -48,21 +56,34 @@ public class GroupManager : MonoBehaviour
         {
             if (group.members.Contains(playerName))
             {
-                group.members.Remove(playerName);
+                List<float> myFloats = new List<float>();
+                myFloats.Add(501);
+                myFloats.Add(groupList.value - 1);
+                myFloats.AddRange(GameManager.stringToFloats(playerName));
+                var myFloatsArray = myFloats.ToArray();
+                m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
             }
         }
 
         if (!groups[groupList.value - 1].members.Contains(playerName))
         {
-            groups[groupList.value - 1].members.Add(playerName);
-            ValueChanged();
+            List<float> myFloats = new List<float>();
+            myFloats.Add(500);
+            myFloats.Add(groupList.value - 1);
+            myFloats.AddRange(GameManager.stringToFloats(playerName));
+            var myFloatsArray = myFloats.ToArray();
+            m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
         }
     }
 
     public void RemovePlayer(string playerName)
     {
-        groups[groupList.value - 1].members.Remove(playerName);
-        ValueChanged();
+        List<float> myFloats = new List<float>();
+        myFloats.Add(501);
+        myFloats.Add(groupList.value - 1);
+        myFloats.AddRange(GameManager.stringToFloats(playerName));
+        var myFloatsArray = myFloats.ToArray();
+        m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
     }
 
     public void ValueChanged()
@@ -79,7 +100,6 @@ public class GroupManager : MonoBehaviour
             groupName.enabled = true;
             groupMembers.enabled = true;
             groupName.text = "";
-            // groupMembers.text = "";
             foreach (Transform child in memberList.transform) {
                 GameObject.Destroy(child.gameObject);
             }
@@ -101,10 +121,6 @@ public class GroupManager : MonoBehaviour
                 listItem.GetComponent<SinglelineContainer>().setText(member);
             }
         }
-        // else
-        // {
-        //     groupMembers.text = "There are no members in this group!";
-        // }
         UpdateAddPlayerList();
     }
 
@@ -134,5 +150,27 @@ public class GroupManager : MonoBehaviour
     public void CloseAddPlayerScreen()
     {
         addPlayerContainer.SetActive(false);
+    }
+
+    public void FloatReceive(string _id, float[] _f) {
+        string username;
+        switch(_f[0]) {
+            case 500:
+                username = "";
+                for (int i = 2; i < _f.Length; i++) {
+                    username += (char)(int)_f[i];
+                }
+                groups[(int)_f[1]].members.Add(username);
+                ValueChanged();
+                break;
+            case 501:
+                username = "";
+                for (int i = 2; i < _f.Length; i++) {
+                    username += (char)(int)_f[i];
+                }
+                groups[(int)_f[1]].members.Remove(username);
+                ValueChanged();
+                break;
+        }
     }
 }
