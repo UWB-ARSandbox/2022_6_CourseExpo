@@ -159,7 +159,7 @@ public class GroupManager : MonoBehaviour
         playerList = GameLiftManager.GetInstance().m_Players;
         foreach (string item in playerList.Values)
         {
-            if (!groups[groupList.value - 1].members.Contains(item))
+            if (!groups[groupList.value - 1].members.Contains(item) && item != GameManager.players[GameManager.MyID])
             {
                 var listItem = Instantiate(addPlayerListItem, addPlayerList.transform, false) as GameObject;
                 listItem.GetComponent<SinglelineContainer>().setText(item);
