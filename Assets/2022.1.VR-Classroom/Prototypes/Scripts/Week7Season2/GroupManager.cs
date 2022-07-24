@@ -25,6 +25,8 @@ public class GroupManager : MonoBehaviour
     public GameObject currentGroupList;
     public Text groupNameText;
 
+    public Group MyGroup = null;
+
     ASLObject m_ASLObject;
     void Start()
     {
@@ -184,6 +186,9 @@ public class GroupManager : MonoBehaviour
                     username += (char)(int)_f[i];
                 }
                 groups[(int)_f[1]].members.Add(username);
+                if (username == GameManager.players[GameManager.MyID]){
+                    MyGroup = groups[(int)_f[1]];
+                }
                 ValueChanged();
                 break;
             case 501:
@@ -192,6 +197,9 @@ public class GroupManager : MonoBehaviour
                     username += (char)(int)_f[i];
                 }
                 groups[(int)_f[1]].members.Remove(username);
+                if (username == GameManager.players[GameManager.MyID]){
+                    MyGroup = null;
+                }
                 ValueChanged();
                 break;
             case 502:
@@ -200,6 +208,9 @@ public class GroupManager : MonoBehaviour
                     username += (char)(int)_f[i];
                 }
                 groups[(int)_f[1] - 1].members.Remove(username);
+                if (username == GameManager.players[GameManager.MyID]){
+                    MyGroup = null;
+                }
                 ValueChanged();
                 break;
         }

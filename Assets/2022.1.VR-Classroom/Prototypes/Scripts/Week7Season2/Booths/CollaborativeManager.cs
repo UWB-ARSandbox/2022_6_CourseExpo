@@ -17,6 +17,8 @@ public class CollaborativeManager : MonoBehaviour
     private GameObject Player;
     public TeleportTrigger TPChannelTrigger;
 
+    public GroupManager m_GroupManager;
+
     //Definable number of students
     public int MaxStudents;
     //maybe float[] and track students ids
@@ -32,6 +34,7 @@ public class CollaborativeManager : MonoBehaviour
 
     #region MessageHeaders
     //Answer inputs - dont necessarily need to be message headers could use the same header for all depends on how much information we want to send
+    public const float GroupQuizStarted = 99;
     public const float QuizStarted = 100;
 
     public const float buttonA = 101;
@@ -69,6 +72,7 @@ public class CollaborativeManager : MonoBehaviour
         Player = GameObject.Find("FirstPersonPlayer(Clone)");
         TPChannelTrigger = gameObject.GetComponentInChildren<TeleportTrigger>();
         FinalSubmitButton.GetComponent<Button>().onClick.AddListener(() => SendInput(FinalSubmit));
+        m_GroupManager = GameObject.Find("GroupsUI").GetComponent<GroupManager>();
     }
 
     public void SetMaxStudents(int maxStudents){
@@ -145,6 +149,26 @@ public class CollaborativeManager : MonoBehaviour
             //Lock room until assessment is finished 
         SetupVoteList();
         yield return null;
+    }
+
+    public void StartGroupQuiz(){
+        if(m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Count <= _myAssessmentManager.NumberOfConcurrentUsers && curStudents.Count == 0){
+            if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)){
+                Debug.Log("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
+                _myAssessmentManager.pnl_Start.SetActive(false);
+                List<float> NewFloats = new List<float>();
+                NewFloats.Add(-1);
+                NewFloats.Add(GroupQuizStarted);
+                NewFloats.Add((float)GameManager.MyID);
+                var FloatsArray = NewFloats.ToArray();
+                m_ASLObject.SendAndSetClaim(() => {
+                    m_ASLObject.SendFloatArray(FloatsArray);
+            });
+            _myAssessmentManager.walls.gameObject.SetActive(true);
+            }    
+        }
+        else
+            SendStartMessage();
     }
 
     #region Sending Floats
@@ -264,6 +288,23 @@ public class CollaborativeManager : MonoBehaviour
                     SyncedTimer();
                     break;
                 }
+                case GroupQuizStarted:{
+                    MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
+                    curStudents.Add(_f[2]);
+                    Debug.Log("Student ID:" +_f[2] +"started test");
+                    SyncedTimer();
+                    if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])){
+                        //teleport user infront of lectern
+                        GameObject player = FindObjectOfType<XpoPlayer>().gameObject;
+                        player.GetComponent<CharacterController>().enabled = false;
+                        player.transform.SetParent(transform, true);
+                        player.transform.localPosition = new Vector3(3.5f, 1.115f, 0);
+                        player.transform.SetParent(null, true);
+                        player.GetComponent<CharacterController>().enabled = true;
+                        SendStartMessage();
+                    }
+                    break;
+                }
                 case ShortAnswerUpdate:{
                     //change to sendTextField
                     //txtField.text += (char)(int)_f[2];
@@ -320,6 +361,7 @@ public class CollaborativeManager : MonoBehaviour
         }
         return floats;
     }
+
     #endregion
 
     #region Voting System 
