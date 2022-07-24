@@ -21,25 +21,24 @@ public class GroupManager : MonoBehaviour
     public GameObject memberListItem;
     public GameObject memberList;
 
+    ASLObject m_ASLObject;
+
     void Start()
     {
         groupName.enabled = false;
         groupMembers.enabled = false;
         addMemberButton.gameObject.SetActive(false);
         addPlayerContainer.SetActive(false);
-        if (GameManager.AmTeacher)
+        m_ASLObject = GetComponent<ASLObject>();
+        for (int i = 0; i < 5; i++)
         {
-            groupsButton.gameObject.SetActive(true);
-            for (int i = 0; i < 5; i++)
+            Group group = new Group();
+            group.name = "Group " + (i + 1);
+            groups.Add(group);
+            if (GameManager.AmTeacher)
             {
-                Group group = new Group();
-                group.name = "Group " + (i + 1);
-                groups.Add(group);
                 groupList.options.Add(new TMP_Dropdown.OptionData() { text = group.name });
             }
-            // groups[0].members.Add("Bobby 1");
-            // groups[0].members.Add("Bobby 2");
-            // groups[0].members.Add("Bobby 3");
         }
     }
 
