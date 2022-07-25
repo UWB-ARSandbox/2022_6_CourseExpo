@@ -1209,6 +1209,7 @@ public class NewPaint : MonoBehaviour
 					maskCanvas.SetPixel(x, y, Color.clear);
 				}
 			}
+			maskCanvas.Apply();
 			maskIsEmpty = true;
 		}
 		
