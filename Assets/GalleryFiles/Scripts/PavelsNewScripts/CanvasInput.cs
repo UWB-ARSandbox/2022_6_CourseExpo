@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.EventSystems;
 using UnityEngine.XR.Interaction.Toolkit;
+using UnityEngine.UI;
 public class CanvasInput : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -68,6 +69,35 @@ public class CanvasInput : MonoBehaviour
                 layerMask = ~layerMask;
                 raycastHitObject = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask);
             }
+
+            
+            if(Input.GetMouseButton(0))
+            {
+                List<RaycastResult> results = new List<RaycastResult>();
+                PointerEventData data = new PointerEventData(EventSystem.current);
+                data.position = new Vector2(Screen.width / 2, Screen.height / 2);
+                data.pressPosition = new Vector2(Screen.width / 2, Screen.height / 2);
+
+                
+                
+                
+                EventSystem.current.RaycastAll(data, results);
+                
+                foreach(RaycastResult result in results)
+                {
+                    
+                    //Debug.Log(result.gameObject.name);
+                    if(result.gameObject.name == "Background")
+                    {
+                        
+                        data.pointerPressRaycast = result;
+                        result.gameObject.transform.parent.GetComponent<Slider>().OnPointerDown(data);
+                        
+                    }
+                    
+                }
+            }
+            
         }
     }
     public RaycastHit GetRaycastHit()
