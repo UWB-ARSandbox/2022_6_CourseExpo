@@ -241,6 +241,12 @@ public class NewPaint : MonoBehaviour
 
 	bool OnCanvas;
 
+	bool OnCanvasLeft;
+
+	bool OnCanvasRight;
+
+	bool maskIsEmpty;
+
 	List<InputDevice>  leftDevices;
 
 	List<InputDevice>  rightDevices;
@@ -288,6 +294,8 @@ public class NewPaint : MonoBehaviour
 		doneLoading = true;
 		selected = false;
 		OnCanvas = false;
+		OnCanvasLeft = false;
+		OnCanvasRight = false;
 		textOnType = "";
 		brushColor = Color.black;
 		pixelToDraw = new Vector2(0, 0);
@@ -536,6 +544,7 @@ public class NewPaint : MonoBehaviour
 	}
 	void GetAndSendInputsVR()
 	{
+		UpdateMaskVR();
 		bool triggerDownLeft;
 		if (leftDevices[0].TryGetFeatureValue(CommonUsages.triggerButton, out triggerDownLeft) && triggerDownLeft)
 		{
@@ -1098,6 +1107,109 @@ public class NewPaint : MonoBehaviour
 			}
 			OnCanvas = false;
 			
+		}
+		
+    }
+	void UpdateMaskVR()
+    {
+		
+		
+		
+		if(CanvasInput.Instance.getRaycastHitObjectVR(0) && CanvasInput.Instance.GetRaycastHitVR()[0].transform == this.transform)
+		{
+			RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[0];
+			
+			maskIsEmpty = false;
+			OnCanvasLeft = true;
+			for (int x = 0; x < canvasWidth; x++)
+			{
+				for (int y = 0; y < canvasHeight; y++)
+				{
+					maskCanvas.SetPixel(x, y, Color.clear);
+				}
+			}
+			Vector2 uv = raycastHit.textureCoord;
+			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+			
+			if(lineMode)
+			{
+				lineMask();
+			}
+			else if(textMode)
+			{
+				textMask(pixelCoord);
+			}
+			else if(eraseMode)
+			{
+				drawMask(pixelCoord, Color.white);
+			}
+			else{
+				
+				drawMask(pixelCoord, brushColor);
+			}
+			
+			
+		}
+		else
+		{
+			
+			OnCanvasLeft = false;
+			
+		}
+		if(CanvasInput.Instance.getRaycastHitObjectVR(1) && CanvasInput.Instance.GetRaycastHitVR()[1].transform == this.transform)
+		{
+			RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[1];
+
+			maskIsEmpty = false;
+			OnCanvasRight = true;
+			if(OnCanvasLeft == false)
+			{
+				for (int x = 0; x < canvasWidth; x++)
+				{
+					for (int y = 0; y < canvasHeight; y++)
+					{
+						maskCanvas.SetPixel(x, y, Color.clear);
+					}
+				}
+			}
+			
+			Vector2 uv = raycastHit.textureCoord;
+			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
+			if(lineMode)
+			{
+				lineMask();
+			}
+			else if(textMode)
+			{
+				textMask(pixelCoord);
+			}
+			else if(eraseMode)
+			{
+				drawMask(pixelCoord, Color.white);
+			}
+			else{
+				
+				drawMask(pixelCoord, brushColor);
+			}
+			
+			
+		}
+		else
+		{
+			
+			OnCanvasRight = false;
+			
+		}
+		if(!maskIsEmpty && !OnCanvasLeft && !OnCanvasRight)
+		{
+			for (int x = 0; x < canvasWidth; x++)
+			{
+				for (int y = 0; y < canvasHeight; y++)
+				{
+					maskCanvas.SetPixel(x, y, Color.clear);
+				}
+			}
+			maskIsEmpty = true;
 		}
 		
     }
