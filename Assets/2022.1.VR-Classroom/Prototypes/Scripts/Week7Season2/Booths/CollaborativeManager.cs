@@ -153,7 +153,7 @@ public class CollaborativeManager : MonoBehaviour
 
     public void StartGroupQuiz(){
         if(m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Count <= _myAssessmentManager.NumberOfConcurrentUsers && curStudents.Count == 0){
-            if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)){
+            if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && !GameManager.isTakingAssessment){
                 Debug.Log("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
                 // AnnouncementDisplay Dspl = AnnouncementManager.pnl_PCAnnouncement;
                 // Dspl.DisplayAnnouncement("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
@@ -203,7 +203,9 @@ public class CollaborativeManager : MonoBehaviour
     }
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
-        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && _myAssessmentManager.pnl_Start.active && !_myAssessmentManager.AssessmentCompleted){
+        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && _myAssessmentManager.pnl_Start.active 
+            && !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
+            GameManager.isTakingAssessment = true;
             _myAssessmentManager.pnl_Start.SetActive(false);
             List<float> NewFloats = new List<float>();
             NewFloats.Add(-1);
@@ -293,8 +295,9 @@ public class CollaborativeManager : MonoBehaviour
                 case GroupQuizStarted:{
                     MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
                     if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
-                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted){
+                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
                         curStudents.Add(_f[2]);
+                        GameManager.isTakingAssessment = true;
                         Debug.Log("Student ID:" +_f[2] +"started test");
                         SyncedTimer();
                         //teleport user infront of lectern
