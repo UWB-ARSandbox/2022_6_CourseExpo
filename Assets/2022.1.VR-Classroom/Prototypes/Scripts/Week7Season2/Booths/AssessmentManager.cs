@@ -382,7 +382,7 @@ public class AssessmentManager : MonoBehaviour {
 
         //Start timer if exists
         if (currentQuestion.timer > 0) {
-            currentQuestion.timer = (_myCollabManager.curStudents.Count*currentQuestion.timer);
+            currentQuestion.timer = (_myCollabManager.curStudents.Count*(currentQuestion.timer*4));
             questionTimeLimit = currentQuestion.timer;
             questionTimeRemaining = questionTimeLimit;
             img_QuestionTimer.rectTransform.sizeDelta = new Vector2(QUESTION_TIMER_INTIAL_WIDTH, 0);
