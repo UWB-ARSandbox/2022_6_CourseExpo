@@ -27,10 +27,10 @@ public class CanvasGroupChecker : MonoBehaviour
     void RefreshTables()
     {
         // loop through all non-teacher players
-        for (int i = 2; GameLiftManager.GetInstance().m_Players.ContainsKey(i); i++)
+        for (int i = 2; i <= GameLiftManager.GetInstance().m_Players.Count; i++)
         {
             // loop through every group and enable/disable access to canvases based on player's group affiliation
-            for (int j = 0; j < m_GroupManager.groups.Capacity; j++)
+            for (int j = 0; j < m_GroupManager.groups.Count; j++)
             {
                 if (m_GroupManager.groups[j].members.Contains(GameLiftManager.GetInstance().m_Players[i]))
                 {
