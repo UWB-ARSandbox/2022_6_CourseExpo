@@ -158,6 +158,7 @@ public class CollaborativeManager : MonoBehaviour
                 // AnnouncementDisplay Dspl = AnnouncementManager.pnl_PCAnnouncement;
                 // Dspl.DisplayAnnouncement("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
                 _myAssessmentManager.pnl_Start.SetActive(false);
+                GameManager.isTakingAssessment = true;
                 List<float> NewFloats = new List<float>();
                 NewFloats.Add(-1);
                 NewFloats.Add(GroupQuizStarted);
@@ -190,20 +191,17 @@ public class CollaborativeManager : MonoBehaviour
     public void SendNewRandom(){
         List<float> NewRandomList = new List<float>();
         System.Random random = new System.Random();
-        NewRandomList.Add(0);
+        NewRandomList.Add(-1);
         NewRandomList.Add(NewRandom);
         NewRandomList.Add(random.Next());
-        for(int i = 0; i< curStudents.Count; i++){
-            NewRandomList[0] = curStudents[i];
-            var RandomFloatsArray = NewRandomList.ToArray();
-            m_ASLObject.SendAndSetClaim(() => {
-                m_ASLObject.SendFloatArray(RandomFloatsArray);
-            });
-        }
+        var RandomFloatsArray = NewRandomList.ToArray();
+        m_ASLObject.SendAndSetClaim(() => {
+            m_ASLObject.SendFloatArray(RandomFloatsArray);
+        });
     }
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
-        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && _myAssessmentManager.pnl_Start.active 
+        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)
             && !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
             GameManager.isTakingAssessment = true;
             _myAssessmentManager.pnl_Start.SetActive(false);
@@ -287,19 +285,23 @@ public class CollaborativeManager : MonoBehaviour
             switch(_f[1]){
                 case QuizStarted:{
                     MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
-                    curStudents.Add(_f[2]);
+                    if(!curStudents.Contains(_f[2]))
+                        curStudents.Add(_f[2]);
                     Debug.Log("Student ID:" +_f[2] +"started test");
                     SyncedTimer();
                     break;
                 }
                 case GroupQuizStarted:{
+                    //quizStarted functionality
                     MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
-                    if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
-                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
+                    Debug.Log("Student ID:" +_f[2] +"started test");
+                    if(!curStudents.Contains(_f[2]))
                         curStudents.Add(_f[2]);
-                        GameManager.isTakingAssessment = true;
-                        Debug.Log("Student ID:" +_f[2] +"started test");
-                        SyncedTimer();
+                    SyncedTimer();
+                    //too see if you should also start the quiz
+                    if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
+                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted 
+                            && !GameManager.isTakingAssessment){
                         //teleport user infront of lectern
                         GameObject player = FindObjectOfType<XpoPlayer>().gameObject;
                         player.GetComponent<CharacterController>().enabled = false;
@@ -390,6 +392,20 @@ public class CollaborativeManager : MonoBehaviour
     public Dictionary<string, bool> FinalSubmitBool = new Dictionary<string, bool>();
     public GameObject FinalSubmitButton;
 
+    public GameObject ForceSubmitButton;
+    public bool ForceRoutineRunning = false;
+
+    //intended to force a continuation if a user has not entered an answer/agreement isnt reached unilaterally
+    public IEnumerator ForceContinue(){
+        ForceRoutineRunning = true;
+        //wait for f seconds initially and then ask if users would like to force continue?
+        yield return new WaitForSeconds(30.0f);
+
+        ForceRoutineRunning = false;
+        yield return null;
+
+    }
+
     public void SubmitTextButtonClick(Button buttonObj){
         string ToSend = buttonObj.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text;
         SendText(ToSend);
@@ -422,6 +438,8 @@ public class CollaborativeManager : MonoBehaviour
                     }
                 }
             }
+            if(!ForceRoutineRunning)
+                StartCoroutine(ForceContinue());
         }
     }
 
@@ -666,11 +684,12 @@ public class CollaborativeManager : MonoBehaviour
             Debug.Log("Votes are unanimous");
             
             FinalSubmitButton.SetActive(true);
+            StopCoroutine(ForceContinue());
+            ForceRoutineRunning = false;
             for(int i = 0; i < curStudents.Count; i++){
                 if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
                     return;
             }
-
             FinalSubmitButton.SetActive(false);
             //Spawn final submit button and when that is pressed submit inputs
             //When submit button is pressed check votes again to make sure they are still distinct
