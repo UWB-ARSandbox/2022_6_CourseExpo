@@ -26,11 +26,11 @@ public class SliderScript : MonoBehaviour
 
     public void ChangeValue()
     {
-        valueText.text = thisSlider.value.ToString();
+        //valueText.text = thisSlider.value.ToString();
     }
 
     public void ChangeValue(InputField i)
     {
-        i.text = thisSlider.value.ToString();
+        //i.text = thisSlider.value.ToString();
     }
 }
