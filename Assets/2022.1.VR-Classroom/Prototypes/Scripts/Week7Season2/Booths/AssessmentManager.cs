@@ -83,6 +83,7 @@ public class AssessmentManager : MonoBehaviour {
     //Stats
     private PersonalStats personalStats;
     private float timeStarted;
+    public bool AssessmentCompleted = false;
 
     //General Response Panel
     public GameObject pnl_Start;
@@ -382,7 +383,7 @@ public class AssessmentManager : MonoBehaviour {
 
         //Start timer if exists
         if (currentQuestion.timer > 0) {
-            currentQuestion.timer = (_myCollabManager.curStudents.Count*currentQuestion.timer);
+            currentQuestion.timer = (_myCollabManager.curStudents.Count*(currentQuestion.timer*4));
             questionTimeLimit = currentQuestion.timer;
             questionTimeRemaining = questionTimeLimit;
             img_QuestionTimer.rectTransform.sizeDelta = new Vector2(QUESTION_TIMER_INTIAL_WIDTH, 0);
@@ -929,6 +930,7 @@ public class AssessmentManager : MonoBehaviour {
         }
         personalStats.SetGroupMembers(boothManager.boothName, GroupMembers);
         personalStats.SetGroupNumber(boothManager.boothName,GNumber );
+        AssessmentCompleted = true;
         _myCollabManager.CurTestFinished();
     }
 
@@ -1232,7 +1234,7 @@ public class AssessmentManager : MonoBehaviour {
                     // if(NumberOfConcurrentUsers < 2)
                     //     btn_Start.onClick.AddListener(StartAssessment);
                     // else
-                        btn_Start.onClick.AddListener(_myCollabManager.SendStartMessage);
+                        btn_Start.onClick.AddListener(_myCollabManager.StartGroupQuiz);
                     btn_Start.gameObject.SetActive(true);
                     break;
                 case "pnl_WelcomeScreen":

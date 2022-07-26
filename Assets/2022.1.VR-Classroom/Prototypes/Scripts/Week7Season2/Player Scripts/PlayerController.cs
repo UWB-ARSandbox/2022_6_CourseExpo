@@ -77,14 +77,14 @@ public class PlayerController : MonoBehaviour {
         VRmenuScreen = GameObject.Find("VR Menu").GetComponent<MenuScreen>();
         VRmenuScreen.flipScreen();
 
-        foreach (MapToggle mt in FindObjectsOfType<MapToggle>(true)) {
+        foreach (MapToggle mt in FindObjectsOfType<MapToggle>()) {
             if (mt.gameObject.name.Equals("PC Map Canvas")) {
                 mapTogglePC = mt;
             } else {
                 mapToggleVR = mt;
             }
         }
-
+        Debug.Assert(mapTogglePC != null);
         //Name orientations + camera movement
         StartCoroutine(GetMapNavigation());
         //Attach VRCanvas as child to Player
@@ -383,7 +383,11 @@ public class PlayerController : MonoBehaviour {
     private void ToggleMap(InputAction.CallbackContext obj) {
         if (isCursorLocked && !IsTypingInput)
         {
+            Debug.Log("Attempting to open minimap");
+            mapTogglePC = GameObject.Find("PC Map Canvas").GetComponent<MapToggle>();
+            Debug.Assert(mapTogglePC != null);
             mapTogglePC.ToggleMap();
+            mapToggleVR = GameObject.Find("VR Map Canvas").GetComponent<MapToggle>();
             mapToggleVR.ToggleMap();
         }
     }
