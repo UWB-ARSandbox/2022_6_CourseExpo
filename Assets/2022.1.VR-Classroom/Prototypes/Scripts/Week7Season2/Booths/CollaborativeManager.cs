@@ -106,10 +106,8 @@ public class CollaborativeManager : MonoBehaviour
     public void EnableBooth(){
         //_myBooth.lockToggle.Unlock();
         QuizActive = false;
-        if(ForceRoutineRunning){
-            StopCoroutine(ForceContinue());
-            ForceRoutineRunning = false;
-        }
+        StopCoroutine(ForceCoroutineInstance);
+        ForceRoutineRunning = false;
         ForceSubmitButton.SetActive(false);
         //if(!_myAssessmentManager.pnl_Start.active)
         if(!curStudents.Contains(GameManager.MyID) && !_myAssessmentManager.AssessmentCompleted)
@@ -207,6 +205,12 @@ public class CollaborativeManager : MonoBehaviour
         });
     }
     //Send ID of player that has started quiz IE hit the button
+    public IEnumerator DelayedStart(float Delay){
+        yield return new WaitForSeconds(Delay);
+        SendStartMessage();
+        yield return null;
+    }
+
     public void SendStartMessage(){
         if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)
             && !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
@@ -316,7 +320,8 @@ public class CollaborativeManager : MonoBehaviour
                         player.transform.localPosition = new Vector3(3.5f, 1.115f, 0);
                         player.transform.SetParent(null, true);
                         player.GetComponent<CharacterController>().enabled = true;
-                        SendStartMessage();
+                        //issue with everyone in the group starting at once
+                        StartCoroutine(DelayedStart((float)m_GroupManager.MyGroup.members.IndexOf(GameManager.players[GameManager.MyID])));
                     }
                     break;
                 }
@@ -358,10 +363,17 @@ public class CollaborativeManager : MonoBehaviour
                     break;
                 }
                 case ForceSubmit:{
-                    if(StudentVotes.ContainsKey(GameManager.players[GameManager.MyID]))
+                    if(StudentVotes.ContainsKey(GameManager.players[GameManager.MyID]) && StudentVotes[GameManager.players[GameManager.MyID]] > 100)
                         SubmitInputs(StudentVotes[GameManager.players[GameManager.MyID]]);
-                    else
-                        SubmitInputs(0f);
+                    else{
+                        var distinctList = StudentVotes.Values.Distinct().ToList();
+                        for(int i = 0; i < distinctList.Count; i++){
+                            if(distinctList[i] > 100 && distinctList[i] < 108){
+                                SubmitInputs(distinctList[i]);
+                                break;
+                            }
+                        }
+                    }
                     SetupVoteList();
                     break;
                 }
@@ -408,6 +420,7 @@ public class CollaborativeManager : MonoBehaviour
     public GameObject FinalSubmitButton;
 
     public GameObject ForceSubmitButton;
+    public Coroutine ForceCoroutineInstance;
     public bool ForceRoutineRunning = false;
 
     //intended to force a continuation if a user has not entered an answer/agreement isnt reached unilaterally
@@ -450,6 +463,10 @@ public class CollaborativeManager : MonoBehaviour
                     if(res.Value != null)
                         res.Value.SetActive(true);
                 }
+                if(!ForceRoutineRunning){
+                    ForceSubmitButton.SetActive(false);
+                    ForceCoroutineInstance = StartCoroutine(ForceContinue());
+                }
             }
             if(ShortAnswer.ContainsKey(GameManager.players[(int)GameManager.MyID])){
                 if(ShortAnswer[GameManager.players[(int)GameManager.MyID]] != null){
@@ -458,10 +475,10 @@ public class CollaborativeManager : MonoBehaviour
                         res.Value.SetActive(true);
                     }
                 }
-            }
-            if(!ForceRoutineRunning){
-                ForceSubmitButton.SetActive(false);
-                StartCoroutine(ForceContinue());
+                if(!ForceRoutineRunning){
+                    ForceSubmitButton.SetActive(false);
+                    ForceCoroutineInstance = StartCoroutine(ForceContinue());
+                }
             }
         }
     }
@@ -684,7 +701,7 @@ public class CollaborativeManager : MonoBehaviour
                 FinalSubmitBool.Add(GameManager.players[(int)curStudents[i]],false);
         }
         if(ForceRoutineRunning){
-            StopCoroutine(ForceContinue());
+            StopCoroutine(ForceCoroutineInstance);
             ForceRoutineRunning = false;
         }
         ForceSubmitButton.SetActive(false);
@@ -712,8 +729,10 @@ public class CollaborativeManager : MonoBehaviour
             Debug.Log("Votes are unanimous");
             
             FinalSubmitButton.SetActive(true);
-            StopCoroutine(ForceContinue());
-            ForceRoutineRunning = false;
+            if(ForceRoutineRunning){
+                StopCoroutine(ForceCoroutineInstance);
+                ForceRoutineRunning = false;
+            }
             ForceSubmitButton.SetActive(false);
             for(int i = 0; i < curStudents.Count; i++){
                 if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
@@ -739,6 +758,11 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void SubmitInputs(float _f){
+        if(ForceRoutineRunning){
+            StopCoroutine(ForceCoroutineInstance);
+            ForceRoutineRunning = false;
+            ForceSubmitButton.SetActive(false);
+        }
         switch(_f){
             case buttonA:{
                 _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonA);
@@ -783,7 +807,7 @@ public class CollaborativeManager : MonoBehaviour
     public IEnumerator CheckForUserDisconnection(){
         while(QuizActive){
             yield return new WaitForSeconds(5f);
-            if(curStudents.Count == 0){
+            if(curStudents.Count == 0 && GameManager.AmTeacher){
                 CurTestFinished();
                 yield return null;
             }
@@ -794,7 +818,8 @@ public class CollaborativeManager : MonoBehaviour
                     curStudents.Remove(_f);
                     if(BZM.currentUsers.Contains(GameManager.players[(int)_f]))
                         BZM.currentUsers.Remove(GameManager.players[(int)_f]);
-                    SetupVoteList();
+                    if(curStudents.Contains((float)GameManager.MyID))
+                        SetupVoteList();
                     yield return new WaitForSeconds(1f);
                 }
             }
