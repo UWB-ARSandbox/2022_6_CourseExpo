@@ -105,6 +105,10 @@ public class CollaborativeManager : MonoBehaviour
     public void EnableBooth(){
         //_myBooth.lockToggle.Unlock();
         QuizActive = false;
+        if(ForceRoutineRunning){
+            StopCoroutine(ForceContinue());
+            ForceRoutineRunning = false;
+        }
         //if(!_myAssessmentManager.pnl_Start.active)
         if(!curStudents.Contains(GameManager.MyID) && !_myAssessmentManager.AssessmentCompleted)
             _myAssessmentManager.pnl_Start.SetActive(true);
@@ -137,6 +141,7 @@ public class CollaborativeManager : MonoBehaviour
         }
         TimerText.SetActive(false);
         QuizActive = true;
+        StartCoroutine(CheckForUserDisconnection());
         TimerStarted = false;
         if(curStudents.Contains((float)GameManager.MyID)){
             _myAssessmentManager.StartAssessment();
@@ -400,7 +405,9 @@ public class CollaborativeManager : MonoBehaviour
         ForceRoutineRunning = true;
         //wait for f seconds initially and then ask if users would like to force continue?
         yield return new WaitForSeconds(30.0f);
-
+        //after 30 seconds activate forceContinue button
+        //when pressed forcecontinue will submit everyones current answers and continue the test
+        //
         ForceRoutineRunning = false;
         yield return null;
 
@@ -660,6 +667,10 @@ public class CollaborativeManager : MonoBehaviour
         for(int i = 0; i < curStudents.Count; i++){
                 FinalSubmitBool.Add(GameManager.players[(int)curStudents[i]],false);
         }
+        if(ForceRoutineRunning){
+            StopCoroutine(ForceContinue());
+            ForceRoutineRunning = false;
+        }
     }
 
     public void CheckVotes(){
@@ -748,18 +759,25 @@ public class CollaborativeManager : MonoBehaviour
     //function to remove the user from the CurStudents list upon disconnection or leaving the booth
     //if the user manages to leave the booth and is not disconnected, not sure how to reset the test
     public IEnumerator CheckForUserDisconnection(){
-        foreach (float _f in curStudents){
-            //Use a different system to check if the users are still in the room -- since BZM.currentUsers will not be updated if the user disconnects
-            //try to look at the ghosts or tie into the disconnect function
-            if(!BZM.currentUsers.Contains(GameManager.players[(int)_f])){
-                if(_f == (float)GameManager.MyID){
-                    //reset test since i managed to escape
-                }
-                curStudents.Remove(_f);
+        while(QuizActive){
+            yield return new WaitForSeconds(5f);
+            if(curStudents.Count == 0){
+                CurTestFinished();
                 yield return null;
             }
+            foreach (float _f in curStudents){
+                //Use a different system to check if the users are still in the room -- since BZM.currentUsers will not be updated if the user disconnects
+                //try to look at the ghosts or tie into the disconnect function
+                if(!GameLiftManager.GetInstance().m_Players.ContainsKey((int)_f)){
+                    curStudents.Remove(_f);
+                    if(BZM.currentUsers.Contains(GameManager.players[(int)_f]))
+                        BZM.currentUsers.Remove(GameManager.players[(int)_f]);
+                    SetupVoteList();
+                    yield return new WaitForSeconds(1f);
+                }
+            }
         }
-        yield return new WaitForSeconds(5.0f);
+        yield return null;
     }
     void Update()
     {
