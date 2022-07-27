@@ -83,6 +83,7 @@ public class AssessmentManager : MonoBehaviour {
     //Stats
     private PersonalStats personalStats;
     private float timeStarted;
+    public bool AssessmentCompleted = false;
 
     //General Response Panel
     public GameObject pnl_Start;
@@ -929,6 +930,7 @@ public class AssessmentManager : MonoBehaviour {
         }
         personalStats.SetGroupMembers(boothManager.boothName, GroupMembers);
         personalStats.SetGroupNumber(boothManager.boothName,GNumber );
+        AssessmentCompleted = true;
         _myCollabManager.CurTestFinished();
     }
 
