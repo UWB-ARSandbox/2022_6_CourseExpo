@@ -53,6 +53,7 @@ public class CollaborativeManager : MonoBehaviour
     public const float BackSpace = 112;
 
     public const float FinalSubmit = 113;
+    public const float ForceSubmit = 114;
     #endregion
     // Need to sync the randomize result IE need to take the result from the first student in curStudents
     //
@@ -109,6 +110,7 @@ public class CollaborativeManager : MonoBehaviour
             StopCoroutine(ForceContinue());
             ForceRoutineRunning = false;
         }
+        ForceSubmitButton.SetActive(false);
         //if(!_myAssessmentManager.pnl_Start.active)
         if(!curStudents.Contains(GameManager.MyID) && !_myAssessmentManager.AssessmentCompleted)
             _myAssessmentManager.pnl_Start.SetActive(true);
@@ -355,6 +357,14 @@ public class CollaborativeManager : MonoBehaviour
                     CheckVotes();
                     break;
                 }
+                case ForceSubmit:{
+                    if(StudentVotes.ContainsKey(GameManager.players[GameManager.MyID]))
+                        SubmitInputs(StudentVotes[GameManager.players[GameManager.MyID]]);
+                    else
+                        SubmitInputs(0f);
+                    SetupVoteList();
+                    break;
+                }
                 default:{
                     if(StudentVotes.ContainsKey(GameManager.players[(int)_f[2]]))
                         StudentVotes[GameManager.players[(int)_f[2]]] = _f[1];
@@ -408,9 +418,13 @@ public class CollaborativeManager : MonoBehaviour
         //after 30 seconds activate forceContinue button
         //when pressed forcecontinue will submit everyones current answers and continue the test
         //
+        ForceSubmitButton.SetActive(true);
         ForceRoutineRunning = false;
         yield return null;
 
+    }
+    public void ForceContinueButtonPress(){
+        SendInput(ForceSubmit);
     }
 
     public void SubmitTextButtonClick(Button buttonObj){
@@ -445,8 +459,10 @@ public class CollaborativeManager : MonoBehaviour
                     }
                 }
             }
-            if(!ForceRoutineRunning)
+            if(!ForceRoutineRunning){
+                ForceSubmitButton.SetActive(false);
                 StartCoroutine(ForceContinue());
+            }
         }
     }
 
@@ -671,6 +687,7 @@ public class CollaborativeManager : MonoBehaviour
             StopCoroutine(ForceContinue());
             ForceRoutineRunning = false;
         }
+        ForceSubmitButton.SetActive(false);
     }
 
     public void CheckVotes(){
@@ -697,6 +714,7 @@ public class CollaborativeManager : MonoBehaviour
             FinalSubmitButton.SetActive(true);
             StopCoroutine(ForceContinue());
             ForceRoutineRunning = false;
+            ForceSubmitButton.SetActive(false);
             for(int i = 0; i < curStudents.Count; i++){
                 if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
                     return;
@@ -749,6 +767,10 @@ public class CollaborativeManager : MonoBehaviour
             case buttonSubmit:{
                 _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.buttonSubmit);
                 break;   
+            }
+            default:{
+                _myAssessmentManager.ReceiveResponse(AssessmentManager.ResponseType.none);
+                break;
             }
         }
     }
