@@ -244,7 +244,7 @@ Transform:
   m_LocalScale: {x: 7, y: 4.48, z: 1.48}
   m_Children: []
   m_Father: {fileID: 9020291726512163164}
-  m_RootOrder: 7
+  m_RootOrder: 6
   m_LocalEulerAnglesHint: {x: 0, y: 90, z: 90}
 --- !u!33 &4253634266491522916
 MeshFilter:
@@ -2158,6 +2158,7 @@ Transform:
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 3023606690084231403}
+  - {fileID: 6963703229186203853}
   m_Father: {fileID: 9020291726512163164}
   m_RootOrder: 0
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
@@ -2176,7 +2177,7 @@ MonoBehaviour:
   m_Camera: {fileID: 9020291727198262165}
   m_OriginBaseGameObject: {fileID: 7777327739242730689}
   m_CameraFloorOffsetObject: {fileID: 3255478245796127545}
-  m_RequestedTrackingOriginMode: 0
+  m_RequestedTrackingOriginMode: 2
   m_CameraYOffset: 1.1176
 --- !u!114 &2627015981144515853
 MonoBehaviour:
@@ -2234,7 +2235,6 @@ Transform:
   - {fileID: 4644027564594459535}
   - {fileID: 880526118277890031}
   - {fileID: 8678548000321289284}
-  - {fileID: 6963703229186203853}
   - {fileID: 3145633528285705888}
   m_Father: {fileID: 0}
   m_RootOrder: 0
@@ -2463,7 +2463,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: c2fadf230d1919748a9aa21d40f74619, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  m_TrackingType: 1
+  m_TrackingType: 0
   m_UpdateType: 0
   m_PositionInput:
     m_UseReference: 1
@@ -2625,13 +2625,13 @@ Transform:
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 9191082697790132794}
   m_LocalRotation: {x: -0, y: -0, z: -0, w: 1}
-  m_LocalPosition: {x: 1.4554493, y: -0.41507995, z: -0.7466998}
+  m_LocalPosition: {x: 1.4554493, y: -0.11507994, z: -1}
   m_LocalScale: {x: 1, y: 1, z: 1}
   m_Children:
   - {fileID: 2334009158894003642}
   - {fileID: 3673469146992769818}
-  m_Father: {fileID: 9020291726512163164}
-  m_RootOrder: 6
+  m_Father: {fileID: 1797998564458092587}
+  m_RootOrder: 1
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &4769217618656327760
 PrefabInstance:
