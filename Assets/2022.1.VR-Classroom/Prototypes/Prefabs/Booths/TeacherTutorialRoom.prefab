@@ -717,7 +717,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7932972799261997237, guid: 253ab503c01a8be4087d8146cec31b8f, type: 3}
       propertyPath: textVal
-      value: To Main Hub (ONE-WAY)
+      value: To Main Hub
       objectReference: {fileID: 0}
     - target: {fileID: 8245720972640020770, guid: 253ab503c01a8be4087d8146cec31b8f, type: 3}
       propertyPath: m_StaticEditorFlags
