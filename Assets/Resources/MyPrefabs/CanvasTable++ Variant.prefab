@@ -467,7 +467,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   img_Container: {fileID: 0}
   teacherCanvas: {fileID: 6407195292231780704}
-  _lengthFromFace: 0.05
+  _lengthFromFace: 0.25
 --- !u!1 &8829134357602534428
 GameObject:
   m_ObjectHideFlags: 0
@@ -634,7 +634,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3896794201413074825, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_IsActive
-      value: 0
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4075775493795936662, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Name
