@@ -170,7 +170,7 @@ public class NewPaint : MonoBehaviour
 	//Has the player clicked load canvas button
 	bool canLoad;
 	
-	//Whether the canvas is selected
+	//Whether the canvas is the last canvas clicked on. Unused as of right now
 	bool selected;
 
     //string for typed text
@@ -1468,18 +1468,17 @@ public class NewPaint : MonoBehaviour
 
 	public void SetCanLoad()
 	{
-		if(selected)
+		
+		if (canSave == false && doneLoading)
 		{
-			if (canSave == false && doneLoading)
-			{
-				doneLoading = false;
-				canLoad = true;
-				Texture2D newPng = new Texture2D(1, 1);
-				StartCoroutine(LoadWindow(newPng));
-				
-			}
-			canLoad = false;
+			doneLoading = false;
+			canLoad = true;
+			Texture2D newPng = new Texture2D(1, 1);
+			StartCoroutine(LoadWindow(newPng));
+			
 		}
+		canLoad = false;
+		
 		
 		
 		
@@ -1546,14 +1545,13 @@ public class NewPaint : MonoBehaviour
 
 	void sendClearCanvas()
 	{
-		if(selected)
-		{
-			float[] fArray = {1};
-			this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
-				{
-					GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
-				});
-		}
+		
+		float[] fArray = {1};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+			{
+				GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+			});
+		
 		
 	}
 	void ClearCanvas()
