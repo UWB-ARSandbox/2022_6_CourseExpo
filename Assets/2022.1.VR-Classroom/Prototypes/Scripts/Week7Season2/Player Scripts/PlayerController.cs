@@ -31,6 +31,9 @@ public class PlayerController : MonoBehaviour {
     private InputAction moveMapCamera;
     private InputAction quit;
 
+    private Vector3 CameraStartingPosition;
+    public GameObject Body;
+
     public GrabbableObject selectedObject = null;
     public static bool IsTypingInput = false;
     private PlayerStatScreen statsScreen = null;
@@ -61,6 +64,7 @@ public class PlayerController : MonoBehaviour {
         _lineRenderers = FindObjectsOfType<LineRenderer>();
         _AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
         Debug.Assert(_AudioManager != null);
+        CameraStartingPosition = Camera.main.transform.position;
     }
 
     private void Start()
@@ -124,7 +128,7 @@ public class PlayerController : MonoBehaviour {
             yield return new WaitForSeconds(0.1f);
         }
         //if (gameObject.GetComponent<UserObject>().ownerID == ASL.GameLiftManager.GetInstance().m_PeerId) {
-            mapToggleVR.transform.SetParent(Camera.main.transform, false);
+            mapToggleVR.transform.SetParent(GameObject.Find("[LeftHand Controller] Model Parent").transform, false);
         //}
     }
 
@@ -133,9 +137,13 @@ public class PlayerController : MonoBehaviour {
             if (isXRActive) {
                 mapTogglePC.gameObject.SetActive(false);
                 mapToggleVR.gameObject.SetActive(true);
+                if(Body.activeSelf)
+                    Body.SetActive(false);
             } else {
                 mapTogglePC.gameObject.SetActive(true);
                 mapToggleVR.gameObject.SetActive(false);
+                if(!Body.activeSelf)
+                    Body.SetActive(true);
             }
             UpdateXR();
             yield return new WaitForSeconds(1.0f);

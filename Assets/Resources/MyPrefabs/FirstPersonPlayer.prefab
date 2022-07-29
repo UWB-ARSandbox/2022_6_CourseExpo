@@ -2285,6 +2285,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 52e986a7b911fd74bb2be2aa451c05c3, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  Body: {fileID: 9191082697790132794}
   selectedObject: {fileID: 0}
   MumblePreFab: {fileID: 5071936630450333555, guid: e6b31c29522d7aa4aba4266cceaac8a3, type: 3}
   _AudioManager: {fileID: 0}
