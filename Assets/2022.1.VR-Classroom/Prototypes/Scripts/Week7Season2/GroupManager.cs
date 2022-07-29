@@ -34,7 +34,6 @@ public class GroupManager : MonoBehaviour
         groupMembers.enabled = false;
         addMemberButton.gameObject.SetActive(false);
         addPlayerContainer.SetActive(false);
-        m_ASLObject = GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
         for (int i = 0; i < 5; i++)
         {

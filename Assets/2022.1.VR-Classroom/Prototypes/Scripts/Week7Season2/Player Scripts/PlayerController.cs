@@ -89,6 +89,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
         Debug.Assert(mapTogglePC != null);
+        Debug.Assert(mapToggleVR != null);
         //Name orientations + camera movement
         StartCoroutine(GetMapNavigation());
         //Attach VRCanvas as child to Player
@@ -124,6 +125,7 @@ public class PlayerController : MonoBehaviour {
     }
 
     IEnumerator AttachVRCanvas() {
+        mapToggleVR = GameObject.Find("VR Map Canvas").GetComponent<MapToggle>();
         while (mapToggleVR == null) {
             yield return new WaitForSeconds(0.1f);
         }
