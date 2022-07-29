@@ -78,8 +78,9 @@ public class PlayerController : MonoBehaviour {
         //statsScreen = GameObject.Find("Stats Container").GetComponent<PlayerStatScreen>();
         PCmenuScreen = GameObject.Find("PC Menu").GetComponent<MenuScreen>();
         PCmenuScreen.flipScreen();
-        VRmenuScreen = GameObject.Find("VR Menu").GetComponent<MenuScreen>();
-        VRmenuScreen.flipScreen();
+        VRmenuScreen = GameObject.FindWithTag("VRMenu").GetComponent<MenuScreen>();
+        if(VRmenuScreen != null)
+            VRmenuScreen.flipScreen();
 
         foreach (MapToggle mt in FindObjectsOfType<MapToggle>()) {
             if (mt.gameObject.name.Equals("PC Map Canvas")) {
@@ -125,12 +126,23 @@ public class PlayerController : MonoBehaviour {
     }
 
     IEnumerator AttachVRCanvas() {
-        mapToggleVR = GameObject.Find("VR Map Canvas").GetComponent<MapToggle>();
-        while (mapToggleVR == null) {
-            yield return new WaitForSeconds(0.1f);
+        if(isXRActive){
+            mapToggleVR = GameObject.Find("VR Map Canvas").GetComponent<MapToggle>();
+            GameObject parentObj = GameObject.Find("[LeftHand Controller] Model Parent");
+            
+            while (mapToggleVR == null && parentObj == null) {
+                yield return new WaitForSeconds(1f);
+            }
+            parentObj.SetActive(true);
+            mapToggleVR.gameObject.SetActive(true);
+            //if (gameObject.GetComponent<UserObject>().ownerID == ASL.GameLiftManager.GetInstance().m_PeerId) {
+            mapToggleVR.transform.SetParent(parentObj.transform, false);
+            if(!isXRActive){
+                mapToggleVR.gameObject.SetActive(false);
+                parentObj.SetActive(false);
+            }
         }
-        //if (gameObject.GetComponent<UserObject>().ownerID == ASL.GameLiftManager.GetInstance().m_PeerId) {
-            mapToggleVR.transform.SetParent(GameObject.Find("[LeftHand Controller] Model Parent").transform, false);
+        yield return null;
         //}
     }
 

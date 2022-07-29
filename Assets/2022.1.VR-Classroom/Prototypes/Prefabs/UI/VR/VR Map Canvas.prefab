@@ -97,7 +97,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 5
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &8062765570913013386
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -858,7 +858,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7439860057174351716, guid: 8e128da2ccd9ea44987461b8f346cfa1, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: 0.00078582764
+      value: -0.009841919
       objectReference: {fileID: 0}
     - target: {fileID: 7439860057778081237, guid: 8e128da2ccd9ea44987461b8f346cfa1, type: 3}
       propertyPath: m_Pivot.x
@@ -1153,7 +1153,7 @@ PrefabInstance:
     m_Modifications:
     - target: {fileID: 7353130797846955221, guid: b47e7bd9ef7f73944a88826a7fcef645, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000061035156
+      value: -0.008911133
       objectReference: {fileID: 0}
     - target: {fileID: 7353130798466897170, guid: b47e7bd9ef7f73944a88826a7fcef645, type: 3}
       propertyPath: m_Pivot.x
@@ -1249,11 +1249,11 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7353130798543598762, guid: b47e7bd9ef7f73944a88826a7fcef645, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.99999154
       objectReference: {fileID: 0}
     - target: {fileID: 7353130798543598762, guid: b47e7bd9ef7f73944a88826a7fcef645, type: 3}
       propertyPath: m_Value
-      value: 1
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7353130799725256335, guid: b47e7bd9ef7f73944a88826a7fcef645, type: 3}
       propertyPath: m_AnchorMax.x
@@ -1665,7 +1665,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4485477380615033227, guid: 93660b78c8aecb0489b7fedde1abddc6, type: 3}
       propertyPath: m_AnchoredPosition.y
-      value: -0.000015258789
+      value: -0.006149292
       objectReference: {fileID: 0}
     - target: {fileID: 4485477380677169670, guid: 93660b78c8aecb0489b7fedde1abddc6, type: 3}
       propertyPath: m_Pivot.x
@@ -1757,7 +1757,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4485477381579728214, guid: 93660b78c8aecb0489b7fedde1abddc6, type: 3}
       propertyPath: m_Size
-      value: 1
+      value: 0.99998736
       objectReference: {fileID: 0}
     - target: {fileID: 4485477381579728214, guid: 93660b78c8aecb0489b7fedde1abddc6, type: 3}
       propertyPath: m_Value
