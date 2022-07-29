@@ -16,8 +16,6 @@ using UnityEngine.Windows;
 using UnityEngine.EventSystems;
 using SimpleFileBrowser;
 using UnityEngine.XR;
- using System.Linq;
-
 
 public class NewPaint : MonoBehaviour
 {
@@ -211,14 +209,14 @@ public class NewPaint : MonoBehaviour
 
 
     // UI field listeners
-	List<Slider> rSlider = new List<Slider>(), gSlider = new List<Slider>(), bSlider = new List<Slider>();
-	List<InputField> rInput = new List<InputField>(), gInput = new List<InputField>(), bInput = new List<InputField>();
-	List<InputField> aField =new List<InputField>();
+	Slider rSlider, gSlider, bSlider;
+	InputField rInput, gInput, bInput;
+	InputField aField = null;
 
-	List<InputField> slField = new List<InputField>();
-	List<InputField> textField = new List<InputField>();
-	List<InputField> brushSizeInput = new List<InputField>();
-	List<Slider> brushSizeSlider = new List<Slider>();
+	InputField slField = null;
+	InputField textField = null;
+	InputField brushSizeInput = null;
+	Slider brushSizeSlider = null;
 
 	// UI button listeners
 	Button loadB = null;
@@ -226,18 +224,18 @@ public class NewPaint : MonoBehaviour
 	Button deleteB = null;
 	Button controlsB = null;
 
-	List<Button> subGalB = new List<Button>();
-	List<Button> subStuB = new List<Button>();
+	Button subGalB = null;
+	Button subStuB = null;
 
 	// UI toggle listeners
-	List<Toggle> eraseTog = new List<Toggle>();
-	List<Toggle> textTog = new List<Toggle>();
-	List<Toggle> lineTog = new List<Toggle>();
+	Toggle eraseTog = null;
+	Toggle textTog = null;
+	Toggle lineTog = null;
 
 	//UI dropdown listeners
-	List<Dropdown> textSizeDrop = new List<Dropdown>();
+	Dropdown textSizeDrop = null;
 
-    List<GameObject> brushColorUI = new List<GameObject>();
+    GameObject brushColorUI;
 
 	bool doneLoading;
 
@@ -312,8 +310,8 @@ public class NewPaint : MonoBehaviour
 
 		alphabetNumber = 0;
 
-        
-		
+        GameObject brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
 
 
         //Texture stuff
@@ -341,110 +339,48 @@ public class NewPaint : MonoBehaviour
         //UI stuff
 
 		// UI field code
-		List<GameObject> objects = Resources.FindObjectsOfTypeAll<GameObject>().ToList();
-		foreach(GameObject o in objects)
-		{
-			if(o.name == "RedSlider")
-			{
-				Slider slider = o.GetComponent<Slider>();
-				rSlider.Add(slider);
-				slider.onValueChanged.AddListener(delegate { ChangeRed(slider.value); });
-			}
-			else if(o.name == "GreenSlider")
-			{
-				Slider slider = o.GetComponent<Slider>();
-				gSlider.Add(slider);
-				slider.onValueChanged.AddListener(delegate { ChangeGreen(slider.value); });
-			}
-			else if(o.name == "BlueSlider")
-			{
-				Slider slider = o.GetComponent<Slider>();
-				bSlider.Add(slider);
-				slider.onValueChanged.AddListener(delegate { ChangeBlue(slider.value); });
-			}
-			else if(o.name == "RedInputField")
-			{
-				InputField input = o.GetComponent<InputField>();
-				rInput.Add(input);
-				input.onEndEdit.AddListener(ChangeRed);
-			}
-			else if(o.name == "GreenInputField")
-			{
-				InputField input = o.GetComponent<InputField>();
-				gInput.Add(input);
-				input.onEndEdit.AddListener(ChangeGreen);
-			}
-			else if(o.name == "BlueInputField")
-			{
-				InputField input = o.GetComponent<InputField>();
-				bInput.Add(input);
-				input.onEndEdit.AddListener(ChangeBlue);
-			}
-			else if(o.name == "TextInput")
-			{
-				InputField input = o.GetComponent<InputField>();
-				textField.Add(input);
-				input.onEndEdit.AddListener(SetTextOnType);
-			}
-			else if(o.name == "SizeInputField")
-			{
-				InputField input = o.GetComponent<InputField>();
-				brushSizeInput.Add(input);
-				input.onEndEdit.AddListener(SetBrushSize);
-			}
-			else if(o.name == "BrushSizeSlider")
-			{
-				Slider slider = o.GetComponent<Slider>();
-				brushSizeSlider.Add(slider);
-				slider.onValueChanged.AddListener(delegate { SetBrushSize(slider.value); });
-			}
-			else if(o.name == "TextSizeDropdown")
-			{
-				Dropdown dropdown = o.GetComponent<Dropdown>();
-				textSizeDrop.Add(dropdown);
-				dropdown.onValueChanged.AddListener(ChangeTextSize);
-			}
-			else if(o.name == "EraserToggle")
-			{
-				Toggle toggle = o.GetComponent<Toggle>();
-				eraseTog.Add(toggle);
-				toggle.onValueChanged.AddListener(SetErase);
-			}
-			else if(o.name == "TextToggle")
-			{
-				Toggle toggle = o.GetComponent<Toggle>();
-				textTog.Add(toggle);
-				toggle.onValueChanged.AddListener(SetText);
-			}
-			else if(o.name == "LineToggle")
-			{
-				Toggle toggle = o.GetComponent<Toggle>();
-				lineTog.Add(toggle);
-				toggle.onValueChanged.AddListener(SetLine);
-			}
-			else if(o.name == "BrushColor")
-			{
-				brushColorUI.Add(o);
-				o.GetComponent<Image>().color = brushColor;
-			}
-		}
-		
+		rSlider = GameObject.Find("RedSlider").GetComponent<Slider>();
+		gSlider = GameObject.Find("GreenSlider").GetComponent<Slider>();
+		bSlider = GameObject.Find("BlueSlider").GetComponent<Slider>();
+		//aField = GameObject.Find("AlphaInputField").GetComponent<InputField>();
 
-		
+		rInput = GameObject.Find("RedInputField").GetComponent<InputField>();
+		gInput = GameObject.Find("GreenInputField").GetComponent<InputField>();
+		bInput = GameObject.Find("BlueInputField").GetComponent<InputField>();
 
-		
-		
+		//slField = GameObject.Find("SaveField").GetComponent<InputField>();
+		textField = GameObject.Find("TextInput").GetComponent<InputField>();
+		brushSizeInput = GameObject.Find("SizeInputField").GetComponent<InputField>();
+		brushSizeSlider = GameObject.Find("BrushSizeSlider").GetComponent<Slider>();
 
-		
+		textSizeDrop = GameObject.Find("TextSizeDropdown").GetComponent<Dropdown>();
 
-		
+        // Adding Listeners to all relevant objects.
 
-		
-		
-		
-		
+		textSizeDrop.onValueChanged.AddListener(ChangeTextSize);
 
-		
+		rSlider.onValueChanged.AddListener(delegate { ChangeRed(rSlider.value); });
+		gSlider.onValueChanged.AddListener(delegate { ChangeGreen(gSlider.value); });
+		bSlider.onValueChanged.AddListener(delegate { ChangeBlue(bSlider.value); });
+		//aField.onEndEdit.AddListener(ChangeAlpha);
+
+		rInput.onEndEdit.AddListener(ChangeRed);
+		gInput.onEndEdit.AddListener(ChangeGreen);
+		bInput.onEndEdit.AddListener(ChangeBlue);
+
+		//slField.onEndEdit.AddListener(SaveOrLoadToPNG);
+		//slField.onValueChanged.AddListener(ChangeToWhite);
+		textField.onEndEdit.AddListener(SetTextOnType);
+		brushSizeInput.onEndEdit.AddListener(SetBrushSize);
+		brushSizeSlider.onValueChanged.AddListener(delegate { SetBrushSize(brushSizeSlider.value); });
+
+		eraseTog = GameObject.Find("EraserToggle").GetComponent<Toggle>();
+		textTog = GameObject.Find("TextToggle").GetComponent<Toggle>();
+		lineTog = GameObject.Find("LineToggle").GetComponent<Toggle>();
+
+		eraseTog.onValueChanged.AddListener(SetErase);
+		textTog.onValueChanged.AddListener(SetText);
+		lineTog.onValueChanged.AddListener(SetLine);
 
 		deleteB = GameObject.Find("DeleteCanvasButton").GetComponent<Button>();
 		
@@ -1374,7 +1310,6 @@ public class NewPaint : MonoBehaviour
 		maskCanvas.Apply();
 	}
     
-	//Method for creating a mask of the line tool, unfinished
     void lineMask()
     {
 
@@ -1393,24 +1328,10 @@ public class NewPaint : MonoBehaviour
 			textMode = false;
 			lineMode = false;
 
-			foreach (Toggle tog in textTog)
-			{
-				tog.isOn = false;
-			}
-			foreach (Toggle tog in lineTog)
-			{
-				tog.isOn = false;
-			}
-			foreach (Toggle tog in eraseTog)
-			{
-				tog.isOn = true;
-			}
-			
-			foreach (InputField input in textField)
-			{
-				input.interactable = false;
-			}
-			
+			textTog.isOn = false;
+			lineTog.isOn = false;
+
+			GameObject.Find("TextInput").GetComponent<InputField>().interactable = false;
 		}
 	}
     public void SetText(bool text)
@@ -1423,24 +1344,11 @@ public class NewPaint : MonoBehaviour
 			lineMode = false;
 
 			// Turning toggles off
-			foreach (Toggle tog in lineTog)
-			{
-				tog.isOn = false;
-			}
-			foreach (Toggle tog in eraseTog)
-			{
-				tog.isOn = false;
-			}
-			foreach (Toggle tog in textTog)
-			{
-				tog.isOn = true;
-			}
-			
+			lineTog.isOn = false;
+			eraseTog.isOn = false;
 
-			foreach (InputField input in textField)
-			{
-				input.interactable = true;
-			}
+			GameObject.Find("TextInput").GetComponent<InputField>().interactable = true;
+			//GameObject.Find("SaveField").GetComponent<InputField>().interactable = false;
 
 			canLoad = false;
 			canSave = false;
@@ -1460,24 +1368,8 @@ public class NewPaint : MonoBehaviour
 			textMode = false;
 
 			// Set other toggles to off
-			foreach (Toggle tog in textTog)
-			{
-				tog.isOn = false;
-			}
-			foreach (Toggle tog in eraseTog)
-			{
-				tog.isOn = false;
-			}
-			foreach (Toggle tog in lineTog)
-			{
-				tog.isOn = true;
-			}
-			foreach (InputField input in textField)
-			{
-				input.interactable = false;
-			}
-
-			
+			textTog.isOn = false;
+			eraseTog.isOn = false;
 		}
 	}
 
@@ -1488,22 +1380,12 @@ public class NewPaint : MonoBehaviour
 	public void SetBrushSize(string size)
 	{
 		int.TryParse(size, out brushSize);
-		foreach (Slider slider in brushSizeSlider)
-		{
-			slider.value = brushSize;
-		}
-		//brushSizeSlider.value = brushSize;
+		brushSizeSlider.value = brushSize;
 	}
 
 	public void SetBrushSize(float size)
 	{
-		/*
 		brushSize = (int)size;
-		foreach (Slider slider in brushSizeSlider)
-		{
-			slider.value = brushSize;
-		}
-		*/
 	}
 
 	public void ChangeRed(string r)
@@ -1511,18 +1393,10 @@ public class NewPaint : MonoBehaviour
 		float red;
 		float.TryParse(r, out red);
 		brushColor = new Color(red, brushColor.g, brushColor.b, brushColor.a);
-		
-		
-		foreach(GameObject o in brushColorUI)
-		{
-			o.GetComponent<Image>().color = brushColor;
-		}
-		
-		foreach (Slider slider in rSlider)
-		{
-			slider.value = red;
-		}
-		
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+
+		rSlider.value = red;
 	}
 
 	public void ChangeRed(float r)
@@ -1530,15 +1404,8 @@ public class NewPaint : MonoBehaviour
 		//float red;
 		//float.TryParse(r, out red);
 		brushColor = new Color(r, brushColor.g, brushColor.b, brushColor.a);
-		foreach(GameObject o in brushColorUI)
-		{
-			o.GetComponent<Image>().color = brushColor;
-		}
-		
-		foreach (Slider slider in rSlider)
-		{
-			slider.value = r;
-		}
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
 
 	public void ChangeGreen(string g)
@@ -1546,15 +1413,10 @@ public class NewPaint : MonoBehaviour
 		float green;
 		float.TryParse(g, out green);
 		brushColor = new Color(brushColor.r, green, brushColor.b, brushColor.a);
-		foreach(GameObject o in brushColorUI)
-		{
-			o.GetComponent<Image>().color = brushColor;
-		}
-		
-		foreach (Slider slider in gSlider)
-		{
-			slider.value = green;
-		}
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+
+		gSlider.value = green;
 	}
 
 	public void ChangeGreen(float g)
@@ -1562,15 +1424,8 @@ public class NewPaint : MonoBehaviour
 		//float green;
 		//float.TryParse(g, out green);
 		brushColor = new Color(brushColor.r, g, brushColor.b, brushColor.a);
-		foreach(GameObject o in brushColorUI)
-		{
-			o.GetComponent<Image>().color = brushColor;
-		}
-		
-		foreach (Slider slider in gSlider)
-		{
-			slider.value = g;
-		}
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
 
 	public void ChangeBlue(string b)
@@ -1578,15 +1433,10 @@ public class NewPaint : MonoBehaviour
 		float blue;
 		float.TryParse(b, out blue);
 		brushColor = new Color(brushColor.b, brushColor.g, blue, brushColor.a);
-		foreach(GameObject o in brushColorUI)
-		{
-			o.GetComponent<Image>().color = brushColor;
-		}
-		
-		foreach (Slider slider in bSlider)
-		{
-			slider.value = blue;
-		}
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
+
+		bSlider.value = blue;
 	}
 
 	public void ChangeBlue(float b)
@@ -1594,18 +1444,9 @@ public class NewPaint : MonoBehaviour
 		//float blue;
 		//float.TryParse(b, out blue);
 		brushColor = new Color(brushColor.r, brushColor.g, b, brushColor.a);
-		foreach(GameObject o in brushColorUI)
-		{
-			o.GetComponent<Image>().color = brushColor;
-		}
-		
-		foreach (Slider slider in bSlider)
-		{
-			slider.value = b;
-		}
+		brushColorUI = GameObject.Find("BrushColor");
+		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
-
-	/*
 	public void ChangeAlpha(string a)
 	{
 		float alpha;
@@ -1614,7 +1455,6 @@ public class NewPaint : MonoBehaviour
 		GameObject brushColorUI = GameObject.Find("BrushColor");
 		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
-	*/
     /*DetermineCharacter
 	* Description: converts the character value (bascially an int)
 	* to where it is in the alphabet.png or alphabet2.png. Due to functionality
