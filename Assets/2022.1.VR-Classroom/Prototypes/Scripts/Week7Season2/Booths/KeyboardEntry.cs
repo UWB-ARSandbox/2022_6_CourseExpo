@@ -69,10 +69,10 @@ public class KeyboardEntry : MonoBehaviour
     }
 
     public void AddChar(string character) {
-        // if(_InputInterceptor != null){
-        //     ExternalUpdate(character);
-        // }
-        // else
+        if(_InputInterceptor != null){
+            ExternalUpdate(character);
+        }
+        else
             txtField.text += character;
     }
     public void ExternalUpdate(string character){
@@ -80,10 +80,10 @@ public class KeyboardEntry : MonoBehaviour
     }
 
     public void Backspace() {        
-        // if(_InputInterceptor != null){
-        //     _InputInterceptor.SendBackSpace();
-        // }
-        // else
+        if(_InputInterceptor != null){
+            _InputInterceptor.SendBackSpace();
+        }
+        else
             txtField.text = txtField.text.Remove(txtField.text.Length - 1);
     }
 }

@@ -1,8 +1,7 @@
+using System.Collections;
 using System.Collections.Generic;
-
-[System.Serializable]
-public class Group {
-    public string groupName;
-    public int groupNumber;
+using UnityEngine;
+public class Group : MonoBehaviour {
+    public string name;
     public List<string> members = new List<string>();
 }

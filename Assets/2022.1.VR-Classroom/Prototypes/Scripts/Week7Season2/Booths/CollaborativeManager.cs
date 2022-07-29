@@ -17,8 +17,6 @@ public class CollaborativeManager : MonoBehaviour
     private GameObject Player;
     public TeleportTrigger TPChannelTrigger;
 
-    public GroupManager m_GroupManager;
-
     //Definable number of students
     public int MaxStudents;
     //maybe float[] and track students ids
@@ -34,7 +32,6 @@ public class CollaborativeManager : MonoBehaviour
 
     #region MessageHeaders
     //Answer inputs - dont necessarily need to be message headers could use the same header for all depends on how much information we want to send
-    public const float GroupQuizStarted = 99;
     public const float QuizStarted = 100;
 
     public const float buttonA = 101;
@@ -51,8 +48,6 @@ public class CollaborativeManager : MonoBehaviour
     public const float TestFinished = 110;
     public const float SendTextField = 111;
     public const float BackSpace = 112;
-
-    public const float FinalSubmit = 113;
     #endregion
     // Need to sync the randomize result IE need to take the result from the first student in curStudents
     //
@@ -71,8 +66,6 @@ public class CollaborativeManager : MonoBehaviour
         Debug.Assert(TimerText != null);
         Player = GameObject.Find("FirstPersonPlayer(Clone)");
         TPChannelTrigger = gameObject.GetComponentInChildren<TeleportTrigger>();
-        FinalSubmitButton.GetComponent<Button>().onClick.AddListener(() => SendInput(FinalSubmit));
-        m_GroupManager = GameObject.Find("GroupsUI").GetComponent<GroupManager>();
     }
 
     public void SetMaxStudents(int maxStudents){
@@ -106,7 +99,7 @@ public class CollaborativeManager : MonoBehaviour
         //_myBooth.lockToggle.Unlock();
         QuizActive = false;
         //if(!_myAssessmentManager.pnl_Start.active)
-        if(!curStudents.Contains(GameManager.MyID) && !_myAssessmentManager.AssessmentCompleted)
+        if(!curStudents.Contains(GameManager.MyID))
             _myAssessmentManager.pnl_Start.SetActive(true);
         //if(_myAssessmentManager.walls.gameObject.active)
             _myAssessmentManager.walls.gameObject.SetActive(false);
@@ -151,28 +144,6 @@ public class CollaborativeManager : MonoBehaviour
         yield return null;
     }
 
-    public void StartGroupQuiz(){
-        if(m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Count <= _myAssessmentManager.NumberOfConcurrentUsers && curStudents.Count == 0){
-            if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && !GameManager.isTakingAssessment){
-                Debug.Log("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
-                // AnnouncementDisplay Dspl = AnnouncementManager.pnl_PCAnnouncement;
-                // Dspl.DisplayAnnouncement("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
-                _myAssessmentManager.pnl_Start.SetActive(false);
-                List<float> NewFloats = new List<float>();
-                NewFloats.Add(-1);
-                NewFloats.Add(GroupQuizStarted);
-                NewFloats.Add((float)GameManager.MyID);
-                var FloatsArray = NewFloats.ToArray();
-                m_ASLObject.SendAndSetClaim(() => {
-                    m_ASLObject.SendFloatArray(FloatsArray);
-            });
-            _myAssessmentManager.walls.gameObject.SetActive(true);
-            }    
-        }
-        else
-            SendStartMessage();
-    }
-
     #region Sending Floats
     public void CurTestFinished(){
         if(curStudents[0] == GameManager.MyID){//make sure to only run once
@@ -203,9 +174,7 @@ public class CollaborativeManager : MonoBehaviour
     }
     //Send ID of player that has started quiz IE hit the button
     public void SendStartMessage(){
-        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && _myAssessmentManager.pnl_Start.active 
-            && !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
-            GameManager.isTakingAssessment = true;
+        if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)){
             _myAssessmentManager.pnl_Start.SetActive(false);
             List<float> NewFloats = new List<float>();
             NewFloats.Add(-1);
@@ -292,25 +261,6 @@ public class CollaborativeManager : MonoBehaviour
                     SyncedTimer();
                     break;
                 }
-                case GroupQuizStarted:{
-                    MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
-                    if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
-                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
-                        curStudents.Add(_f[2]);
-                        GameManager.isTakingAssessment = true;
-                        Debug.Log("Student ID:" +_f[2] +"started test");
-                        SyncedTimer();
-                        //teleport user infront of lectern
-                        GameObject player = FindObjectOfType<XpoPlayer>().gameObject;
-                        player.GetComponent<CharacterController>().enabled = false;
-                        player.transform.SetParent(transform, true);
-                        player.transform.localPosition = new Vector3(3.5f, 1.115f, 0);
-                        player.transform.SetParent(null, true);
-                        player.GetComponent<CharacterController>().enabled = true;
-                        SendStartMessage();
-                    }
-                    break;
-                }
                 case ShortAnswerUpdate:{
                     //change to sendTextField
                     //txtField.text += (char)(int)_f[2];
@@ -333,19 +283,12 @@ public class CollaborativeManager : MonoBehaviour
                     for (int i = 4; i < length + 4; i++) {
                         NewText += (char)(int)_f[i];
                     }
-                    if(_f[2] == GameManager.MyID)
-                        txtField.text = NewText;
+                    //txtField.text = NewText;
                     CreateShortAnswerPrefab(NewText, _f[2]);
                     break;
                 }
                 case BackSpace:{
                     //txtField.text = txtField.text.Remove(txtField.text.Length - 1);
-                    break;
-                }
-                case FinalSubmit:{
-                    Debug.Log(GameManager.players[(int)_f[2]] + " Has hit the final submit button");
-                    FinalSubmitBool[GameManager.players[(int)_f[2]]] = true;
-                    CheckVotes();
                     break;
                 }
                 default:{
@@ -367,7 +310,6 @@ public class CollaborativeManager : MonoBehaviour
         }
         return floats;
     }
-
     #endregion
 
     #region Voting System 
@@ -386,21 +328,6 @@ public class CollaborativeManager : MonoBehaviour
     public GameObject TextAreaOptionSubmit;
     public GameObject ShortAnswerPrefab;
 
-    //intent is to check to see that all students have hit that final submit button
-    public Dictionary<string, bool> FinalSubmitBool = new Dictionary<string, bool>();
-    public GameObject FinalSubmitButton;
-
-    public void SubmitTextButtonClick(Button buttonObj){
-        string ToSend = buttonObj.gameObject.GetComponentInChildren<TMPro.TextMeshProUGUI>().text;
-        SendText(ToSend);
-
-        StartCoroutine(SendInputDelayed());
-    }
-    public IEnumerator SendInputDelayed(){
-        yield return new WaitForSeconds(1.0f);
-        SendInput(buttonSubmit);
-        yield return null;
-    }
 
     public void SetupVoteList(){
         ClearVotes();
@@ -434,16 +361,12 @@ public class CollaborativeManager : MonoBehaviour
             ShortAnswerP.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = text;
             ShortAnswer[studentName] = ShortAnswerP;
             ShortAnswerP.SetActive(false);
-            Button btn_Submit = ShortAnswerP.GetComponent<Button>();
-            btn_Submit.onClick.AddListener(() => SubmitTextButtonClick(btn_Submit));
         }
         else{
             GameObject ShortAnswerP = (GameObject)Instantiate(ShortAnswerPrefab, TextAreaOptionSubmit.transform, false);
             ShortAnswerP.GetComponentInChildren<TMPro.TextMeshProUGUI>().text = text;
             ShortAnswer.Add(studentName, ShortAnswerP);
             ShortAnswerP.SetActive(false);
-            Button btn_Submit = ShortAnswerP.GetComponent<Button>();
-            btn_Submit.onClick.AddListener(() => SubmitTextButtonClick(btn_Submit));
         }
     }
 
@@ -637,11 +560,6 @@ public class CollaborativeManager : MonoBehaviour
                 Destroy(res.Value);
         }
         ShortAnswer.Clear();
-        FinalSubmitBool.Clear();
-        FinalSubmitButton.SetActive(false);
-        for(int i = 0; i < curStudents.Count; i++){
-                FinalSubmitBool.Add(GameManager.players[(int)curStudents[i]],false);
-        }
     }
 
     public void CheckVotes(){
@@ -664,30 +582,11 @@ public class CollaborativeManager : MonoBehaviour
                  }
             }
             Debug.Log("Votes are unanimous");
-            
-            FinalSubmitButton.SetActive(true);
-            for(int i = 0; i < curStudents.Count; i++){
-                if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
-                    return;
-            }
-
-            FinalSubmitButton.SetActive(false);
-            //Spawn final submit button and when that is pressed submit inputs
-            //When submit button is pressed check votes again to make sure they are still distinct
             SubmitInputs(distinctList[0]);
             SetupVoteList();//clear old votes
         }
-        else{
+        else
             Debug.Log("Votes are divided");
-            FinalSubmitButton.SetActive(false);
-            for(int i = 0; i < curStudents.Count; i++){
-                if(FinalSubmitBool.ContainsKey(GameManager.players[(int)curStudents[i]])){
-                    FinalSubmitBool[GameManager.players[(int)curStudents[i]]] = false;
-                }
-                else
-                    FinalSubmitBool.Add(GameManager.players[(int)curStudents[i]],false);
-            }
-        }
     }
 
     public void SubmitInputs(float _f){
@@ -749,6 +648,6 @@ public class CollaborativeManager : MonoBehaviour
             _myAssessmentManager.pnl_Start.SetActive(false);
                 //_myBooth.lockToggle.Lock();
         }
-        //StartCoroutine(CheckForUserDisconnection());
+        StartCoroutine(CheckForUserDisconnection());
     }
 }
