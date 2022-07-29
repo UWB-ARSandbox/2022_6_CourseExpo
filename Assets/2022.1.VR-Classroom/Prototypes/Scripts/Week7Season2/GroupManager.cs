@@ -27,7 +27,7 @@ public class GroupManager : MonoBehaviour
 
     public Group MyGroup = null;
 
-    ASLObject m_ASLObject;
+    public ASLObject m_ASLObject;
     void Start()
     {
         groupName.enabled = false;
