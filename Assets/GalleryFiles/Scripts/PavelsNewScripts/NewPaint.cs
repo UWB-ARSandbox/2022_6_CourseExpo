@@ -1492,28 +1492,18 @@ public class NewPaint : MonoBehaviour
 		{
 			slider.value = brushSize;
 		}
-		foreach(InputField input in brushSizeInput)
-		{
-			input.text = size;
-		}
-		
+		//brushSizeSlider.value = brushSize;
 	}
 
 	public void SetBrushSize(float size)
 	{
-		
+		/*
 		brushSize = (int)size;
-		
 		foreach (Slider slider in brushSizeSlider)
 		{
-			slider.value = (float)brushSize;
+			slider.value = brushSize;
 		}
-		foreach(InputField input in brushSizeInput)
-		{
-			input.text = size.ToString();
-		}
-		
-		
+		*/
 	}
 
 	public void ChangeRed(string r)
@@ -1532,16 +1522,11 @@ public class NewPaint : MonoBehaviour
 		{
 			slider.value = red;
 		}
-		foreach(InputField input in rInput)
-		{
-			input.text = r;
-		}
 		
 	}
 
 	public void ChangeRed(float r)
 	{
-		
 		//float red;
 		//float.TryParse(r, out red);
 		brushColor = new Color(r, brushColor.g, brushColor.b, brushColor.a);
@@ -1553,10 +1538,6 @@ public class NewPaint : MonoBehaviour
 		foreach (Slider slider in rSlider)
 		{
 			slider.value = r;
-		}
-		foreach(InputField input in rInput)
-		{
-			input.text = r.ToString();
 		}
 	}
 
@@ -1574,10 +1555,6 @@ public class NewPaint : MonoBehaviour
 		{
 			slider.value = green;
 		}
-		foreach(InputField input in gInput)
-		{
-			input.text = g;
-		}
 	}
 
 	public void ChangeGreen(float g)
@@ -1593,10 +1570,6 @@ public class NewPaint : MonoBehaviour
 		foreach (Slider slider in gSlider)
 		{
 			slider.value = g;
-		}
-		foreach(InputField input in gInput)
-		{
-			input.text = g.ToString();
 		}
 	}
 
@@ -1614,10 +1587,6 @@ public class NewPaint : MonoBehaviour
 		{
 			slider.value = blue;
 		}
-		foreach(InputField input in bInput)
-		{
-			input.text = b;
-		}
 	}
 
 	public void ChangeBlue(float b)
@@ -1633,10 +1602,6 @@ public class NewPaint : MonoBehaviour
 		foreach (Slider slider in bSlider)
 		{
 			slider.value = b;
-		}
-		foreach(InputField input in bInput)
-		{
-			input.text = b.ToString();
 		}
 	}
 
