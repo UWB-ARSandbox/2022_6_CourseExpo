@@ -161,6 +161,7 @@ public class MumbleActor : MonoBehaviour {
             newObj = SendPosition
                 ? GameObject.Instantiate(MyMumbleAudioPlayerPositionedPrefab)
                 : GameObject.Instantiate(MyMumbleAudioPlayerPrefab);
+            StartCoroutine(mumbleAudioPlayer(username));
         }
         newObj.name = username + "_MumbleAudioPlayer";
         MumbleAudioPlayer newPlayer = newObj.GetComponent<MumbleAudioPlayer>();
@@ -168,6 +169,23 @@ public class MumbleActor : MonoBehaviour {
         //AudioManager.AttachIndividualAudio(newObj); 
         return newPlayer;
     }
+
+    public IEnumerator mumbleAudioPlayer(string username){
+        if(GameManager.players.ContainsValue(username)){
+            GameObject parent = GameObject.Find(username + "_GhostPlayer");
+            while(parent == null){
+                parent = GameObject.Find(username + "_GhostPlayer");
+                yield return new WaitForSeconds(.2f);
+            }
+            GameObject AudioPlayer = GameObject.Find(username + "_MumbleAudioPlayer");
+            if(AudioPlayer != null){
+                AudioPlayer.transform.SetParent(parent.transform);
+                AudioPlayer.transform.position = parent.transform.position;
+            }
+        }
+        yield return null;
+    }
+
     private void OnOtherUserStateChange(uint session, MumbleProto.UserState updatedDeltaState, MumbleProto.UserState fullUserState)
     {
         print("User #" + session + " had their user state change");

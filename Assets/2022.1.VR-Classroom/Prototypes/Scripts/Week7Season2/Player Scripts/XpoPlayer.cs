@@ -33,22 +33,7 @@ public class XpoPlayer : MonoBehaviour {
     }
 
     IEnumerator DelayedInit() {
-        yield return new WaitForSeconds(0.2f);
-        ASL.ASLHelper.InstantiateASLObject("GhostPlayer",
-            new Vector3(GameManager.RespawnPoint.x, GameManager.RespawnPoint.y + 1.05f, GameManager.RespawnPoint.z),
-            Quaternion.identity, gameObject.name, "");
-        GhostPlayer myGhost = gameObject.GetComponentInChildren<GhostPlayer>();;
-        while(myGhost == null){
-            myGhost = gameObject.GetComponentInChildren<GhostPlayer>();
-            yield return new WaitForSeconds(.01f);
-        }
-        if(myGhost != null){
-            float[] m_floatArray = new float[2] { 99, GameLiftManager.GetInstance().m_PeerId};
-            Debug.Log("Setting ghost player ID to: " +GameLiftManager.GetInstance().m_PeerId);
-            myGhost.GetComponent<ASLObject>().SendAndSetClaim(() => {
-                myGhost.GetComponent<ASLObject>().SendFloatArray(m_floatArray);
-            });
-        }
+
         while (m_GhostPlayer == null) {
             Debug.Log("Finding ghost...");
             foreach (GhostPlayer gp in FindObjectsOfType<GhostPlayer>()) {
