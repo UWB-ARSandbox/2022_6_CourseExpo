@@ -127,6 +127,7 @@ public class GhostPlayer : MonoBehaviour
         switch(code) {
             case 99:
                 SetOwner(_id, _f);
+                SendPlayerName(GameManager.players[(int)_f[1]]);
                 break;
             case 100:
                 string username = "";

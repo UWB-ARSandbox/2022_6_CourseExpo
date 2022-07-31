@@ -35,7 +35,7 @@ public class GameManager : MonoBehaviour {
     public static bool isTakingAssessment = false;
 
     public AudioManager _myAudioManager;
-
+    public GhostPlayer[] ghostList;
     public static bool PlayersVisible => arePlayersVisible;
     private static bool arePlayersVisible = true;
 
@@ -79,7 +79,7 @@ public class GameManager : MonoBehaviour {
 
     // Start is called before the first frame update
     private void Start() {
-        players = GameLiftManager.GetInstance().m_Players;
+        
         ASL_PhysicsMasterSingleton.Instance.SetUpPhysicsMaster();
         
         _asl._LocallySetFloatCallback(FloatReceive);
@@ -89,9 +89,34 @@ public class GameManager : MonoBehaviour {
         } else {
             Instantiate(FirstPersonPlayer, new Vector3(RespawnPoint.x, RespawnPoint.y + 1.05f, RespawnPoint.z + (2 * GameManager.MyID)), Quaternion.identity);
         }
-
+        foreach (int playerID in GameLiftManager.GetInstance().m_Players.Keys) {
+            Debug.Log("Player id found: " +playerID);
+            players = GameLiftManager.GetInstance().m_Players;
+        }
         if (AmTeacher) {
-            foreach (int playerID in players.Keys) {
+            StartCoroutine(SpawnGhostPlayers());
+            // foreach (int playerID in GameLiftManager.GetInstance().m_Players.Keys) {
+            //     playerIDs.Add(playerID);
+
+            //     // ASL.ASLHelper.InstantiateASLObject("FirstPersonPlayer",
+            //     //     new Vector3(RespawnPoint.x, RespawnPoint.y + 1.05f, RespawnPoint.z),
+            //     //     Quaternion.identity, "", "", playerSetUp);
+
+            //     ASL.ASLHelper.InstantiateASLObject("GhostPlayer",
+            //         new Vector3(RespawnPoint.x, RespawnPoint.y + 1.05f, RespawnPoint.z),
+            //         Quaternion.identity, "", "", ghostSetUp);
+
+            //     RespawnPoint.z += 2;
+            // }
+            // StartCoroutine(SendGhostIDs());
+        }
+
+        StartCoroutine(AlignBoothNames());
+        
+    }
+    IEnumerator SpawnGhostPlayers(){
+        yield return new WaitForSeconds(10f);
+        foreach (int playerID in GameLiftManager.GetInstance().m_Players.Keys) {
                 playerIDs.Add(playerID);
 
                 // ASL.ASLHelper.InstantiateASLObject("FirstPersonPlayer",
@@ -103,23 +128,28 @@ public class GameManager : MonoBehaviour {
                     Quaternion.identity, "", "", ghostSetUp);
 
                 RespawnPoint.z += 2;
+                
             }
-            StartCoroutine(SendGhostIDs());
-        }
-
-        StartCoroutine(AlignBoothNames());
-        
-    }
-
-    private IEnumerator SendGhostIDs() {
-        while (numGhostsInitialized != players.Count) {
+        ghostList = FindObjectsOfType<GhostPlayer>(true);
+        while (ghostList.Count() != players.Count) {
+            ghostList = FindObjectsOfType<GhostPlayer>(true);
             yield return new WaitForSeconds(0.1f);
         }
+        StartCoroutine(SendGhostIDs());
+        
+        //StartCoroutine(SendGhostIDs());
+        yield return null;
+    }
+
+    public IEnumerator SendGhostIDs() {
+        // while (numGhostsInitialized != players.Count) {
+        //     yield return new WaitForSeconds(0.1f);
+        // }
+        Debug.Log("Sending Ghost IDs");
         yield return new WaitForSeconds(0.2f);
 
         bool oneGhostInvalid = true;
         while(oneGhostInvalid) {
-            var ghostList = FindObjectsOfType<GhostPlayer>(true);
             foreach (int playerID in players.Keys) {
                 float[] m_floatArray = new float[2] { 99, playerID };
                 ghostList[playerID - 1].GetComponent<ASLObject>().SendAndSetClaim(() => {

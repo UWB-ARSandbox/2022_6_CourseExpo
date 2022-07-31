@@ -13,7 +13,7 @@ GameObject:
   - component: {fileID: 2482854813392446619}
   - component: {fileID: 2482854813392446618}
   - component: {fileID: 4092081314213374446}
-  m_Layer: 5
+  m_Layer: 22
   m_Name: RequestHelpButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -146,7 +146,6 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: a170164259dfbde4881d3bb7321f2dea, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  buttonSound: {fileID: 8300000, guid: 9872259f6d26b4c4580268a24632039e, type: 3}
 --- !u!1 &2482854813541933727
 GameObject:
   m_ObjectHideFlags: 0

@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 5231020396699022096}
   - component: {fileID: 5231020396699022098}
   - component: {fileID: 5231020396699022097}
-  m_Layer: 5
+  m_Layer: 22
   m_Name: Text (TMP)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -149,7 +149,7 @@ GameObject:
   - component: {fileID: 5231020396813639916}
   - component: {fileID: 5231020396813639907}
   - component: {fileID: 1012311235355761506}
-  m_Layer: 5
+  m_Layer: 22
   m_Name: HelpRequestButton
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -283,3 +283,4 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   username: 
+  id: 0
