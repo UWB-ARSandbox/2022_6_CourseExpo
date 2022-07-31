@@ -26,6 +26,8 @@ public class HelpRequestedUI : MonoBehaviour
 
         if (GameManager.AmTeacher)
             requestHelpButton.SetActive(false);
+        else
+            GameObject.Find("RequestHelpUI").SetActive(false);
     }
 
     public void HelpRequested() {
