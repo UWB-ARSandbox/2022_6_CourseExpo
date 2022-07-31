@@ -355,6 +355,7 @@ GameObject:
   - component: {fileID: 1165963632668153834}
   - component: {fileID: 3689375528977060726}
   - component: {fileID: 6407195292231780704}
+  - component: {fileID: 1662757518534728195}
   m_Layer: 0
   m_Name: TeacherCanvasMirrorPlaceholder (4)
   m_TagString: Untagged
@@ -452,6 +453,21 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   myCanvas: {fileID: 0}
+--- !u!114 &1662757518534728195
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 7892246554303968630}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 878bfd3b0dac5fa4f9b33fa6d46d8929, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  img_Container: {fileID: 0}
+  teacherCanvas: {fileID: 6407195292231780704}
+  _lengthFromFace: 0.25
 --- !u!1 &8829134357602534428
 GameObject:
   m_ObjectHideFlags: 0
@@ -615,6 +631,10 @@ PrefabInstance:
     - target: {fileID: 3896794201413074825, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Name
       value: RedButton
+      objectReference: {fileID: 0}
+    - target: {fileID: 3896794201413074825, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 4075775493795936662, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Name
@@ -780,14 +800,14 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 249024165482910944, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
   m_PrefabInstance: {fileID: 3225234085556227946}
   m_PrefabAsset: {fileID: 0}
---- !u!1 &1464309139831092988 stripped
-GameObject:
-  m_CorrespondingSourceObject: {fileID: 4075775493795936662, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
-  m_PrefabInstance: {fileID: 3225234085556227946}
-  m_PrefabAsset: {fileID: 0}
 --- !u!4 &5348216155838200590 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 7420519390332990564, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
+  m_PrefabInstance: {fileID: 3225234085556227946}
+  m_PrefabAsset: {fileID: 0}
+--- !u!1 &1464309139831092988 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 4075775493795936662, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
   m_PrefabInstance: {fileID: 3225234085556227946}
   m_PrefabAsset: {fileID: 0}
 --- !u!114 &7379186523670077692
