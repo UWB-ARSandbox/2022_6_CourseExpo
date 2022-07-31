@@ -26,8 +26,10 @@ public class WelcomeScreen : MonoBehaviour, IClickable
     [Range(0.5f, 50f)]
     public float _distanceFromGround = 8f;
     private GameObject _firstPersonPlayer = null;
+    private Vector3 startPos;
     void Start()
     {
+        startPos = transform.position;
         Debug.Assert(ImagesContainer != null);
         UpdateUI();
     }
@@ -53,7 +55,7 @@ public class WelcomeScreen : MonoBehaviour, IClickable
         }
         else
         {
-            transform.localPosition = Vector3.up * _distanceFromGround;
+            transform.position = transform.position;
         }
         //do the screen player look-at tracking
         if (Camera.main != null)
