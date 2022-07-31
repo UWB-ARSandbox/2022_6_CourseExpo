@@ -330,6 +330,10 @@ public class CollaborativeManager : MonoBehaviour
                         && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted 
                             && !GameManager.isTakingAssessment){
                         //issue with everyone in the group starting at once
+                        
+                        StartCoroutine(TeleportUser(GameManager.players[(int)_f[2]]));
+                        GameManager.isTakingAssessment = true;
+                        Debug.Log("Student ID:" +_f[2] +"started test");
                         StartCoroutine(DelayedStart((float)m_GroupManager.MyGroup.members.IndexOf(GameManager.players[GameManager.MyID])));
                         StartCoroutine(TeleportUser(GameManager.players[(int)_f[2]]));
                         GameManager.isTakingAssessment = true;
