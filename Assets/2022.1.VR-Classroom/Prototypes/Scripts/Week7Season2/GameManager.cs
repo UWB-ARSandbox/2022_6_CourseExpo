@@ -115,7 +115,7 @@ public class GameManager : MonoBehaviour {
         
     }
     IEnumerator SpawnGhostPlayers(){
-        
+        yield return new WaitForSeconds(10f);
         foreach (int playerID in GameLiftManager.GetInstance().m_Players.Keys) {
                 playerIDs.Add(playerID);
 
@@ -136,8 +136,8 @@ public class GameManager : MonoBehaviour {
             yield return new WaitForSeconds(0.1f);
         }
         StartCoroutine(SendGhostIDs());
-        yield return new WaitForSeconds(15f);
-        StartCoroutine(SendGhostIDs());
+        
+        //StartCoroutine(SendGhostIDs());
         yield return null;
     }
 

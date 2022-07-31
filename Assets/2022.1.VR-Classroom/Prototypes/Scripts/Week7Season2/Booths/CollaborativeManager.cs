@@ -106,14 +106,15 @@ public class CollaborativeManager : MonoBehaviour
     public void EnableBooth(){
         //_myBooth.lockToggle.Unlock();
         QuizActive = false;
-        StopCoroutine(ForceCoroutineInstance);
+        if(ForceRoutineRunning)
+            StopCoroutine(ForceCoroutineInstance);
         ForceRoutineRunning = false;
         ForceSubmitButton.SetActive(false);
         //if(!_myAssessmentManager.pnl_Start.active)
-        if(!curStudents.Contains(GameManager.MyID) && !_myAssessmentManager.AssessmentCompleted)
+        if(!_myAssessmentManager.AssessmentCompleted)
             _myAssessmentManager.pnl_Start.SetActive(true);
         //if(_myAssessmentManager.walls.gameObject.active)
-            _myAssessmentManager.walls.gameObject.SetActive(false);
+        _myAssessmentManager.walls.gameObject.SetActive(false);
         if(TPChannelTrigger != null){
             TPChannelTrigger.Active = false;
         }
