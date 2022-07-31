@@ -9,7 +9,7 @@ public class HelpRequestedUI : MonoBehaviour
 
     public GameObject scrollPanel;
     public GameObject buttonPrefab;
-    ASLObject m_ASLObject;
+    public ASLObject m_ASLObject;
     float[] id = new float[2];
     public GameObject requestHelpButton;
 
@@ -21,11 +21,13 @@ public class HelpRequestedUI : MonoBehaviour
     void Start()
     {
         // requestHelpButton = GameObject.Find("RequestHelpButton");
-        m_ASLObject = GetComponent<ASLObject>();
+        //m_ASLObject = GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
 
         if (GameManager.AmTeacher)
             requestHelpButton.SetActive(false);
+        else
+            GameObject.Find("RequestHelpUI").SetActive(false);
     }
 
     public void HelpRequested() {

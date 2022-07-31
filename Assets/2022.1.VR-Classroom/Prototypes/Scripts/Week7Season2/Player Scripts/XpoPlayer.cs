@@ -33,6 +33,7 @@ public class XpoPlayer : MonoBehaviour {
     }
 
     IEnumerator DelayedInit() {
+
         while (m_GhostPlayer == null) {
             Debug.Log("Finding ghost...");
             foreach (GhostPlayer gp in FindObjectsOfType<GhostPlayer>()) {
@@ -48,6 +49,8 @@ public class XpoPlayer : MonoBehaviour {
                     m_GhostPlayer.SendPlayerName(ASL.GameLiftManager.GetInstance().m_Username);
                 }
             }
+            //Ask teacher to resend ghosts?
+            //or create my own ghost
             yield return new WaitForSeconds(0.1f);
         }
         StartCoroutine(OrientMapNames());

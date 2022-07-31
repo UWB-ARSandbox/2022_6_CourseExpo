@@ -27,14 +27,13 @@ public class GroupManager : MonoBehaviour
 
     public Group MyGroup = null;
 
-    ASLObject m_ASLObject;
+    public ASLObject m_ASLObject;
     void Start()
     {
         groupName.enabled = false;
         groupMembers.enabled = false;
         addMemberButton.gameObject.SetActive(false);
         addPlayerContainer.SetActive(false);
-        m_ASLObject = GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
         for (int i = 0; i < 5; i++)
         {

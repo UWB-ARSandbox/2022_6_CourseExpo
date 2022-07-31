@@ -9,6 +9,7 @@ TagManager:
   - BoothZone
   - Chapter
   - InputField
+  - VRMenu
   layers:
   - Default
   - TransparentFX

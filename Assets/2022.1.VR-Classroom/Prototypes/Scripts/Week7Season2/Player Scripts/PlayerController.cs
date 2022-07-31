@@ -31,6 +31,9 @@ public class PlayerController : MonoBehaviour {
     private InputAction moveMapCamera;
     private InputAction quit;
 
+    private Vector3 CameraStartingPosition;
+    public GameObject Body;
+
     public GrabbableObject selectedObject = null;
     public static bool IsTypingInput = false;
     private PlayerStatScreen statsScreen = null;
@@ -61,6 +64,7 @@ public class PlayerController : MonoBehaviour {
         _lineRenderers = FindObjectsOfType<LineRenderer>();
         _AudioManager = GameObject.Find("GameManager").GetComponent<AudioManager>();
         Debug.Assert(_AudioManager != null);
+        CameraStartingPosition = Camera.main.transform.position;
     }
 
     private void Start()
@@ -74,8 +78,9 @@ public class PlayerController : MonoBehaviour {
         //statsScreen = GameObject.Find("Stats Container").GetComponent<PlayerStatScreen>();
         PCmenuScreen = GameObject.Find("PC Menu").GetComponent<MenuScreen>();
         PCmenuScreen.flipScreen();
-        VRmenuScreen = GameObject.Find("VR Menu").GetComponent<MenuScreen>();
-        VRmenuScreen.flipScreen();
+        VRmenuScreen = GameObject.FindWithTag("VRMenu").GetComponent<MenuScreen>();
+        if(VRmenuScreen != null)
+            VRmenuScreen.flipScreen();
 
         foreach (MapToggle mt in FindObjectsOfType<MapToggle>()) {
             if (mt.gameObject.name.Equals("PC Map Canvas")) {
@@ -85,6 +90,7 @@ public class PlayerController : MonoBehaviour {
             }
         }
         Debug.Assert(mapTogglePC != null);
+        Debug.Assert(mapToggleVR != null);
         //Name orientations + camera movement
         StartCoroutine(GetMapNavigation());
         //Attach VRCanvas as child to Player
@@ -120,11 +126,23 @@ public class PlayerController : MonoBehaviour {
     }
 
     IEnumerator AttachVRCanvas() {
-        while (mapToggleVR == null) {
-            yield return new WaitForSeconds(0.1f);
+        if(isXRActive){
+            mapToggleVR = GameObject.Find("VR Map Canvas").GetComponent<MapToggle>();
+            GameObject parentObj = GameObject.Find("[LeftHand Controller] Model Parent");
+            
+            while (mapToggleVR == null && parentObj == null) {
+                yield return new WaitForSeconds(1f);
+            }
+            parentObj.SetActive(true);
+            mapToggleVR.gameObject.SetActive(true);
+            //if (gameObject.GetComponent<UserObject>().ownerID == ASL.GameLiftManager.GetInstance().m_PeerId) {
+            mapToggleVR.transform.SetParent(parentObj.transform, false);
+            if(!isXRActive){
+                mapToggleVR.gameObject.SetActive(false);
+                parentObj.SetActive(false);
+            }
         }
-        //if (gameObject.GetComponent<UserObject>().ownerID == ASL.GameLiftManager.GetInstance().m_PeerId) {
-            mapToggleVR.transform.SetParent(Camera.main.transform, false);
+        yield return null;
         //}
     }
 
@@ -133,9 +151,13 @@ public class PlayerController : MonoBehaviour {
             if (isXRActive) {
                 mapTogglePC.gameObject.SetActive(false);
                 mapToggleVR.gameObject.SetActive(true);
+                if(Body.activeSelf)
+                    Body.SetActive(false);
             } else {
                 mapTogglePC.gameObject.SetActive(true);
                 mapToggleVR.gameObject.SetActive(false);
+                if(!Body.activeSelf)
+                    Body.SetActive(true);
             }
             UpdateXR();
             yield return new WaitForSeconds(1.0f);
