@@ -48,7 +48,8 @@ public class AssessmentManager : MonoBehaviour {
         buttonD,
         buttonTrue,
         buttonFalse,
-        buttonSubmit
+        buttonSubmit,
+        none
     };
 
     public AssessmentType assessmentType = AssessmentType.none;
