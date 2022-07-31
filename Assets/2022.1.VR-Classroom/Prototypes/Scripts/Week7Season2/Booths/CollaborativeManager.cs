@@ -18,6 +18,7 @@ public class CollaborativeManager : MonoBehaviour
     public TeleportTrigger TPChannelTrigger;
 
     public GroupManager m_GroupManager;
+    public ChatManager m_ChatManager;
 
     //Definable number of students
     public int MaxStudents;
@@ -73,6 +74,7 @@ public class CollaborativeManager : MonoBehaviour
         TPChannelTrigger = gameObject.GetComponentInChildren<TeleportTrigger>();
         FinalSubmitButton.GetComponent<Button>().onClick.AddListener(() => SendInput(FinalSubmit));
         m_GroupManager = GameObject.Find("GroupsUI").GetComponent<GroupManager>();
+        m_ChatManager = GameObject.Find("Chat").GetComponent<ChatManager>();
     }
 
     public void SetMaxStudents(int maxStudents){
@@ -282,6 +284,19 @@ public class CollaborativeManager : MonoBehaviour
         }
     }
 
+    IEnumerator TeleportUser(string testStarter)
+    {
+        m_ChatManager.AddMessage(testStarter + " has started a test, you will be teleported in 10 seconds.");
+        yield return new WaitForSeconds(10f);
+        //teleport user infront of lectern
+        GameObject player = FindObjectOfType<XpoPlayer>().gameObject;
+        player.GetComponent<CharacterController>().enabled = false;
+        player.transform.SetParent(transform, true);
+        player.transform.localPosition = new Vector3(3.5f, 1.115f, 0);
+        player.transform.SetParent(null, true);
+        player.GetComponent<CharacterController>().enabled = true;
+    }
+
     public void FloatReceive(string _id, float[] _f) {
         if((int)_f[0] == GameManager.MyID || _f[0] == -1){
             switch(_f[1]){
@@ -297,16 +312,10 @@ public class CollaborativeManager : MonoBehaviour
                     if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
                         && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
                         curStudents.Add(_f[2]);
+                        SyncedTimer();
+                        StartCoroutine(TeleportUser(GameManager.players[(int)_f[2]]));
                         GameManager.isTakingAssessment = true;
                         Debug.Log("Student ID:" +_f[2] +"started test");
-                        SyncedTimer();
-                        //teleport user infront of lectern
-                        GameObject player = FindObjectOfType<XpoPlayer>().gameObject;
-                        player.GetComponent<CharacterController>().enabled = false;
-                        player.transform.SetParent(transform, true);
-                        player.transform.localPosition = new Vector3(3.5f, 1.115f, 0);
-                        player.transform.SetParent(null, true);
-                        player.GetComponent<CharacterController>().enabled = true;
                         SendStartMessage();
                     }
                     break;
