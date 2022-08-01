@@ -4,7 +4,8 @@ using UnityEngine;
 
 public class GrabCanvas : MonoBehaviour
 {
-    // Start is called before the first frame update
+    Vector3 originalStartPos; // Original position of object in the editor, for reset purposes
+
     Quaternion currentRotation;
     float currentY;
     bool selected = false;
@@ -17,6 +18,7 @@ public class GrabCanvas : MonoBehaviour
 
     void Start()
     {
+        originalStartPos = objectToMove.transform.position;
         selected = false;
         GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(setPosition);
     }
@@ -81,5 +83,13 @@ public class GrabCanvas : MonoBehaviour
 
             objectToMove.position = new Vector3(_f[1], _f[2], _f[3]);
         }
+    }
+
+    public void ResetPosition()
+    {
+        float[] fArray = { -1f, originalStartPos.x, originalStartPos.y, originalStartPos.z, 0f,  0f };
+        GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
+            GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+        });
     }
 }

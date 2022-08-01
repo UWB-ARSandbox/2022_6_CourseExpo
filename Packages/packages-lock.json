@@ -9,6 +9,13 @@
         "com.unity.xr.arcore": "4.1.0-preview.10"
       }
     },
+    "com.matthewminer.consolation": {
+      "version": "https://github.com/mminer/consolation.git",
+      "depth": 0,
+      "source": "git",
+      "dependencies": {},
+      "hash": "8a19af96b9edf48b762cfb60cbbe0bddae69d7dc"
+    },
     "com.unity.2d.sprite": {
       "version": "1.0.0",
       "depth": 0,

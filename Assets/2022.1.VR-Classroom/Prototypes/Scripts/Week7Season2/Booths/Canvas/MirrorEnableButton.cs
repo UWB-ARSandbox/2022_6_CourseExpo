@@ -5,7 +5,6 @@ using UnityEngine;
 public class MirrorEnableButton : MonoBehaviour, IClickable
 {
     public CanvasTableFeatures m_Features;
-    // Start is called before the first frame update
     void Start()
     {
         Debug.Assert(m_Features != null);
