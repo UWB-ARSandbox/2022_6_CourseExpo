@@ -411,11 +411,15 @@ public class PlayerController : MonoBehaviour {
         if (isCursorLocked && !IsTypingInput)
         {
             Debug.Log("Attempting to open minimap");
+            if(!isXRActive){
             mapTogglePC = GameObject.Find("PC Map Canvas").GetComponent<MapToggle>();
             Debug.Assert(mapTogglePC != null);
             mapTogglePC.ToggleMap();
-            mapToggleVR = GameObject.Find("VR Map Canvas").GetComponent<MapToggle>();
-            mapToggleVR.ToggleMap();
+            }
+            if(isXRActive){
+                mapToggleVR = GameObject.Find("VR Map Canvas").GetComponent<MapToggle>();
+                mapToggleVR.ToggleMap();
+            }
         }
     }
 
