@@ -17,10 +17,11 @@ using UnityEngine.EventSystems;
 using SimpleFileBrowser;
 using UnityEngine.XR;
 
+
 public class NewPaint : MonoBehaviour
 {
 	
-	bool allowedPlayer;
+	public bool allowedPlayer;
 
 	[SerializeField] bool allowForEveryone;
 	[SerializeField] bool visibleForEveryone;
@@ -30,7 +31,7 @@ public class NewPaint : MonoBehaviour
 	{
 		allowedPlayer = true;
 		
-
+		
 	}
 	public void disableCanvasLocal()
 	{
@@ -139,6 +140,8 @@ public class NewPaint : MonoBehaviour
 	public Texture2D studentCanvas;
 
 	Texture2D blankCanvas;
+
+	Texture2D unMarkedCanvasMask;
 
     int brushSize;
 
@@ -313,12 +316,16 @@ public class NewPaint : MonoBehaviour
         
 		brushColorUI.GetComponent<Image>().color = brushColor;
 
-
+		
         //Texture stuff
+
+		
+
         studentCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 		maskCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 		blankCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
-
+		unMarkedCanvasMask = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false)
+;
         for (int x = 0; x < canvasWidth; x++)
 		{
 			for (int y = 0; y < canvasHeight; y++)
@@ -326,12 +333,15 @@ public class NewPaint : MonoBehaviour
 				studentCanvas.SetPixel(x, y, Color.white);
 				maskCanvas.SetPixel(x, y, Color.clear);
 				blankCanvas.SetPixel(x,y, Color.black );
+				unMarkedCanvasMask.SetPixel(x,y, Color.clear);
 
 			}
 		}
 		studentCanvas.Apply();
 		maskCanvas.Apply();
 		blankCanvas.Apply();
+		unMarkedCanvasMask.Apply();
+
 
         gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
 		maskRenderer.material.mainTexture = maskCanvas;
@@ -372,10 +382,10 @@ public class NewPaint : MonoBehaviour
 
 		loadB.onClick.AddListener(SetCanLoad);
 
-    
+		StartCoroutine(UpdateCanvas());
 		if(!allowForEveryone)
 		{
-			StartCoroutine(UpdateCanvas());
+			
 
 			//enableCanvasLocal();
 			disableCanvasLocal();
@@ -388,6 +398,7 @@ public class NewPaint : MonoBehaviour
 			}
 		}
 		else{
+			
 			enableCanvasLocal();
 		}
         
@@ -817,6 +828,7 @@ public class NewPaint : MonoBehaviour
 	}
     void Draw(InputInformation inp, Color brush)
 	{
+		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
         if (!inp.previousMouseDown)
         {
             //draw area of brush size if greater than 1
@@ -839,6 +851,7 @@ public class NewPaint : MonoBehaviour
                         }
                         // Set pixel on canvas to the current brush color
                         
+						
                         studentCanvas.SetPixel(x, y, brush);
                         
                         
@@ -878,8 +891,12 @@ public class NewPaint : MonoBehaviour
                             {
                                 continue;
                             }
-                            
-                            studentCanvas.SetPixel(x, y, brush);
+                            if(!dictionary.ContainsKey((x, y)))
+							{
+								dictionary.Add((x, y), true);
+                            	studentCanvas.SetPixel(x, y, brush);
+							}
+							
                             
                         }
                     }
@@ -896,7 +913,13 @@ public class NewPaint : MonoBehaviour
                     float distanceX = (i * (inp.canvasClick.x - inp.previousCanvasClick.x) / numberOfInterpolations);
                     float distanceY = (i * (inp.canvasClick.y - inp.previousCanvasClick.y) / numberOfInterpolations);
                     
-                    studentCanvas.SetPixel((int)(inp.canvasClick.x - distanceX), (int)(inp.canvasClick.y - distanceY), brush);
+					int x = (int)(inp.canvasClick.x - distanceX);
+					int y = (int)(inp.canvasClick.y - distanceY);
+                    if(!dictionary.ContainsKey((x, y)))
+					{
+						dictionary.Add((x, y), true);
+						studentCanvas.SetPixel(x, y, brush);
+					}
                     
                     
                 }
@@ -909,6 +932,7 @@ public class NewPaint : MonoBehaviour
 	}
 	void DrawText(InputInformation inp)
 	{
+		
 		Vector2 startChar = new Vector2(inp.canvasClick.x, inp.canvasClick.y);
 		int tWidth = 0;
 		int tHeight = 0;
@@ -967,7 +991,7 @@ public class NewPaint : MonoBehaviour
 	}
 	void DrawCharacter(Vector2 currUV, int spot, int tWidth, int tHeight, InputInformation inp)
 	{
-		
+		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
 		spot *= tWidth;
 		int currX = (int)currUV.x;
 		int currY = (int)currUV.y;
@@ -987,7 +1011,14 @@ public class NewPaint : MonoBehaviour
 						{
 							if (((currX + j) < canvasWidth) && (currY + ((y - 2) * inp.brushSize) + i < canvasHeight))
 							{
-								studentCanvas.SetPixel(currX + j, currY + ((y - 2) * inp.brushSize) + i, pixelColor);
+								int tempX = currX + j;
+								int tempY = currY + ((y - 2) * inp.brushSize) + i;
+								if(!dictionary.ContainsKey((tempX, tempY)))
+								{
+									dictionary.Add((tempX, tempY), true);
+									studentCanvas.SetPixel(tempX, tempY, pixelColor);
+								}
+								
 							}
 
 						}
@@ -1005,6 +1036,7 @@ public class NewPaint : MonoBehaviour
 
 	void DrawLine(InputInformation inp) 
 	{
+		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
 		float lineInterpolations = 1000 - 9 * inp.brushSize;
 		for (int i = 0; i < lineInterpolations; i++)
 		{
@@ -1024,11 +1056,19 @@ public class NewPaint : MonoBehaviour
 					}
 					if (inp.eraseMode == false)
 					{
-						studentCanvas.SetPixel(x, y, inp.brushColor);
+						if(!dictionary.ContainsKey((x, y)))
+						{
+							dictionary.Add((x, y), true);
+							studentCanvas.SetPixel(x, y, brushColor);
+						}
 					}
 					else
 					{
-						studentCanvas.SetPixel(x, y, Color.white);
+						if(!dictionary.ContainsKey((x, y)))
+						{
+							dictionary.Add((x, y), true);
+							studentCanvas.SetPixel(x, y, Color.white);
+						}
 					}
 				}
 			}
@@ -1047,13 +1087,8 @@ public class NewPaint : MonoBehaviour
 			OnCanvas = true;
 			Vector2 uv = raycastHit.textureCoord;
 			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
-			for (int x = 0; x < canvasWidth; x++)
-			{
-				for (int y = 0; y < canvasHeight; y++)
-				{
-					maskCanvas.SetPixel(x, y, Color.clear);
-				}
-			}
+			
+			Graphics.CopyTexture(unMarkedCanvasMask, maskCanvas);
 			if(lineMode)
 			{
 				lineMask();
@@ -1103,13 +1138,7 @@ public class NewPaint : MonoBehaviour
 			
 			maskIsEmpty = false;
 			OnCanvasLeft = true;
-			for (int x = 0; x < canvasWidth; x++)
-			{
-				for (int y = 0; y < canvasHeight; y++)
-				{
-					maskCanvas.SetPixel(x, y, Color.clear);
-				}
-			}
+			Graphics.CopyTexture(unMarkedCanvasMask, maskCanvas);
 			Vector2 uv = raycastHit.textureCoord;
 			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
 			
@@ -1146,13 +1175,7 @@ public class NewPaint : MonoBehaviour
 			OnCanvasRight = true;
 			if(OnCanvasLeft == false)
 			{
-				for (int x = 0; x < canvasWidth; x++)
-				{
-					for (int y = 0; y < canvasHeight; y++)
-					{
-						maskCanvas.SetPixel(x, y, Color.clear);
-					}
-				}
+				Graphics.CopyTexture(unMarkedCanvasMask, maskCanvas);
 			}
 			
 			Vector2 uv = raycastHit.textureCoord;
@@ -1184,14 +1207,7 @@ public class NewPaint : MonoBehaviour
 		}
 		if(!maskIsEmpty && !OnCanvasLeft && !OnCanvasRight)
 		{
-			for (int x = 0; x < canvasWidth; x++)
-			{
-				for (int y = 0; y < canvasHeight; y++)
-				{
-					maskCanvas.SetPixel(x, y, Color.clear);
-				}
-			}
-			maskCanvas.Apply();
+			Graphics.CopyTexture(unMarkedCanvasMask, maskCanvas);
 			maskIsEmpty = true;
 		}
 		
@@ -1505,7 +1521,7 @@ public class NewPaint : MonoBehaviour
 		}
 	}
 	
-	void SendTexture(Texture2D newPng)
+	public void SendTexture(Texture2D newPng)
 	{
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
 			{

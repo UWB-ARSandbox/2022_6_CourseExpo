@@ -145,12 +145,7 @@ public class CanvasInput : MonoBehaviour
                         break;
                         
                     }
-                    else if(result.gameObject.name == "Background")
-                    {
-                        data.pointerPressRaycast = result;
-                        result.gameObject.transform.parent.GetComponent<Slider>().OnPointerDown(data);
-                        break;
-                    }
+                    
                     
                 }
             }

@@ -63,5 +63,9 @@ public class CanvasTableFeatures : MonoBehaviour
         }
         flippedUp = !flippedUp; // convert from true <---> false
     }
+    public void StartGallery()
+    {
+        
+    }
 
 }
