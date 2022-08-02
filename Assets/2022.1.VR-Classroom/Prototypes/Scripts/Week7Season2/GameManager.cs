@@ -127,7 +127,7 @@ public class GameManager : MonoBehaviour {
     IEnumerator SendRdyPings(){
         while(!readyAcknowledged){
             SendPing();
-            yield return new WaitForSeconds(MyID/2);
+            yield return new WaitForSeconds(MyID/20);
         }
         yield return null;
     }

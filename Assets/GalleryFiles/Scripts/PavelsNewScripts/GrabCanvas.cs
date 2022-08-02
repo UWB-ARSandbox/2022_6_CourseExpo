@@ -30,30 +30,39 @@ public class GrabCanvas : MonoBehaviour
         {
             if(CanvasInput.Instance.GetRaycastHit().transform == this.transform)
             {
-                previousParent = objectToMove.parent;
-                objectToMove.SetParent(Camera.main.transform);
-                selected = true;
-                currentRotation = objectToMove.rotation;
-                currentY = objectToMove.position.y;
-                
-                StartCoroutine(sendPosition());
+                StartSendPosition();
             }
         }
         if(Input.GetMouseButtonUp(0) && selected)
         {
-            if (lookAtParent)
-                objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
-            else
-                objectToMove.rotation = currentRotation;
-
-            objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
-
-            objectToMove.parent = previousParent;
-            
-            selected = false;
+            StopSendPosition();
         }
         
     }
+
+    public void StartSendPosition(){
+        previousParent = objectToMove.parent;
+        objectToMove.SetParent(Camera.main.transform);
+        selected = true;
+        currentRotation = objectToMove.rotation;
+        currentY = objectToMove.position.y;
+                
+        StartCoroutine(sendPosition());
+    }
+    
+    public void StopSendPosition(){
+        if (lookAtParent)
+            objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
+        else
+            objectToMove.rotation = currentRotation;
+
+        objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
+
+        objectToMove.parent = previousParent;
+            
+        selected = false;
+    }
+
     IEnumerator sendPosition()
     {
         
