@@ -114,13 +114,13 @@ public class TutorialScreen : MonoBehaviour, IClickable
         UpdateUI();
     }
 
-    public void ViewWelcomeScreen()
+    public void ViewScreen()
     {
         if (!XRSettings.isDeviceActive) Cursor.lockState = CursorLockMode.None;
         _screenAttached = true;
     }
 
-    public void DetachWelcomeScreen()
+    public void DetachScreen()
     {
         _screenAttached = false;
         if (!XRSettings.isDeviceActive) Cursor.lockState = CursorLockMode.Locked;
@@ -128,6 +128,6 @@ public class TutorialScreen : MonoBehaviour, IClickable
 
     public void IClickableClicked()
     {
-        ViewWelcomeScreen();
+        ViewScreen();
     }
 }

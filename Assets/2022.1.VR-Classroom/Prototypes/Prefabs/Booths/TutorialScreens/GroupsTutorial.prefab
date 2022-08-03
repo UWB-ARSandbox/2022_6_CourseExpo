@@ -594,7 +594,7 @@ GameObject:
   - component: {fileID: 2864570330946008203}
   - component: {fileID: 4939288630597972978}
   m_Layer: 22
-  m_Name: WelcomeScreen
+  m_Name: TutorialScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0

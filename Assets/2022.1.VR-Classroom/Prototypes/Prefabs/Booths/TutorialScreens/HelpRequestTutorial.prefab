@@ -673,7 +673,7 @@ GameObject:
   - component: {fileID: 4593615041310726502}
   - component: {fileID: 6698211454299250207}
   m_Layer: 22
-  m_Name: WelcomeScreen
+  m_Name: TutorialScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
