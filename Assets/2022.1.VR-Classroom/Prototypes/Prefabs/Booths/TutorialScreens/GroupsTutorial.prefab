@@ -11,7 +11,7 @@ GameObject:
   - component: {fileID: 2534436850496064891}
   - component: {fileID: 1564114271737843264}
   - component: {fileID: 1690436447636436842}
-  - component: {fileID: 2520535113750268041}
+  - component: {fileID: 7182677521961259845}
   m_Layer: 0
   m_Name: GroupsTutorial
   m_TagString: Untagged
@@ -89,7 +89,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2520535113750268041}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
         m_MethodName: ViewWelcomeScreen
         m_Mode: 1
@@ -137,7 +137,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &2520535113750268041
+--- !u!114 &7182677521961259845
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -146,7 +146,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 701196509039684858}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 888b313831afb4849894e44796c8f002, type: 3}
+  m_Script: {fileID: 11500000, guid: ae434c9208c8ccb468c802e6361f60a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   img_Container: {fileID: 944330712060873915}
@@ -359,7 +359,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2520535113750268041}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
         m_MethodName: DetachWelcomeScreen
         m_Mode: 1
@@ -567,7 +567,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2520535113750268041}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
         m_MethodName: PreviousScreen
         m_Mode: 1
@@ -916,7 +916,7 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 2520535113750268041}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
         m_MethodName: NextScreen
         m_Mode: 1
