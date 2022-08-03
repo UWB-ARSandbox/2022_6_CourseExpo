@@ -121,9 +121,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
-        m_MethodName: DetachWelcomeScreen
+      - m_Target: {fileID: 4907727971096051363}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
+        m_MethodName: DetachScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -646,8 +646,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
+      - m_Target: {fileID: 4907727971096051363}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
         m_MethodName: NextScreen
         m_Mode: 1
         m_Arguments:
@@ -916,8 +916,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 0}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
+      - m_Target: {fileID: 4907727971096051363}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
         m_MethodName: PreviousScreen
         m_Mode: 1
         m_Arguments:
