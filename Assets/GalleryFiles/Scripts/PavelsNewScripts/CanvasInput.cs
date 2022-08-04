@@ -114,7 +114,7 @@ public class CanvasInput : MonoBehaviour
                 Ray ray = Camera.main.ScreenPointToRay(Input.mousePosition);
 
 
-                int layerMask = 1 << 30;
+                LayerMask layerMask = LayerMask.GetMask("PlayerBody");
                 
                 layerMask = ~layerMask;
                 raycastHitObject = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask);
