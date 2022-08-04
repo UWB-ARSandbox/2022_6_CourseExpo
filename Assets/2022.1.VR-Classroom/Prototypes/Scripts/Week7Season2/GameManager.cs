@@ -31,7 +31,7 @@ public class GameManager : MonoBehaviour {
     private static Dictionary<string, string> nameAndDesc = new Dictionary<string, string>();
     private static Dictionary<string, string> nameToType = new Dictionary<string, string>();
     private int countVerify = -1;
-
+    public static bool GhostsSent = false;
     public static bool isTakingAssessment = false;
 
     public AudioManager _myAudioManager;
@@ -200,6 +200,8 @@ public class GameManager : MonoBehaviour {
             }
             yield return new WaitForSeconds(0.1f);
         }
+        yield return new WaitForSeconds(1f);
+        GhostsSent = true;
     }
 
     // private static void playerSetUp(GameObject _gameObject) {
