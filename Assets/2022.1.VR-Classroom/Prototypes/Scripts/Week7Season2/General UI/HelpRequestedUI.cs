@@ -1,12 +1,9 @@
-using System.Collections;
-using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 using ASL;
 
 public class HelpRequestedUI : MonoBehaviour
 {
-
     public GameObject scrollPanel;
     public GameObject buttonPrefab;
     public ASLObject m_ASLObject;
@@ -24,15 +21,18 @@ public class HelpRequestedUI : MonoBehaviour
         //m_ASLObject = GetComponent<ASLObject>();
         m_ASLObject._LocallySetFloatCallback(FloatReceive);
 
+        // disable students request help button if you are a teacher
+        // and disable the teachers help request ui if you are a student
         if (GameManager.AmTeacher)
             requestHelpButton.SetActive(false);
         else
             GameObject.Find("RequestHelpUI").SetActive(false);
     }
 
+    // called by student when pressing request help button
     public void HelpRequested() {
         id[0] = GameManager.MyID;
-        id[1] = 100;
+        id[1] = 100; // student request
         requestHelpButton.GetComponent<Button>().enabled = false;
         m_ASLObject.SendAndSetClaim(() => {
             m_ASLObject.SendFloatArray(id);
