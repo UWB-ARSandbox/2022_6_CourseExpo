@@ -475,17 +475,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""3a051534-3a8b-4c97-909e-6007af8d405a"",
-                    ""path"": ""<XRController>{LeftHand}/joystickClicked"",
-                    ""interactions"": ""Press"",
-                    ""processors"": """",
-                    ""groups"": ""VR"",
-                    ""action"": ""Sprint"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""72730817-b98b-418d-a823-8f13ca38d719"",
                     ""path"": ""<Keyboard>/slash"",
                     ""interactions"": """",

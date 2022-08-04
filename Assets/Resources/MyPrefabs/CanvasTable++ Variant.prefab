@@ -14,7 +14,7 @@ GameObject:
   - component: {fileID: 2449623843296058873}
   - component: {fileID: 5622251218036721692}
   - component: {fileID: 6148256103730017556}
-  m_Layer: 22
+  m_Layer: 0
   m_Name: StudentCanvasMirror (1)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -137,7 +137,7 @@ GameObject:
   - component: {fileID: 6937483991453778544}
   - component: {fileID: 6155225357658847677}
   - component: {fileID: 904554720905809946}
-  m_Layer: 22
+  m_Layer: 0
   m_Name: BlackBg
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -447,7 +447,7 @@ GameObject:
   - component: {fileID: 3689375528977060726}
   - component: {fileID: 6407195292231780704}
   - component: {fileID: 1662757518534728195}
-  m_Layer: 22
+  m_Layer: 0
   m_Name: TeacherCanvasMirrorPlaceholder (4)
   m_TagString: Untagged
   m_Icon: {fileID: 0}
@@ -772,7 +772,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 249024165482910944, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Layer
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 719253056495100897, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_LocalScale.z
@@ -820,7 +820,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 3896794201413074825, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Layer
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 3896794201413074825, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_IsActive
@@ -832,7 +832,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 4075775493795936662, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Layer
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 4606669629957190270, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_LocalRotation.w
@@ -880,7 +880,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 6862739226249843603, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Layer
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 7420519390332990564, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_RootOrder
@@ -944,7 +944,7 @@ PrefabInstance:
       objectReference: {fileID: 0}
     - target: {fileID: 7680972172480267378, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Layer
-      value: 22
+      value: 0
       objectReference: {fileID: 0}
     - target: {fileID: 8005638754188161689, guid: 92655bf1dc1d01b40bb189e3c2042db0, type: 3}
       propertyPath: m_Layer
