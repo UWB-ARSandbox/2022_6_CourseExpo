@@ -33,6 +33,7 @@ public class PlayerController : MonoBehaviour {
 
     private Vector3 CameraStartingPosition;
     public GameObject Body;
+    public GameObject Head;
 
     public GrabbableObject selectedObject = null;
     public static bool IsTypingInput = false;
@@ -153,11 +154,15 @@ public class PlayerController : MonoBehaviour {
                 mapToggleVR.gameObject.SetActive(true);
                 if(Body.activeSelf)
                     Body.SetActive(false);
+                if(Head.activeSelf)
+                    Head.SetActive(false);
             } else {
                 mapTogglePC.gameObject.SetActive(true);
                 mapToggleVR.gameObject.SetActive(false);
                 if(!Body.activeSelf)
                     Body.SetActive(true);
+                if(!Head.activeSelf)
+                    Head.SetActive(true);
             }
             UpdateXR();
             yield return new WaitForSeconds(1.0f);

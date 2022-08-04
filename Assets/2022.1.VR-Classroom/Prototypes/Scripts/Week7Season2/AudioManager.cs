@@ -209,7 +209,7 @@ public class AudioManager : MonoBehaviour
     public void SetConnectionInfo(string hostname, string password){
         HostName = hostname;
         Password = password;
-        GameManager.SendEnableMessage(hostname + ":" + password);
+        StartCoroutine(SendEnable());
     }
 
     //Call the moveChannel function when user is in desired area and needs to move VoIP channels
@@ -375,7 +375,7 @@ public class AudioManager : MonoBehaviour
         if(VoiceUI != null)
             VoiceUI.GetComponent<VoiceUI>().TestConnectionSuccess();
         else{
-            GameManager.SendEnableMessage(HostName + ":" + Password);
+            StartCoroutine(SendEnable());
         }
     }
     //if test fails initiate error message, lock Enable Voice Chat button
@@ -386,6 +386,12 @@ public class AudioManager : MonoBehaviour
         runningTest = false;
         if(VoiceUI != null)
             VoiceUI.GetComponent<VoiceUI>().TestConnectionFailure();
+    }
+
+    IEnumerator SendEnable(){
+        while(!GameManager.GhostsSent)
+            yield return new WaitForSeconds(0.1f);
+        GameManager.SendEnableMessage(HostName + ":" + Password);
     }
     #endregion 
 
