@@ -24,7 +24,7 @@ public class GroupManager : MonoBehaviour
     public GameObject currentGroupListItem;
     public GameObject currentGroupList;
     public Text groupNameText;
-
+    public bool VR_UI_Script;
     public Group MyGroup = null;
 
     public ASLObject m_ASLObject;
@@ -34,7 +34,10 @@ public class GroupManager : MonoBehaviour
         groupMembers.enabled = false;
         addMemberButton.gameObject.SetActive(false);
         addPlayerContainer.SetActive(false);
-        m_ASLObject._LocallySetFloatCallback(FloatReceive);
+        if(VR_UI_Script && PlayerController.isXRActive)
+            m_ASLObject._LocallySetFloatCallback(FloatReceive);
+        else if(!VR_UI_Script && !PlayerController.isXRActive)
+            m_ASLObject._LocallySetFloatCallback(FloatReceive);
         for (int i = 0; i < 5; i++)
         {
             Group group = new Group();

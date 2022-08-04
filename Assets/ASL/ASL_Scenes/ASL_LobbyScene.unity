@@ -1091,8 +1091,8 @@ MonoBehaviour:
   m_TargetGraphic: {fileID: 723893227}
   m_HandleRect: {fileID: 1192939527}
   m_Direction: 2
-  m_Value: 0.99983776
-  m_Size: 0.84063184
+  m_Value: 0.9998379
+  m_Size: 0.84073216
   m_NumberOfSteps: 0
   m_OnValueChanged:
     m_PersistentCalls:
@@ -4324,43 +4324,7 @@ MonoBehaviour:
   m_Value: 0
   m_Options:
     m_Options:
-    - m_Text: ARObjectSync_Example
-      m_Image: {fileID: 0}
-    - m_Text: OnCollisionEnterScene
-      m_Image: {fileID: 0}
-    - m_Text: OnCollisionExitScene
-      m_Image: {fileID: 0}
-    - m_Text: OnTriggerEnterScene
-      m_Image: {fileID: 0}
-    - m_Text: OnTriggerExitScene
-      m_Image: {fileID: 0}
-    - m_Text: OnTriggerStayScene
-      m_Image: {fileID: 0}
-    - m_Text: ASL_KinematicCollisionTestScene
-      m_Image: {fileID: 0}
-    - m_Text: ASL_RigidBodyCollisionTestScene
-      m_Image: {fileID: 0}
-    - m_Text: ASL_StaticColliderTestScene
-      m_Image: {fileID: 0}
-    - m_Text: StressTest_OnTriggerEnter
-      m_Image: {fileID: 0}
-    - m_Text: StressTestOnTriggerExit
-      m_Image: {fileID: 0}
-    - m_Text: StressTestOnTriggerStay
-      m_Image: {fileID: 0}
-    - m_Text: SimplePlatformerTutorial
-      m_Image: {fileID: 0}
-    - m_Text: ComplexPlatformerScene
-      m_Image: {fileID: 0}
-    - m_Text: PhysicsMasterOrdering
-      m_Image: {fileID: 0}
-    - m_Text: AutonomousObjectTestScene
-      m_Image: {fileID: 0}
-    - m_Text: ColorObject_Example
-      m_Image: {fileID: 0}
-    - m_Text: AutonomousObjectStressTest
-      m_Image: {fileID: 0}
-    - m_Text: TransformObjectViaWorldSpace_Example
+    - m_Text: Week7Season2
       m_Image: {fileID: 0}
   m_OnValueChanged:
     m_PersistentCalls:
@@ -5277,7 +5241,7 @@ RectTransform:
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
-  m_AnchoredPosition: {x: 0, y: 0.045532227}
+  m_AnchoredPosition: {x: 0, y: 0.026794434}
   m_SizeDelta: {x: 0, y: 300}
   m_Pivot: {x: 0, y: 1}
 --- !u!1 &1218653162
@@ -6629,7 +6593,7 @@ MonoBehaviour:
     m_HorizontalOverflow: 0
     m_VerticalOverflow: 0
     m_LineSpacing: 1
-  m_Text: ARObjectSync_Example
+  m_Text: Week7Season2
 --- !u!222 &1522670409
 CanvasRenderer:
   m_ObjectHideFlags: 0
