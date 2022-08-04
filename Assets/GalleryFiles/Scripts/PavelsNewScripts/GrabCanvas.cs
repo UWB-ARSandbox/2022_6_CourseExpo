@@ -1,6 +1,8 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
+using UnityEngine.XR;
+using UnityEngine.XR.Interaction.Toolkit;
 
 public class GrabCanvas : MonoBehaviour
 {
@@ -14,43 +16,92 @@ public class GrabCanvas : MonoBehaviour
 
     [SerializeField] Transform objectToMove;
     public bool lookAtParent = false;
+    bool previousTriggerDownLeft;
+
+    List<InputDevice>  leftDevices;
 
 
     void Start()
     {
         originalStartPos = objectToMove.transform.position;
         selected = false;
+        leftDevices = new List<InputDevice>();
+		var desiredCharacteristicsLeft = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Left | UnityEngine.XR.InputDeviceCharacteristics.Controller;
+		InputDevices.GetDevicesWithCharacteristics(desiredCharacteristicsLeft, leftDevices);
         GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(setPosition);
     }
 
     // Update is called once per frame
     void Update()
     {
-        if(Input.GetMouseButtonDown(0))
+        if(PlayerController.isXRActive)
         {
-            if(CanvasInput.Instance.GetRaycastHit().transform == this.transform)
+            bool triggerDownLeft;
+            if (leftDevices[0].TryGetFeatureValue(CommonUsages.triggerButton, out triggerDownLeft) && triggerDownLeft)
             {
-                previousParent = objectToMove.parent;
-                objectToMove.SetParent(Camera.main.transform);
-                selected = true;
-                currentRotation = objectToMove.rotation;
-                currentY = objectToMove.position.y;
                 
-                StartCoroutine(sendPosition());
+                if(CanvasInput.Instance.getRaycastHitObjectVR(0))
+                {
+                    
+                    RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[0];
+                    
+
+                    if (raycastHit.transform == this.transform)
+                    {
+                        previousParent = objectToMove.parent;
+                        objectToMove.SetParent(GameObject.FindGameObjectWithTag("Player").GetComponentsInChildren<XRRayInteractor>()[0].transform);
+                        selected = true;
+                        currentRotation = objectToMove.rotation;
+                        currentY = objectToMove.position.y;
+                        previousTriggerDownLeft = true;
+                        StartCoroutine(sendPosition());
+                    }
+                }
             }
+            if(!triggerDownLeft && previousTriggerDownLeft && selected)
+            {
+                if (lookAtParent)
+                    objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
+                else
+                    objectToMove.rotation = currentRotation;
+
+                objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
+
+                objectToMove.parent = previousParent;
+                
+                selected = false;
+                previousTriggerDownLeft = false;
+            }
+		
         }
-        if(Input.GetMouseButtonUp(0) && selected)
+        else
         {
-            if (lookAtParent)
-                objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
-            else
-                objectToMove.rotation = currentRotation;
+            if(Input.GetMouseButtonDown(0))
+            {
+                if(CanvasInput.Instance.GetRaycastHit().transform == this.transform)
+                {
+                    previousParent = objectToMove.parent;
+                    objectToMove.SetParent(Camera.main.transform);
+                    selected = true;
+                    currentRotation = objectToMove.rotation;
+                    currentY = objectToMove.position.y;
+                    
+                    StartCoroutine(sendPosition());
+                }
+            }
+            if(Input.GetMouseButtonUp(0) && selected)
+            {
+                if (lookAtParent)
+                    objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
+                else
+                    objectToMove.rotation = currentRotation;
 
-            objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
+                objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
 
-            objectToMove.parent = previousParent;
-            
-            selected = false;
+                objectToMove.parent = previousParent;
+                
+                selected = false;
+            }
         }
         
     }
