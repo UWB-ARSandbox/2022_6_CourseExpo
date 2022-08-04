@@ -23,6 +23,7 @@ public class BoothZoneManager : MonoBehaviour
             _myManager.SetBZM(this);
     }
 
+    // send user id over network when they have entered a booths collider
     void OnTriggerEnter(Collider other)
     {
         if (m_ASLObject == null)
@@ -37,6 +38,7 @@ public class BoothZoneManager : MonoBehaviour
         }
     }
 
+    // send user id over network when they have exited a booths collider
     void OnTriggerExit(Collider other)
     {
         if (other.GetComponent<XpoPlayer>())
@@ -48,6 +50,7 @@ public class BoothZoneManager : MonoBehaviour
         }
     }
 
+    // add or remove a user from the current users list
     void FloatReceive(string _id, float[] _f)
     {
         string boothName;

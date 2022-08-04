@@ -90,7 +90,7 @@ GameObject:
   - component: {fileID: 1064540478285850795}
   - component: {fileID: 4061957328620448656}
   - component: {fileID: 4224240050273309370}
-  - component: {fileID: 1085539425133342041}
+  - component: {fileID: 4365230685882041386}
   m_Layer: 0
   m_Name: GenUITutorial
   m_TagString: Untagged
@@ -168,7 +168,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1085539425133342041}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
         m_MethodName: ViewWelcomeScreen
         m_Mode: 1
@@ -216,7 +216,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &1085539425133342041
+--- !u!114 &4365230685882041386
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -225,7 +225,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 2616881162617293098}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 888b313831afb4849894e44796c8f002, type: 3}
+  m_Script: {fileID: 11500000, guid: ae434c9208c8ccb468c802e6361f60a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   img_Container: {fileID: 2373624363906476395}
@@ -361,9 +361,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1085539425133342041}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
-        m_MethodName: DetachWelcomeScreen
+      - m_Target: {fileID: 4365230685882041386}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
+        m_MethodName: DetachScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
@@ -388,7 +388,7 @@ GameObject:
   - component: {fileID: 732642556509294939}
   - component: {fileID: 7593563584472290850}
   m_Layer: 22
-  m_Name: WelcomeScreen
+  m_Name: TutorialScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -631,8 +631,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1085539425133342041}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
+      - m_Target: {fileID: 4365230685882041386}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
         m_MethodName: PreviousScreen
         m_Mode: 1
         m_Arguments:
@@ -922,8 +922,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 1085539425133342041}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
+      - m_Target: {fileID: 4365230685882041386}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
         m_MethodName: NextScreen
         m_Mode: 1
         m_Arguments:

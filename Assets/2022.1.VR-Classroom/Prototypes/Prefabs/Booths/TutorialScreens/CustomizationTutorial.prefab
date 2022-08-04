@@ -169,7 +169,7 @@ GameObject:
   - component: {fileID: 7254049825118673804}
   - component: {fileID: 567612703580675317}
   m_Layer: 22
-  m_Name: WelcomeScreen
+  m_Name: TutorialScreen
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -412,8 +412,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7030626154943735694}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
+      - m_Target: {fileID: -3528811562093894616}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
         m_MethodName: PreviousScreen
         m_Mode: 1
         m_Arguments:
@@ -545,8 +545,8 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7030626154943735694}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
+      - m_Target: {fileID: -3528811562093894616}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
         m_MethodName: NextScreen
         m_Mode: 1
         m_Arguments:
@@ -647,7 +647,7 @@ GameObject:
   - component: {fileID: 6937602309463237244}
   - component: {fileID: 6259908703660253511}
   - component: {fileID: 6061513691176114285}
-  - component: {fileID: 7030626154943735694}
+  - component: {fileID: -3528811562093894616}
   m_Layer: 0
   m_Name: CustomizationTutorial
   m_TagString: Untagged
@@ -725,7 +725,7 @@ MonoBehaviour:
   m_SelectEntered:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7030626154943735694}
+      - m_Target: {fileID: 0}
         m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
         m_MethodName: ViewWelcomeScreen
         m_Mode: 1
@@ -773,7 +773,7 @@ MonoBehaviour:
   m_OnDeactivate:
     m_PersistentCalls:
       m_Calls: []
---- !u!114 &7030626154943735694
+--- !u!114 &-3528811562093894616
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
@@ -782,7 +782,7 @@ MonoBehaviour:
   m_GameObject: {fileID: 5390904319468618749}
   m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 888b313831afb4849894e44796c8f002, type: 3}
+  m_Script: {fileID: 11500000, guid: ae434c9208c8ccb468c802e6361f60a8, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
   img_Container: {fileID: 5652474583742636988}
@@ -996,9 +996,9 @@ MonoBehaviour:
   m_OnClick:
     m_PersistentCalls:
       m_Calls:
-      - m_Target: {fileID: 7030626154943735694}
-        m_TargetAssemblyTypeName: WelcomeScreen, Assembly-CSharp
-        m_MethodName: DetachWelcomeScreen
+      - m_Target: {fileID: -3528811562093894616}
+        m_TargetAssemblyTypeName: TutorialScreen, Assembly-CSharp
+        m_MethodName: DetachScreen
         m_Mode: 1
         m_Arguments:
           m_ObjectArgument: {fileID: 0}
