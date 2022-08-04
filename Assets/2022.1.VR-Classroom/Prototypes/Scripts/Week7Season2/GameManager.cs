@@ -41,12 +41,18 @@ public class GameManager : MonoBehaviour {
 
     //Message Headers
     //Chosen according to their value on a phone keypad in decimal
+    private const float RDYPING = 5555;
+    private const float ACKPING = 5556;
     private const float XML = 965;
     private const float ASMT = 2768;
     private const float CONT = 2960;
     private const float ANCMT = 26268;
     private const float CNNCT = 26628;
     private const float QUIT = 101;
+
+    private bool readyAcknowledged = false;
+    private bool AllUsersReady = false;
+    private Dictionary<int, bool> playerReadiness = new Dictionary<int,bool>();
 
     public void Quit()
     {
@@ -88,12 +94,16 @@ public class GameManager : MonoBehaviour {
             Instantiate(FirstPersonPlayer, new Vector3(TeacherRespawnPoint.x, TeacherRespawnPoint.y + 1.05f, TeacherRespawnPoint.z), Quaternion.identity);
         } else {
             Instantiate(FirstPersonPlayer, new Vector3(RespawnPoint.x, RespawnPoint.y + 1.05f, RespawnPoint.z + (2 * GameManager.MyID)), Quaternion.identity);
+            //Instantiate UserReady object
+            StartCoroutine(SendRdyPings());
         }
         foreach (int playerID in GameLiftManager.GetInstance().m_Players.Keys) {
             Debug.Log("Player id found: " +playerID);
+            playerReadiness.Add(playerID,false);
             players = GameLiftManager.GetInstance().m_Players;
         }
         if (AmTeacher) {
+            UserReady(MyID);
             StartCoroutine(SpawnGhostPlayers());
             // foreach (int playerID in GameLiftManager.GetInstance().m_Players.Keys) {
             //     playerIDs.Add(playerID);
@@ -114,8 +124,33 @@ public class GameManager : MonoBehaviour {
         StartCoroutine(AlignBoothNames());
         
     }
+    IEnumerator SendRdyPings(){
+        while(!readyAcknowledged){
+            SendPing();
+            yield return new WaitForSeconds(MyID/2);
+        }
+        yield return null;
+    }
+
+    public void UserReady(int userID){
+        playerReadiness[userID] = true;
+        for(int i = 1;i <= players.Count;i++){
+            if(!playerReadiness[i])
+                return;
+        }
+        AllUsersReady = true;
+    }
+
     IEnumerator SpawnGhostPlayers(){
-        yield return new WaitForSeconds(10f);
+        //     UserReadyList = FindObjectsOfType<UserReady>(true);
+        //while(UserReadyList.Count() < (GameLiftManager.GetInstance().m_Players.Count -1)){
+        //     UserReadyList = FindObjectsOfType<UserReady>(true);
+        //     yield return new WaitForSeconds(1f);
+        // }
+        while(!AllUsersReady){
+            yield return new WaitForSeconds(1f);
+        }
+        //yield return new WaitForSeconds(15f);
         foreach (int playerID in GameLiftManager.GetInstance().m_Players.Keys) {
                 playerIDs.Add(playerID);
 
@@ -520,6 +555,24 @@ public class GameManager : MonoBehaviour {
     #endregion
 
     #region Sending
+    public void SendPing(){
+        List<float> NewFloats = new List<float>();
+        NewFloats.Add(RDYPING);
+        NewFloats.Add((float)GameManager.MyID);
+        var FloatsArray = NewFloats.ToArray();
+        _asl.SendAndSetClaim(() => {
+            _asl.SendFloatArray(FloatsArray);
+        });
+    }
+    public void SendAck(float _id){
+        List<float> NewFloats = new List<float>();
+        NewFloats.Add(ACKPING);
+        NewFloats.Add(_id);
+        var FloatsArray = NewFloats.ToArray();
+        _asl.SendAndSetClaim(() => {
+            _asl.SendFloatArray(FloatsArray);
+        });
+    }
     public void SendNamesAndDescriptions() {
         if (nameAndDesc.Count > 0) {
             float[] numNameDescriptionPairs = new float[]
@@ -990,6 +1043,16 @@ public class GameManager : MonoBehaviour {
 
     public void FloatReceive(string _id, float[] _f) {
         switch(_f[0]) {
+            case RDYPING:
+                if(AmTeacher){
+                    SendAck(_f[1]);
+                    UserReady((int)_f[1]);
+                }
+                break;
+            case ACKPING:
+                if(_f[1] == (float)MyID)
+                    readyAcknowledged = true;
+                break;
             case QUIT:
                 Debug.Log(GameManager.players[(int)_f[1]] + " has left the game");
                 GameObject.Find(GameManager.players[(int)_f[1]]).transform.parent.gameObject.SetActive(false);

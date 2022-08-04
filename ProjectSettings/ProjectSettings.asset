@@ -76,7 +76,7 @@ PlayerSettings:
   androidFullscreenMode: 1
   defaultIsNativeResolution: 1
   macRetinaSupport: 1
-  runInBackground: 0
+  runInBackground: 1
   captureSingleScreen: 0
   muteOtherAudioSources: 0
   Prepare IOS For Recording: 0
@@ -313,6 +313,16 @@ PlayerSettings:
   - {fileID: 0}
   - {fileID: 0}
   - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: d705f516cdf33c0459f9c14527d924f4, type: 2}
+  - {fileID: -4954083692503614620, guid: 9884d9205f7a5604c9da4d3f97b10a5e, type: 2}
+  - {fileID: 7359272615936036999, guid: a542886fb524d1242a198a1b8c27e6b8, type: 2}
+  - {fileID: 0}
+  - {fileID: 11400000, guid: ddba8be975fc4d546b730dce634e6c7b, type: 2}
   metroInputSource: 0
   wsaTransparentSwapchain: 0
   m_HolographicPauseOnTrackingLoss: 1
