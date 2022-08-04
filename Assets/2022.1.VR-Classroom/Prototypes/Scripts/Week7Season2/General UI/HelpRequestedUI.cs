@@ -9,7 +9,7 @@ public class HelpRequestedUI : MonoBehaviour
     public ASLObject m_ASLObject;
     float[] id = new float[2];
     public GameObject requestHelpButton;
-
+    public bool VR_UI_Script;
     public bool CurrentlyHelping = false;
     public float CurrentlyHelping_id = -1;
     //public GameObject HelpingFinishedPrefab;
@@ -19,7 +19,10 @@ public class HelpRequestedUI : MonoBehaviour
     {
         // requestHelpButton = GameObject.Find("RequestHelpButton");
         //m_ASLObject = GetComponent<ASLObject>();
-        m_ASLObject._LocallySetFloatCallback(FloatReceive);
+        if(VR_UI_Script && PlayerController.isXRActive)
+            m_ASLObject._LocallySetFloatCallback(FloatReceive);
+        else if(!VR_UI_Script && !PlayerController.isXRActive)
+            m_ASLObject._LocallySetFloatCallback(FloatReceive);
 
         // disable students request help button if you are a teacher
         // and disable the teachers help request ui if you are a student

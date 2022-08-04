@@ -266,17 +266,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                 },
                 {
                     ""name"": """",
-                    ""id"": ""39953acd-4bcf-4d83-a0cf-07cc8bb32d07"",
-                    ""path"": ""<XRController>{LeftHand}/joystick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""VR"",
-                    ""action"": ""Movement"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
                     ""id"": ""48cc4dcf-2b67-4cf7-861b-b3ee2ddf2adf"",
                     ""path"": ""<Keyboard>/space"",
                     ""interactions"": """",
@@ -315,17 +304,6 @@ public partial class @PlayerInputActions : IInputActionCollection2, IDisposable
                     ""interactions"": """",
                     ""processors"": """",
                     ""groups"": ""PC"",
-                    ""action"": ""Rotation"",
-                    ""isComposite"": false,
-                    ""isPartOfComposite"": false
-                },
-                {
-                    ""name"": """",
-                    ""id"": ""24148b60-8018-4490-bed2-d00580ca7226"",
-                    ""path"": ""<XRController>{RightHand}/joystick"",
-                    ""interactions"": """",
-                    ""processors"": """",
-                    ""groups"": ""VR"",
                     ""action"": ""Rotation"",
                     ""isComposite"": false,
                     ""isPartOfComposite"": false
