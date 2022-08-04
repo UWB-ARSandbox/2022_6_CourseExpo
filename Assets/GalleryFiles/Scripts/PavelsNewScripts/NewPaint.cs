@@ -16,10 +16,11 @@ using UnityEngine.EventSystems;
 using SimpleFileBrowser;
 using UnityEngine.XR;
 
+
 public class NewPaint : MonoBehaviour
 {
 	
-	bool allowedPlayer;
+	public bool allowedPlayer;
 
 	[SerializeField] bool allowForEveryone;
 	[SerializeField] bool visibleForEveryone;
@@ -29,7 +30,7 @@ public class NewPaint : MonoBehaviour
 	{
 		allowedPlayer = true;
 		
-
+		
 	}
 	public void disableCanvasLocal()
 	{
@@ -139,6 +140,8 @@ public class NewPaint : MonoBehaviour
 
 	Texture2D blankCanvas;
 
+	Texture2D unMarkedCanvasMask;
+
     int brushSize;
 
 	//how wide the canvas is in pixels
@@ -169,7 +172,7 @@ public class NewPaint : MonoBehaviour
 	//Has the player clicked load canvas button
 	bool canLoad;
 	
-	//Whether the canvas is selected
+	//Whether the canvas is the last canvas clicked on. Unused as of right now
 	bool selected;
 
     //string for typed text
@@ -208,33 +211,33 @@ public class NewPaint : MonoBehaviour
 
 
     // UI field listeners
-	Slider rSlider, gSlider, bSlider;
-	InputField rInput, gInput, bInput;
-	InputField aField = null;
+	[SerializeField] Slider rSlider, gSlider, bSlider;
+	[SerializeField] InputField rInput, gInput, bInput;
+	[SerializeField] InputField aField = null;
 
-	InputField slField = null;
-	InputField textField = null;
-	InputField brushSizeInput = null;
-	Slider brushSizeSlider = null;
+	[SerializeField] InputField slField = null;
+	[SerializeField] InputField textField = null;
+	[SerializeField] InputField brushSizeInput = null;
+	[SerializeField] Slider brushSizeSlider = null;
 
 	// UI button listeners
-	Button loadB = null;
-	Button saveB = null;
-	Button deleteB = null;
-	Button controlsB = null;
+	[SerializeField] Button loadB = null;
+	[SerializeField] Button saveB = null;
+	[SerializeField] Button deleteB = null;
+	[SerializeField] Button controlsB = null;
 
-	Button subGalB = null;
-	Button subStuB = null;
+	[SerializeField] Button subGalB = null;
+	[SerializeField] Button subStuB = null;
 
 	// UI toggle listeners
-	Toggle eraseTog = null;
-	Toggle textTog = null;
-	Toggle lineTog = null;
+	[SerializeField] Toggle eraseTog = null;
+	[SerializeField] Toggle textTog = null;
+	[SerializeField] Toggle lineTog = null;
 
 	//UI dropdown listeners
-	Dropdown textSizeDrop = null;
+	[SerializeField] Dropdown textSizeDrop = null;
 
-    GameObject brushColorUI;
+    [SerializeField] GameObject brushColorUI;
 
 	bool doneLoading;
 
@@ -309,15 +312,19 @@ public class NewPaint : MonoBehaviour
 
 		alphabetNumber = 0;
 
-        GameObject brushColorUI = GameObject.Find("BrushColor");
+        
 		brushColorUI.GetComponent<Image>().color = brushColor;
 
-
+		
         //Texture stuff
+
+		
+
         studentCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 		maskCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 		blankCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
-
+		unMarkedCanvasMask = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false)
+;
         for (int x = 0; x < canvasWidth; x++)
 		{
 			for (int y = 0; y < canvasHeight; y++)
@@ -325,12 +332,15 @@ public class NewPaint : MonoBehaviour
 				studentCanvas.SetPixel(x, y, Color.white);
 				maskCanvas.SetPixel(x, y, Color.clear);
 				blankCanvas.SetPixel(x,y, Color.black );
+				unMarkedCanvasMask.SetPixel(x,y, Color.clear);
 
 			}
 		}
 		studentCanvas.Apply();
 		maskCanvas.Apply();
 		blankCanvas.Apply();
+		unMarkedCanvasMask.Apply();
+
 
         gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
 		maskRenderer.material.mainTexture = maskCanvas;
@@ -338,21 +348,7 @@ public class NewPaint : MonoBehaviour
         //UI stuff
 
 		// UI field code
-		rSlider = GameObject.Find("RedSlider").GetComponent<Slider>();
-		gSlider = GameObject.Find("GreenSlider").GetComponent<Slider>();
-		bSlider = GameObject.Find("BlueSlider").GetComponent<Slider>();
-		//aField = GameObject.Find("AlphaInputField").GetComponent<InputField>();
-
-		rInput = GameObject.Find("RedInputField").GetComponent<InputField>();
-		gInput = GameObject.Find("GreenInputField").GetComponent<InputField>();
-		bInput = GameObject.Find("BlueInputField").GetComponent<InputField>();
-
-		//slField = GameObject.Find("SaveField").GetComponent<InputField>();
-		textField = GameObject.Find("TextInput").GetComponent<InputField>();
-		brushSizeInput = GameObject.Find("SizeInputField").GetComponent<InputField>();
-		brushSizeSlider = GameObject.Find("BrushSizeSlider").GetComponent<Slider>();
-
-		textSizeDrop = GameObject.Find("TextSizeDropdown").GetComponent<Dropdown>();
+		
 
         // Adding Listeners to all relevant objects.
 
@@ -373,26 +369,22 @@ public class NewPaint : MonoBehaviour
 		brushSizeInput.onEndEdit.AddListener(SetBrushSize);
 		brushSizeSlider.onValueChanged.AddListener(delegate { SetBrushSize(brushSizeSlider.value); });
 
-		eraseTog = GameObject.Find("EraserToggle").GetComponent<Toggle>();
-		textTog = GameObject.Find("TextToggle").GetComponent<Toggle>();
-		lineTog = GameObject.Find("LineToggle").GetComponent<Toggle>();
+		
 
 		eraseTog.onValueChanged.AddListener(SetErase);
 		textTog.onValueChanged.AddListener(SetText);
 		lineTog.onValueChanged.AddListener(SetLine);
 
-		deleteB = GameObject.Find("DeleteCanvasButton").GetComponent<Button>();
 		
-		loadB = GameObject.Find("LoadButton").GetComponent<Button>();
 
 		deleteB.onClick.AddListener(sendClearCanvas);
 
 		loadB.onClick.AddListener(SetCanLoad);
 
-    
+		StartCoroutine(UpdateCanvas());
 		if(!allowForEveryone)
 		{
-			StartCoroutine(UpdateCanvas());
+			
 
 			//enableCanvasLocal();
 			disableCanvasLocal();
@@ -405,6 +397,7 @@ public class NewPaint : MonoBehaviour
 			}
 		}
 		else{
+			
 			enableCanvasLocal();
 		}
         
@@ -834,6 +827,7 @@ public class NewPaint : MonoBehaviour
 	}
     void Draw(InputInformation inp, Color brush)
 	{
+		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
         if (!inp.previousMouseDown)
         {
             //draw area of brush size if greater than 1
@@ -856,6 +850,7 @@ public class NewPaint : MonoBehaviour
                         }
                         // Set pixel on canvas to the current brush color
                         
+						
                         studentCanvas.SetPixel(x, y, brush);
                         
                         
@@ -895,8 +890,12 @@ public class NewPaint : MonoBehaviour
                             {
                                 continue;
                             }
-                            
-                            studentCanvas.SetPixel(x, y, brush);
+                            if(!dictionary.ContainsKey((x, y)))
+							{
+								dictionary.Add((x, y), true);
+                            	studentCanvas.SetPixel(x, y, brush);
+							}
+							
                             
                         }
                     }
@@ -913,7 +912,13 @@ public class NewPaint : MonoBehaviour
                     float distanceX = (i * (inp.canvasClick.x - inp.previousCanvasClick.x) / numberOfInterpolations);
                     float distanceY = (i * (inp.canvasClick.y - inp.previousCanvasClick.y) / numberOfInterpolations);
                     
-                    studentCanvas.SetPixel((int)(inp.canvasClick.x - distanceX), (int)(inp.canvasClick.y - distanceY), brush);
+					int x = (int)(inp.canvasClick.x - distanceX);
+					int y = (int)(inp.canvasClick.y - distanceY);
+                    if(!dictionary.ContainsKey((x, y)))
+					{
+						dictionary.Add((x, y), true);
+						studentCanvas.SetPixel(x, y, brush);
+					}
                     
                     
                 }
@@ -926,6 +931,7 @@ public class NewPaint : MonoBehaviour
 	}
 	void DrawText(InputInformation inp)
 	{
+		
 		Vector2 startChar = new Vector2(inp.canvasClick.x, inp.canvasClick.y);
 		int tWidth = 0;
 		int tHeight = 0;
@@ -984,7 +990,7 @@ public class NewPaint : MonoBehaviour
 	}
 	void DrawCharacter(Vector2 currUV, int spot, int tWidth, int tHeight, InputInformation inp)
 	{
-		
+		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
 		spot *= tWidth;
 		int currX = (int)currUV.x;
 		int currY = (int)currUV.y;
@@ -1004,7 +1010,14 @@ public class NewPaint : MonoBehaviour
 						{
 							if (((currX + j) < canvasWidth) && (currY + ((y - 2) * inp.brushSize) + i < canvasHeight))
 							{
-								studentCanvas.SetPixel(currX + j, currY + ((y - 2) * inp.brushSize) + i, pixelColor);
+								int tempX = currX + j;
+								int tempY = currY + ((y - 2) * inp.brushSize) + i;
+								if(!dictionary.ContainsKey((tempX, tempY)))
+								{
+									dictionary.Add((tempX, tempY), true);
+									studentCanvas.SetPixel(tempX, tempY, pixelColor);
+								}
+								
 							}
 
 						}
@@ -1022,6 +1035,8 @@ public class NewPaint : MonoBehaviour
 
 	void DrawLine(InputInformation inp) 
 	{
+		/*
+		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
 		float lineInterpolations = 1000 - 9 * inp.brushSize;
 		for (int i = 0; i < lineInterpolations; i++)
 		{
@@ -1041,16 +1056,98 @@ public class NewPaint : MonoBehaviour
 					}
 					if (inp.eraseMode == false)
 					{
-						studentCanvas.SetPixel(x, y, inp.brushColor);
+						if(!dictionary.ContainsKey((x, y)))
+						{
+							dictionary.Add((x, y), true);
+							studentCanvas.SetPixel(x, y, brushColor);
+						}
 					}
 					else
 					{
-						studentCanvas.SetPixel(x, y, Color.white);
+						if(!dictionary.ContainsKey((x, y)))
+						{
+							dictionary.Add((x, y), true);
+							studentCanvas.SetPixel(x, y, Color.white);
+						}
 					}
 				}
 			}
 		}
 		studentCanvas.Apply();
+		*/
+
+		//This method interpolates between the two points to form a line
+		//This method works by incrementing either the x value or the y value by 1
+		//This way calculates the pixel locations accurately without any repeats caused from the rounding of the hypotenuse.
+
+		
+		if(inp.previousCanvasClick == inp.canvasClick)
+		{
+			return;
+		}
+		float yDistance = inp.previousCanvasClick.y - inp.canvasClick.y;
+		float xDistance =  inp.previousCanvasClick.x - inp.canvasClick.x;
+		float xOverY = Math.Abs(xDistance / yDistance) * (xDistance < 0 ? 1 : -1);
+		float yOverX = Math.Abs(yDistance / xDistance) * (yDistance < 0 ? 1 : -1);
+
+		//Check which of the distances is greater to determine when interpolating which direction (x or y) gets incremented by 1.
+		//If the y is greater, then it gets incremented by 1, else the x gets incremented by 1
+		if(Math.Abs(yDistance) >= Math.Abs(xDistance))
+		{
+			
+			
+			
+			int increment = (yDistance < 0) ? 1 : -1;
+			float horizontalHeight = (float)(Math.Sqrt((xDistance * xDistance) + (yDistance * yDistance)) / Math.Abs(yDistance)) * inp.brushSize;
+
+			
+			
+			for(int i = 0; (i < Math.Abs(yDistance)); i++)
+			{
+				
+				for(int j = 0; j < horizontalHeight/2; j++)
+				{
+					Vector2 interpolationOffset = new Vector2(i * xOverY, i * increment);
+					Vector2 brushOffset = new Vector2(j, 0);
+					Vector2 pixelToSet = inp.previousCanvasClick + interpolationOffset + brushOffset;
+					
+					
+					studentCanvas.SetPixel((int)pixelToSet.x, (int)pixelToSet.y, inp.brushColor);
+					pixelToSet = inp.previousCanvasClick + interpolationOffset - brushOffset;
+					studentCanvas.SetPixel((int)pixelToSet.x, (int)pixelToSet.y, inp.brushColor);
+					
+				}
+				
+
+			}
+		}
+		else{
+			
+			int increment = (xDistance < 0) ? 1 : -1;
+			float verticalHeight = (float)(Math.Sqrt((xDistance * xDistance) + (yDistance * yDistance)) / Math.Abs(xDistance)) * inp.brushSize;
+
+			for(int i = 0; (i < Math.Abs(xDistance)); i++)
+			{
+				for(int j = 0; j < verticalHeight/2; j++)
+				{
+					Vector2 interpolationOffset = new Vector2(i * increment, i * yOverX);
+					Vector2 brushOffset = new Vector2(0, j);
+					Vector2 pixelToSet = inp.previousCanvasClick + interpolationOffset + brushOffset;
+
+					studentCanvas.SetPixel((int)pixelToSet.x, (int)pixelToSet.y, inp.brushColor);
+					pixelToSet = inp.previousCanvasClick + interpolationOffset - brushOffset;
+					studentCanvas.SetPixel((int)pixelToSet.x, (int)pixelToSet.y, inp.brushColor);
+				}
+				
+
+			}
+		}
+		studentCanvas.Apply();
+		
+
+
+		
+
 	}
 	
     void UpdateMask()
@@ -1064,13 +1161,8 @@ public class NewPaint : MonoBehaviour
 			OnCanvas = true;
 			Vector2 uv = raycastHit.textureCoord;
 			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
-			for (int x = 0; x < canvasWidth; x++)
-			{
-				for (int y = 0; y < canvasHeight; y++)
-				{
-					maskCanvas.SetPixel(x, y, Color.clear);
-				}
-			}
+			
+			Graphics.CopyTexture(unMarkedCanvasMask, maskCanvas);
 			if(lineMode)
 			{
 				lineMask();
@@ -1120,13 +1212,7 @@ public class NewPaint : MonoBehaviour
 			
 			maskIsEmpty = false;
 			OnCanvasLeft = true;
-			for (int x = 0; x < canvasWidth; x++)
-			{
-				for (int y = 0; y < canvasHeight; y++)
-				{
-					maskCanvas.SetPixel(x, y, Color.clear);
-				}
-			}
+			Graphics.CopyTexture(unMarkedCanvasMask, maskCanvas);
 			Vector2 uv = raycastHit.textureCoord;
 			Vector2 pixelCoord = new Vector2((int)(uv.x * (float)(canvasWidth)), (int)(uv.y * (float)(canvasHeight)));
 			
@@ -1163,13 +1249,7 @@ public class NewPaint : MonoBehaviour
 			OnCanvasRight = true;
 			if(OnCanvasLeft == false)
 			{
-				for (int x = 0; x < canvasWidth; x++)
-				{
-					for (int y = 0; y < canvasHeight; y++)
-					{
-						maskCanvas.SetPixel(x, y, Color.clear);
-					}
-				}
+				Graphics.CopyTexture(unMarkedCanvasMask, maskCanvas);
 			}
 			
 			Vector2 uv = raycastHit.textureCoord;
@@ -1201,14 +1281,7 @@ public class NewPaint : MonoBehaviour
 		}
 		if(!maskIsEmpty && !OnCanvasLeft && !OnCanvasRight)
 		{
-			for (int x = 0; x < canvasWidth; x++)
-			{
-				for (int y = 0; y < canvasHeight; y++)
-				{
-					maskCanvas.SetPixel(x, y, Color.clear);
-				}
-			}
-			maskCanvas.Apply();
+			Graphics.CopyTexture(unMarkedCanvasMask, maskCanvas);
 			maskIsEmpty = true;
 		}
 		
@@ -1330,7 +1403,7 @@ public class NewPaint : MonoBehaviour
 			textTog.isOn = false;
 			lineTog.isOn = false;
 
-			GameObject.Find("TextInput").GetComponent<InputField>().interactable = false;
+			textField.GetComponent<InputField>().interactable = false;
 		}
 	}
     public void SetText(bool text)
@@ -1346,7 +1419,7 @@ public class NewPaint : MonoBehaviour
 			lineTog.isOn = false;
 			eraseTog.isOn = false;
 
-			GameObject.Find("TextInput").GetComponent<InputField>().interactable = true;
+			textField.interactable = true;
 			//GameObject.Find("SaveField").GetComponent<InputField>().interactable = false;
 
 			canLoad = false;
@@ -1354,7 +1427,7 @@ public class NewPaint : MonoBehaviour
 		}
 		else
 		{
-			GameObject.Find("TextInput").GetComponent<InputField>().interactable = false;
+			textField.GetComponent<InputField>().interactable = false;
 		}
 	}
     public void SetLine(bool line)
@@ -1392,7 +1465,7 @@ public class NewPaint : MonoBehaviour
 		float red;
 		float.TryParse(r, out red);
 		brushColor = new Color(red, brushColor.g, brushColor.b, brushColor.a);
-		brushColorUI = GameObject.Find("BrushColor");
+		
 		brushColorUI.GetComponent<Image>().color = brushColor;
 
 		rSlider.value = red;
@@ -1403,7 +1476,7 @@ public class NewPaint : MonoBehaviour
 		//float red;
 		//float.TryParse(r, out red);
 		brushColor = new Color(r, brushColor.g, brushColor.b, brushColor.a);
-		brushColorUI = GameObject.Find("BrushColor");
+		
 		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
 
@@ -1412,7 +1485,7 @@ public class NewPaint : MonoBehaviour
 		float green;
 		float.TryParse(g, out green);
 		brushColor = new Color(brushColor.r, green, brushColor.b, brushColor.a);
-		brushColorUI = GameObject.Find("BrushColor");
+		
 		brushColorUI.GetComponent<Image>().color = brushColor;
 
 		gSlider.value = green;
@@ -1423,7 +1496,7 @@ public class NewPaint : MonoBehaviour
 		//float green;
 		//float.TryParse(g, out green);
 		brushColor = new Color(brushColor.r, g, brushColor.b, brushColor.a);
-		brushColorUI = GameObject.Find("BrushColor");
+		
 		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
 
@@ -1432,7 +1505,7 @@ public class NewPaint : MonoBehaviour
 		float blue;
 		float.TryParse(b, out blue);
 		brushColor = new Color(brushColor.b, brushColor.g, blue, brushColor.a);
-		brushColorUI = GameObject.Find("BrushColor");
+		
 		brushColorUI.GetComponent<Image>().color = brushColor;
 
 		bSlider.value = blue;
@@ -1443,7 +1516,7 @@ public class NewPaint : MonoBehaviour
 		//float blue;
 		//float.TryParse(b, out blue);
 		brushColor = new Color(brushColor.r, brushColor.g, b, brushColor.a);
-		brushColorUI = GameObject.Find("BrushColor");
+		
 		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
 	public void ChangeAlpha(string a)
@@ -1451,7 +1524,7 @@ public class NewPaint : MonoBehaviour
 		float alpha;
 		float.TryParse(a, out alpha);
 		brushColor = new Color(brushColor.r, brushColor.g, brushColor.b, alpha);
-		GameObject brushColorUI = GameObject.Find("BrushColor");
+		
 		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
     /*DetermineCharacter
@@ -1485,18 +1558,17 @@ public class NewPaint : MonoBehaviour
 
 	public void SetCanLoad()
 	{
-		if(selected)
+		
+		if (canSave == false && doneLoading)
 		{
-			if (canSave == false && doneLoading)
-			{
-				doneLoading = false;
-				canLoad = true;
-				Texture2D newPng = new Texture2D(1, 1);
-				StartCoroutine(LoadWindow(newPng));
-				
-			}
-			canLoad = false;
+			doneLoading = false;
+			canLoad = true;
+			Texture2D newPng = new Texture2D(1, 1);
+			StartCoroutine(LoadWindow(newPng));
+			
 		}
+		canLoad = false;
+		
 		
 		
 		
@@ -1523,7 +1595,7 @@ public class NewPaint : MonoBehaviour
 		}
 	}
 	
-	void SendTexture(Texture2D newPng)
+	public void SendTexture(Texture2D newPng)
 	{
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
 			{
@@ -1563,14 +1635,13 @@ public class NewPaint : MonoBehaviour
 
 	void sendClearCanvas()
 	{
-		if(selected)
-		{
-			float[] fArray = {1};
-			this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
-				{
-					GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
-				});
-		}
+		
+		float[] fArray = {1};
+		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
+			{
+				GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+			});
+		
 		
 	}
 	void ClearCanvas()
