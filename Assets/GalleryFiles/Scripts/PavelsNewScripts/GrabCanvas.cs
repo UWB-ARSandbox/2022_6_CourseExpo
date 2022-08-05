@@ -39,31 +39,37 @@ public class GrabCanvas : MonoBehaviour
             bool triggerDownLeft;
             if (leftDevices[0].TryGetFeatureValue(CommonUsages.triggerButton, out triggerDownLeft) && triggerDownLeft)
             {
-                
-                if(CanvasInput.Instance.getRaycastHitObjectVR(0))
+                if(!previousTriggerDownLeft)
                 {
-                    
-                    RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[0];
-                    
-
-                    if (raycastHit.transform == this.transform)
+                    if(CanvasInput.Instance.getRaycastHitObjectVR(0))
                     {
-                        previousParent = objectToMove.parent;
-                        objectToMove.SetParent(GameObject.FindGameObjectWithTag("Player").GetComponentsInChildren<XRRayInteractor>()[0].transform);
-                        selected = true;
-                        currentRotation = objectToMove.rotation;
-                        currentY = objectToMove.position.y;
-                        previousTriggerDownLeft = true;
-                        StartCoroutine(sendPosition());
+                        
+                        RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHitVR()[0];
+                        
+
+                        if (raycastHit.transform == this.transform)
+                        {
+                            previousParent = objectToMove.parent;
+                            objectToMove.SetParent(GameObject.FindGameObjectWithTag("Player").GetComponentsInChildren<XRRayInteractor>()[0].transform);
+                            selected = true;
+                            currentRotation = objectToMove.rotation;
+                            currentY = objectToMove.position.y;
+                            previousTriggerDownLeft = true;
+                            StartCoroutine(sendPosition());
+                        }
                     }
                 }
             }
             if(!triggerDownLeft && previousTriggerDownLeft && selected)
             {
                 if (lookAtParent)
+                {
                     objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
+                }
                 else
+                {
                     objectToMove.rotation = currentRotation;
+                }
 
                 objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
 
@@ -92,9 +98,13 @@ public class GrabCanvas : MonoBehaviour
             if(Input.GetMouseButtonUp(0) && selected)
             {
                 if (lookAtParent)
+                {
                     objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
+                }
                 else
+                {
                     objectToMove.rotation = currentRotation;
+                }
 
                 objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
 
@@ -112,9 +122,14 @@ public class GrabCanvas : MonoBehaviour
         while(selected)
         {
             if (lookAtParent)
+            {
                 objectToMove.transform.LookAt(new Vector3(objectToMove.parent.position.x, currentY, objectToMove.parent.position.z));
+            }
+                
             else
+            {
                 objectToMove.rotation = currentRotation;
+            }
             objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
             float[] fArray = {ASL.GameLiftManager.GetInstance().m_PeerId, objectToMove.position.x, currentY, objectToMove.position.z, objectToMove.parent.position.x, objectToMove.parent.position.z};
            GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
