@@ -112,11 +112,11 @@ public class PlayerController : MonoBehaviour {
             Vector2 input = moveMapCamera.ReadValue<Vector2>();
             mapNavigation.PanCamera(input);
         }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKey(KeyCode.LeftControl))
         {
             Cursor.lockState = CursorLockMode.None;
         }
-        if (Input.GetKeyDown(KeyCode.LeftControl))
+        if (Input.GetKeyUp(KeyCode.LeftControl))
         {
             Cursor.lockState = CursorLockMode.Locked;
         }
