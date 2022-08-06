@@ -6476,6 +6476,7 @@ MonoBehaviour:
   BZM: {fileID: 0}
   TPChannelTrigger: {fileID: 0}
   m_GroupManager: {fileID: 0}
+  m_ChatManager: {fileID: 0}
   MaxStudents: 0
   curStudents: []
   RandomVal: 0
@@ -15052,6 +15053,18 @@ PrefabInstance:
   m_Modification:
     m_TransformParent: {fileID: 8559277850925738845}
     m_Modifications:
+    - target: {fileID: 388566016143774030, guid: a972703f8cd73c549b938d865726dd13, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 13.6
+      objectReference: {fileID: 0}
+    - target: {fileID: 388566016143774030, guid: a972703f8cd73c549b938d865726dd13, type: 3}
+      propertyPath: m_LocalPosition.z
+      value: -0
+      objectReference: {fileID: 0}
+    - target: {fileID: 388566016143774030, guid: a972703f8cd73c549b938d865726dd13, type: 3}
+      propertyPath: m_AnchoredPosition.x
+      value: 0.266
+      objectReference: {fileID: 0}
     - target: {fileID: 1792615139348369531, guid: a972703f8cd73c549b938d865726dd13, type: 3}
       propertyPath: m_RootOrder
       value: 5
@@ -15108,6 +15121,10 @@ PrefabInstance:
       propertyPath: boothRenderer
       value: 
       objectReference: {fileID: 5261340563723671934}
+    - target: {fileID: 7996153464087239106, guid: a972703f8cd73c549b938d865726dd13, type: 3}
+      propertyPath: m_SizeDelta.x
+      value: 49.5
+      objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: a972703f8cd73c549b938d865726dd13, type: 3}
 --- !u!4 &7379790665610564498 stripped
