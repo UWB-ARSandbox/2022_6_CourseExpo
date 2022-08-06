@@ -850,6 +850,7 @@ public class AssessmentManager : MonoBehaviour {
         }
 
         if (!testLockedOut) {
+            _myCollabManager.ClearVotes();
             switch (currentQuestion.questionType) {
                 case QuestionType.MultipleChoice:
                     CheckMCResponse(-1);

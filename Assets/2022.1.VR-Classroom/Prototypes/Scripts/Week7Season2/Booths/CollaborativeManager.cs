@@ -209,6 +209,7 @@ public class CollaborativeManager : MonoBehaviour
         });
     }
     //Send ID of player that has started quiz IE hit the button
+    //Send ID of player that has started quiz IE hit the button
     public IEnumerator DelayedStart(float Delay){
         yield return new WaitForSeconds(Delay/20);
         SendStartMessage();
@@ -440,7 +441,8 @@ public class CollaborativeManager : MonoBehaviour
 
     //intent is to check to see that all students have hit that final submit button
     public Dictionary<string, bool> FinalSubmitBool = new Dictionary<string, bool>();
-    public GameObject FinalSubmitButton;
+    public Button FinalSubmitButton;
+    public GameObject FinalSubmitText;
 
     public GameObject ForceSubmitButton;
     public Coroutine ForceCoroutineInstance;
@@ -719,7 +721,7 @@ public class CollaborativeManager : MonoBehaviour
         }
         ShortAnswer.Clear();
         FinalSubmitBool.Clear();
-        FinalSubmitButton.SetActive(false);
+        FinalSubmitToggle(false);
         for(int i = 0; i < curStudents.Count; i++){
                 FinalSubmitBool.Add(GameManager.players[(int)curStudents[i]],false);
         }
@@ -729,7 +731,27 @@ public class CollaborativeManager : MonoBehaviour
         }
         ForceSubmitButton.SetActive(false);
     }
-
+    void FinalSubmitToggle(bool ToggleVal){
+        Color greenColor;
+        Color redColor;
+        ColorUtility.TryParseHtmlString("#0AC742", out greenColor);
+        ColorUtility.TryParseHtmlString("#FF0000", out redColor);
+        if(ToggleVal){
+            if(!FinalSubmitButton.gameObject.activeSelf){
+                FinalSubmitButton.gameObject.SetActive(true);
+                FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.SetActive(false);
+            }
+            FinalSubmitButton.gameObject.transform.Find("lbl_QuestionTimer").gameObject.SetActive(false);
+            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = greenColor;
+        }
+        else if(!ToggleVal && FinalSubmitButton.gameObject.activeSelf){
+            if(FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.activeSelf)
+                FinalSubmitButton.gameObject.transform.Find("lbl_QuestionTimer").gameObject.SetActive(true);
+            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = redColor;
+        }
+        FinalSubmitButton.interactable = ToggleVal;
+        FinalSubmitText.SetActive(ToggleVal);
+    }
     public void CheckVotes(){
         for(int i = 0;i < curStudents.Count;i++){
             CreateVotePrefab(GameManager.players[(int)curStudents[i]]);
@@ -751,7 +773,7 @@ public class CollaborativeManager : MonoBehaviour
             }
             Debug.Log("Votes are unanimous");
             
-            FinalSubmitButton.SetActive(true);
+            FinalSubmitToggle(true);
             if(ForceRoutineRunning){
                 StopCoroutine(ForceCoroutineInstance);
                 ForceRoutineRunning = false;
@@ -761,7 +783,7 @@ public class CollaborativeManager : MonoBehaviour
                 if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
                     return;
             }
-            FinalSubmitButton.SetActive(false);
+            FinalSubmitToggle(false);
             //Spawn final submit button and when that is pressed submit inputs
             //When submit button is pressed check votes again to make sure they are still distinct
             SubmitInputs(distinctList[0]);
@@ -769,7 +791,7 @@ public class CollaborativeManager : MonoBehaviour
         }
         else{
             Debug.Log("Votes are divided");
-            FinalSubmitButton.SetActive(false);
+            FinalSubmitToggle(false);
             for(int i = 0; i < curStudents.Count; i++){
                 if(FinalSubmitBool.ContainsKey(GameManager.players[(int)curStudents[i]])){
                     FinalSubmitBool[GameManager.players[(int)curStudents[i]]] = false;

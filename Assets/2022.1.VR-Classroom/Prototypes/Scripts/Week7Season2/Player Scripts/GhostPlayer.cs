@@ -137,7 +137,7 @@ public class GhostPlayer : MonoBehaviour
                 Debug.Log("FloatReceive, Converted Username===============>" + username);
                 minimapUsername.text = username;
                 worldspaceUsername.text = username;
-                worldspaceUsername.transform.parent.name = username;
+                //worldspaceUsername.transform.parent.name = username;
                 gameObject.name = (username + "_GhostPlayer");
                 break;
             case 101:
