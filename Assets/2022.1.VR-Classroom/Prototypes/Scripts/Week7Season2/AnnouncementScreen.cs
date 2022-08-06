@@ -42,7 +42,7 @@ public class AnnouncementScreen : MonoBehaviour
     {
         if (gameObject.activeSelf == false)
         {
-            Cursor.lockState = CursorLockMode.Confined;
+            Cursor.lockState = CursorLockMode.None;
             gameObject.SetActive(true);
             //resetList();
             createList();
