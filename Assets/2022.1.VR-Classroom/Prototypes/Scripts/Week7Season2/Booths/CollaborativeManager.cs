@@ -160,6 +160,7 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void StartGroupQuiz(){
+
         if(m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Count <= _myAssessmentManager.NumberOfConcurrentUsers && curStudents.Count == 0){
             if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && !GameManager.isTakingAssessment){
                 Debug.Log("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
@@ -209,14 +210,17 @@ public class CollaborativeManager : MonoBehaviour
     }
     //Send ID of player that has started quiz IE hit the button
     public IEnumerator DelayedStart(float Delay){
-        yield return new WaitForSeconds(Delay/2);
+        yield return new WaitForSeconds(Delay/20);
         SendStartMessage();
         yield return null;
     }
 
     public void SendStartMessage(){
+        //if not teacher
+        //make sure your not already in the student list for quiz
+        //make sure you have not already taken the assessment
         if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)
-            && !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
+            && !_myAssessmentManager.AssessmentCompleted){
             GameManager.isTakingAssessment = true;
             _myAssessmentManager.pnl_Start.SetActive(false);
             List<float> NewFloats = new List<float>();
@@ -305,6 +309,7 @@ public class CollaborativeManager : MonoBehaviour
         player.transform.localPosition = new Vector3(3.5f, 1.115f, 0);
         player.transform.SetParent(null, true);
         player.GetComponent<CharacterController>().enabled = true;
+        _myAssessmentManager.walls.gameObject.SetActive(true);
     }
 
     public void FloatReceive(string _id, float[] _f) {
@@ -332,13 +337,13 @@ public class CollaborativeManager : MonoBehaviour
                     // check if the group i am in contains whoever started the quiz
                     // check if i have not completed this assessment
                     // check if i am currently not taking an assessment
+                    // check if 
                     if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
                         && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]]) && !_myAssessmentManager.AssessmentCompleted 
                             && !GameManager.isTakingAssessment) {
                         //issue with everyone in the group starting at once
                         StartCoroutine(DelayedStart((float)m_GroupManager.MyGroup.members.IndexOf(GameManager.players[GameManager.MyID])));
                         StartCoroutine(TeleportUser(GameManager.players[(int)_f[2]]));
-                        curStudents.Add(GameManager.MyID);
                         GameManager.isTakingAssessment = true;
                     }
                     break;
