@@ -160,6 +160,7 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void StartGroupQuiz(){
+
         if(m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Count <= _myAssessmentManager.NumberOfConcurrentUsers && curStudents.Count == 0){
             if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && !GameManager.isTakingAssessment){
                 Debug.Log("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
@@ -208,15 +209,19 @@ public class CollaborativeManager : MonoBehaviour
         });
     }
     //Send ID of player that has started quiz IE hit the button
+    //Send ID of player that has started quiz IE hit the button
     public IEnumerator DelayedStart(float Delay){
-        yield return new WaitForSeconds(Delay/2);
+        yield return new WaitForSeconds(Delay/20);
         SendStartMessage();
         yield return null;
     }
 
     public void SendStartMessage(){
+        //if not teacher
+        //make sure your not already in the student list for quiz
+        //make sure you have not already taken the assessment
         if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID)
-            && !_myAssessmentManager.AssessmentCompleted && !GameManager.isTakingAssessment){
+            && !_myAssessmentManager.AssessmentCompleted){
             GameManager.isTakingAssessment = true;
             _myAssessmentManager.pnl_Start.SetActive(false);
             List<float> NewFloats = new List<float>();
@@ -305,6 +310,7 @@ public class CollaborativeManager : MonoBehaviour
         player.transform.localPosition = new Vector3(3.5f, 1.115f, 0);
         player.transform.SetParent(null, true);
         player.GetComponent<CharacterController>().enabled = true;
+        _myAssessmentManager.walls.gameObject.SetActive(true);
     }
 
     public void FloatReceive(string _id, float[] _f) {
@@ -314,21 +320,28 @@ public class CollaborativeManager : MonoBehaviour
                     MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
                     if(!curStudents.Contains(_f[2]))
                         curStudents.Add(_f[2]);
-                    Debug.Log("Student ID:" +_f[2] +"started test");
+                    Debug.Log("Student ID:" +_f[2] +" has started a test");
                     SyncedTimer();
                     break;
                 }
                 case GroupQuizStarted:{
                     //quizStarted functionality
                     MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
-                    Debug.Log("Student ID:" +_f[2] +"started test");
                     if(!curStudents.Contains(_f[2]))
                         curStudents.Add(_f[2]);
+                    Debug.Log("Student ID:" +_f[2] +" has started a test");
                     SyncedTimer();
                     //too see if you should also start the quiz
+                    // check if MyID is not the same as whoever started the test
+                    // check if i am currently not in the booth
+                    // check if i am currently in a group
+                    // check if the group i am in contains whoever started the quiz
+                    // check if i have not completed this assessment
+                    // check if i am currently not taking an assessment
+                    // check if 
                     if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
-                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted 
-                            && !GameManager.isTakingAssessment){
+                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]]) && !_myAssessmentManager.AssessmentCompleted 
+                            && !GameManager.isTakingAssessment) {
                         //issue with everyone in the group starting at once
                         StartCoroutine(DelayedStart((float)m_GroupManager.MyGroup.members.IndexOf(GameManager.players[GameManager.MyID])));
                         StartCoroutine(TeleportUser(GameManager.players[(int)_f[2]]));
@@ -428,7 +441,8 @@ public class CollaborativeManager : MonoBehaviour
 
     //intent is to check to see that all students have hit that final submit button
     public Dictionary<string, bool> FinalSubmitBool = new Dictionary<string, bool>();
-    public GameObject FinalSubmitButton;
+    public Button FinalSubmitButton;
+    public GameObject FinalSubmitText;
 
     public GameObject ForceSubmitButton;
     public Coroutine ForceCoroutineInstance;
@@ -707,7 +721,7 @@ public class CollaborativeManager : MonoBehaviour
         }
         ShortAnswer.Clear();
         FinalSubmitBool.Clear();
-        FinalSubmitButton.SetActive(false);
+        FinalSubmitToggle(false);
         for(int i = 0; i < curStudents.Count; i++){
                 FinalSubmitBool.Add(GameManager.players[(int)curStudents[i]],false);
         }
@@ -717,7 +731,27 @@ public class CollaborativeManager : MonoBehaviour
         }
         ForceSubmitButton.SetActive(false);
     }
-
+    void FinalSubmitToggle(bool ToggleVal){
+        Color greenColor;
+        Color redColor;
+        ColorUtility.TryParseHtmlString("#0AC742", out greenColor);
+        ColorUtility.TryParseHtmlString("#FF0000", out redColor);
+        if(ToggleVal){
+            if(!FinalSubmitButton.gameObject.activeSelf){
+                FinalSubmitButton.gameObject.SetActive(true);
+                FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.SetActive(false);
+            }
+            FinalSubmitButton.gameObject.transform.Find("lbl_QuestionTimer").gameObject.SetActive(false);
+            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = greenColor;
+        }
+        else if(!ToggleVal && FinalSubmitButton.gameObject.activeSelf){
+            if(FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.activeSelf)
+                FinalSubmitButton.gameObject.transform.Find("lbl_QuestionTimer").gameObject.SetActive(true);
+            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = redColor;
+        }
+        FinalSubmitButton.interactable = ToggleVal;
+        FinalSubmitText.SetActive(ToggleVal);
+    }
     public void CheckVotes(){
         for(int i = 0;i < curStudents.Count;i++){
             CreateVotePrefab(GameManager.players[(int)curStudents[i]]);
@@ -739,7 +773,7 @@ public class CollaborativeManager : MonoBehaviour
             }
             Debug.Log("Votes are unanimous");
             
-            FinalSubmitButton.SetActive(true);
+            FinalSubmitToggle(true);
             if(ForceRoutineRunning){
                 StopCoroutine(ForceCoroutineInstance);
                 ForceRoutineRunning = false;
@@ -749,7 +783,7 @@ public class CollaborativeManager : MonoBehaviour
                 if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
                     return;
             }
-            FinalSubmitButton.SetActive(false);
+            FinalSubmitToggle(false);
             //Spawn final submit button and when that is pressed submit inputs
             //When submit button is pressed check votes again to make sure they are still distinct
             SubmitInputs(distinctList[0]);
@@ -757,7 +791,7 @@ public class CollaborativeManager : MonoBehaviour
         }
         else{
             Debug.Log("Votes are divided");
-            FinalSubmitButton.SetActive(false);
+            FinalSubmitToggle(false);
             for(int i = 0; i < curStudents.Count; i++){
                 if(FinalSubmitBool.ContainsKey(GameManager.players[(int)curStudents[i]])){
                     FinalSubmitBool[GameManager.players[(int)curStudents[i]]] = false;

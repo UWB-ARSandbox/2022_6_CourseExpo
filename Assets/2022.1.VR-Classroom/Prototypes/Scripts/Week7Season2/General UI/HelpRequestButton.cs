@@ -35,7 +35,7 @@ public class HelpRequestButton : MonoBehaviour
                 yield return new WaitForSeconds(1f);
             }
             Player.transform.GetComponent<CharacterController>().enabled = false;
-            Player.transform.position = GameObject.Find(username).transform.position + (Vector3.up);
+            Player.transform.position = GameObject.Find(username+"_GhostPlayer").transform.position + (Vector3.up);
             Player.transform.GetComponent<CharacterController>().enabled = true;
             // check to see if the teacher is currently helping a student if so end the chat with 
             // that student and return them to their previous channel
