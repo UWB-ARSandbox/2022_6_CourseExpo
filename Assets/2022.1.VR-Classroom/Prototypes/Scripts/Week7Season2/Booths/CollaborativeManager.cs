@@ -314,24 +314,31 @@ public class CollaborativeManager : MonoBehaviour
                     MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
                     if(!curStudents.Contains(_f[2]))
                         curStudents.Add(_f[2]);
-                    Debug.Log("Student ID:" +_f[2] +"started test");
+                    Debug.Log("Student ID:" +_f[2] +" has started a test");
                     SyncedTimer();
                     break;
                 }
                 case GroupQuizStarted:{
                     //quizStarted functionality
                     MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
-                    Debug.Log("Student ID:" +_f[2] +"started test");
                     if(!curStudents.Contains(_f[2]))
                         curStudents.Add(_f[2]);
+                    Debug.Log("Student ID:" +_f[2] +" has started a test");
                     SyncedTimer();
                     //too see if you should also start the quiz
+                    // check if MyID is not the same as whoever started the test
+                    // check if i am currently not in the booth
+                    // check if i am currently in a group
+                    // check if the group i am in contains whoever started the quiz
+                    // check if i have not completed this assessment
+                    // check if i am currently not taking an assessment
                     if(GameManager.MyID != (int)_f[2] && !curStudents.Contains((float)GameManager.MyID) && m_GroupManager.MyGroup != null 
-                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]])&& !_myAssessmentManager.AssessmentCompleted 
-                            && !GameManager.isTakingAssessment){
+                        && m_GroupManager.MyGroup.members.Contains(GameManager.players[(int)_f[2]]) && !_myAssessmentManager.AssessmentCompleted 
+                            && !GameManager.isTakingAssessment) {
                         //issue with everyone in the group starting at once
                         StartCoroutine(DelayedStart((float)m_GroupManager.MyGroup.members.IndexOf(GameManager.players[GameManager.MyID])));
                         StartCoroutine(TeleportUser(GameManager.players[(int)_f[2]]));
+                        curStudents.Add(GameManager.MyID);
                         GameManager.isTakingAssessment = true;
                     }
                     break;

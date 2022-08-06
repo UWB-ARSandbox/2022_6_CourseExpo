@@ -1235,7 +1235,7 @@ public class AssessmentManager : MonoBehaviour {
                     // if(NumberOfConcurrentUsers < 2)
                     //     btn_Start.onClick.AddListener(StartAssessment);
                     // else
-                        btn_Start.onClick.AddListener(_myCollabManager.StartGroupQuiz);
+                    btn_Start.onClick.AddListener(_myCollabManager.StartGroupQuiz);
                     btn_Start.gameObject.SetActive(true);
                     break;
                 case "pnl_WelcomeScreen":
