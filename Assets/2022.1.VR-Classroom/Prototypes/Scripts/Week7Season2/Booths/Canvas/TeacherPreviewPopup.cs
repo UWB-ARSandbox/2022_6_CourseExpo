@@ -5,9 +5,10 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.XR;
 
+// Current implementation of the "full view" of the teacher's canvas (usable from the student drawing tables) so that students can see more clearly.
+// Derived from the WelcomeScreen implemented by the first expo group.
 public class TeacherPreviewPopup : MonoBehaviour, IClickable
 {
-    // Start is called before the first frame update
     public Image img_Container;
 
     public CanvasMirrorer teacherCanvas;
@@ -25,11 +26,11 @@ public class TeacherPreviewPopup : MonoBehaviour, IClickable
     private Transform previousParent;
     void Start()
     {
+        // Store initial information from the unity editor at startup
         initLocalPos = transform.localPosition;
         initLocalRot = transform.localRotation;
         initLocalScale = transform.localScale;
         previousParent = transform.parent;
-        //UpdateUI();
     }
 
     void FixedUpdate()

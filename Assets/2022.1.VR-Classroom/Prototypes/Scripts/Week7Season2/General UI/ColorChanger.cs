@@ -3,6 +3,7 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Preset color buttons (e.g. "Red") in the UI.
 public class ColorChanger : MonoBehaviour
 {
     public bool basedOnImgColor = false; // Overrides the colorOfChoice, uses the color associated with the imgOfChoice's color field

@@ -3,6 +3,9 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Manager script for "background audio" within the expo. Should be expandable to include more audio tracks.
+// Future Devleopers: Check out the BackgroundAudio prefab under the GameManager in the scene. The current two
+// audio tracks "OceanWaves" and "SteadyEnjoyment" can be consulted as examples for how to add more.
 public class BackgroundAudioManager : MonoBehaviour
 {
     public List<AudioSource> audioClips; // configure in the Unity editor. clips should route to the same AudioMixer as the volume slider

@@ -3,6 +3,8 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.UI;
 
+// Script to grab the face image texture using the current player ID yada yada. Replaces the texture of 
+// the object it's attached to (currently, the image componet of the "avatar preview" in the UI)
 public class FaceImagePreview : MonoBehaviour
 {
     public GameObject colorPreview;

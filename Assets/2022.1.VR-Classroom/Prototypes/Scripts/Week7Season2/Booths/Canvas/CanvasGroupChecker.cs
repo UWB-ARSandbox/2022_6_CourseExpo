@@ -3,6 +3,10 @@ using System.Collections.Generic;
 using UnityEngine;
 using ASL;
 
+// Uses information from the group manager to update canvases based on groups the teacher has set up.
+// The current implementation uses a box collider emcompassing the whole canvas room. When the teacher
+// enters the room (locally), canvases are updated based on current group data. In this way, the teacher
+// can modify student groups on the fly and re-assign canvas access to students.
 public class CanvasGroupChecker : MonoBehaviour
 {
     public GroupManager m_GroupManager;

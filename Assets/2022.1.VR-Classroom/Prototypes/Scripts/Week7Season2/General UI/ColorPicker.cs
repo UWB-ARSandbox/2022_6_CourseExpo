@@ -5,6 +5,8 @@ using UnityEngine.UI;
 using System;
 using UnityEngine.Events;
 
+// Limitation: Does not seem to work in VR due to how expo UI is handled. Preset color buttons serve as an alternative for now.
+
 // Much credit to PabloMakes for the following tutorial: https://www.youtube.com/watch?v=rKhFYxUNL6A
 // I have modified his implementation below and attempted to explain everything that may be confusing.
 
