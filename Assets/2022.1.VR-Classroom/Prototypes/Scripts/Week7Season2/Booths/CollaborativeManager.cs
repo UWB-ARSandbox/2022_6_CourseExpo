@@ -73,9 +73,12 @@ public class CollaborativeManager : MonoBehaviour
         Debug.Assert(TimerText != null);
         Player = GameObject.Find("FirstPersonPlayer(Clone)");
         TPChannelTrigger = gameObject.GetComponentInChildren<TeleportTrigger>();
-        FinalSubmitButton.GetComponent<Button>().onClick.AddListener(() => SendInput(FinalSubmit));
+        //FinalSubmitButton.GetComponent<Button>().onClick.AddListener(() => SendInput(FinalSubmit));
         m_GroupManager = GameObject.Find("GroupsUI").GetComponent<GroupManager>();
         m_ChatManager = GameObject.Find("Chat").GetComponent<ChatManager>();
+        ColorUtility.TryParseHtmlString("#0AC742", out greenColor);
+        ColorUtility.TryParseHtmlString("#FF0000", out redColor);
+        ColorUtility.TryParseHtmlString("#FFFF00",out yellowColor);
     }
 
     public void SetMaxStudents(int maxStudents){
@@ -89,6 +92,8 @@ public class CollaborativeManager : MonoBehaviour
         yield return null;
     }
 
+    //Intent is to disable the the ability for other users to start the quiz
+    //
     public void DisableBooth(){
         if(!GameManager.AmTeacher){
             //_myBooth.lockToggle.Lock();
@@ -111,7 +116,7 @@ public class CollaborativeManager : MonoBehaviour
         if(ForceRoutineRunning)
             StopCoroutine(ForceCoroutineInstance);
         ForceRoutineRunning = false;
-        ForceSubmitButton.SetActive(false);
+        ForceSubmitToggle(false);
         //if(!_myAssessmentManager.pnl_Start.active)
         if(!_myAssessmentManager.AssessmentCompleted)
             _myAssessmentManager.pnl_Start.SetActive(true);
@@ -443,10 +448,13 @@ public class CollaborativeManager : MonoBehaviour
     public Dictionary<string, bool> FinalSubmitBool = new Dictionary<string, bool>();
     public Button FinalSubmitButton;
     public GameObject FinalSubmitText;
-
-    public GameObject ForceSubmitButton;
+    public GameObject ForceSubmitText;
     public Coroutine ForceCoroutineInstance;
     public bool ForceRoutineRunning = false;
+
+    Color greenColor;
+    Color redColor;
+    Color yellowColor;
 
     //intended to force a continuation if a user has not entered an answer/agreement isnt reached unilaterally
     public IEnumerator ForceContinue(){
@@ -456,13 +464,10 @@ public class CollaborativeManager : MonoBehaviour
         //after 30 seconds activate forceContinue button
         //when pressed forcecontinue will submit everyones current answers and continue the test
         //
-        ForceSubmitButton.SetActive(true);
+        ForceSubmitToggle(true);
         ForceRoutineRunning = false;
         yield return null;
 
-    }
-    public void ForceContinueButtonPress(){
-        SendInput(ForceSubmit);
     }
 
     public void SubmitTextButtonClick(Button buttonObj){
@@ -489,7 +494,7 @@ public class CollaborativeManager : MonoBehaviour
                         res.Value.SetActive(true);
                 }
                 if(!ForceRoutineRunning){
-                    ForceSubmitButton.SetActive(false);
+                    ForceSubmitToggle(false);
                     ForceCoroutineInstance = StartCoroutine(ForceContinue());
                 }
             }
@@ -501,7 +506,7 @@ public class CollaborativeManager : MonoBehaviour
                     }
                 }
                 if(!ForceRoutineRunning){
-                    ForceSubmitButton.SetActive(false);
+                    ForceSubmitToggle(false);
                     ForceCoroutineInstance = StartCoroutine(ForceContinue());
                 }
             }
@@ -729,14 +734,36 @@ public class CollaborativeManager : MonoBehaviour
             StopCoroutine(ForceCoroutineInstance);
             ForceRoutineRunning = false;
         }
-        ForceSubmitButton.SetActive(false);
+        ForceSubmitToggle(false);
     }
-    void FinalSubmitToggle(bool ToggleVal){
-        Color greenColor;
-        Color redColor;
-        ColorUtility.TryParseHtmlString("#0AC742", out greenColor);
-        ColorUtility.TryParseHtmlString("#FF0000", out redColor);
+
+    void ForceSubmitToggle(bool ToggleVal){
         if(ToggleVal){
+            FinalSubmitButton.onClick.AddListener(() => SendInput(ForceSubmit));
+            
+            if(!FinalSubmitButton.gameObject.activeSelf){
+                FinalSubmitButton.gameObject.SetActive(true);
+                FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.SetActive(false);
+            }
+            FinalSubmitButton.gameObject.transform.Find("lbl_QuestionTimer").gameObject.SetActive(false);
+            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = yellowColor;
+        }
+        else if(!ToggleVal && FinalSubmitButton.gameObject.activeSelf){
+            if(FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.activeSelf)
+                FinalSubmitButton.gameObject.transform.Find("lbl_QuestionTimer").gameObject.SetActive(true);
+            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = redColor;
+        }
+
+        ForceSubmitText.SetActive(ToggleVal);
+        FinalSubmitButton.interactable = ToggleVal;        
+        if(!ToggleVal)
+            FinalSubmitButton.onClick.RemoveListener(() => SendInput(ForceSubmit));
+    }
+
+    void FinalSubmitToggle(bool ToggleVal){
+        if(ToggleVal){
+            FinalSubmitButton.onClick.AddListener(() => SendInput(FinalSubmit));
+            
             if(!FinalSubmitButton.gameObject.activeSelf){
                 FinalSubmitButton.gameObject.SetActive(true);
                 FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.SetActive(false);
@@ -751,7 +778,10 @@ public class CollaborativeManager : MonoBehaviour
         }
         FinalSubmitButton.interactable = ToggleVal;
         FinalSubmitText.SetActive(ToggleVal);
+        if(!ToggleVal)
+            FinalSubmitButton.onClick.RemoveListener(()=>SendInput(FinalSubmit));
     }
+
     public void CheckVotes(){
         for(int i = 0;i < curStudents.Count;i++){
             CreateVotePrefab(GameManager.players[(int)curStudents[i]]);
@@ -772,13 +802,12 @@ public class CollaborativeManager : MonoBehaviour
                  }
             }
             Debug.Log("Votes are unanimous");
-            
+            ForceSubmitToggle(false);
             FinalSubmitToggle(true);
             if(ForceRoutineRunning){
                 StopCoroutine(ForceCoroutineInstance);
                 ForceRoutineRunning = false;
             }
-            ForceSubmitButton.SetActive(false);
             for(int i = 0; i < curStudents.Count; i++){
                 if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
                     return;
@@ -806,7 +835,7 @@ public class CollaborativeManager : MonoBehaviour
         if(ForceRoutineRunning){
             StopCoroutine(ForceCoroutineInstance);
             ForceRoutineRunning = false;
-            ForceSubmitButton.SetActive(false);
+            ForceSubmitToggle(false);
         }
         switch(_f){
             case buttonA:{
