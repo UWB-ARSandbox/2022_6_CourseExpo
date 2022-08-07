@@ -71,7 +71,10 @@ public class VoiceUI : MonoBehaviour
         if(myMumble != null){
             MuteSelf.isOn = myMumble.getClient().IsSelfMuted();
         }
-
+        else if(myMumble == null && _AudioManager.VoiceChatEnabled){
+            MuteSelf.isOn = _AudioManager.GetMumbleActor().getClient().IsSelfMuted();
+        }
+        
         if(_AudioManager.VoiceChatEnabled)
             HideConnectionPanel();
         else

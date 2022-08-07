@@ -30,7 +30,7 @@ public class AudioManager : MonoBehaviour
     public MenuScreen PCMenu;
     public MenuScreen VRMenu;
 
-    public ASLObject ASL_GameManager;
+    public ASLObject _myASLObject;
 
     private string Username;
     public string HostName;
@@ -44,7 +44,7 @@ public class AudioManager : MonoBehaviour
     private Mumble.MumbleClient _mumbleClient;
 
     private bool AudioAttached = false;
-
+    
     public bool AdminFlag = false;
     private string previousChannel;
     public void SetController(PlayerController cont){my_Controller = cont;}
@@ -52,11 +52,15 @@ public class AudioManager : MonoBehaviour
     public bool runningTest = false;
     public bool TestSuccess_bool = false;
 
+    private const float CNNCT = 26628;
+
     private void Awake() {
-        ASL_GameManager = gameObject.GetComponent<ASLObject>();
+        if(_myASLObject == null)
+            _myASLObject = gameObject.GetComponent<ASLObject>();
     }
     // Start is called before the first frame update
     void Start(){
+        _myASLObject._LocallySetFloatCallback(FloatReceive);
         Username = GameManager.players[GameManager.MyID];
         if(PCMenu == null){
             PCMenu = GameObject.Find("PC Menu").GetComponent<MenuScreen>();
@@ -114,6 +118,14 @@ public class AudioManager : MonoBehaviour
 
     #endregion
 
+    public void FloatReceive(string _id, float[] _f) {
+        switch(_f[0]) {
+            case CNNCT:
+                RecieveConnectionInfo_FromGamemanager(_f);
+            break;
+        }
+    }
+
     //Intended to be called by the GameManager upon recieving the CNNCT command from the Teacher
     //float[] _f should contain such information such as HostName and Password where password must match exactly
     //And hostname shall match the hostname indicated in the Voice Chat Setup guide
@@ -167,6 +179,9 @@ public class AudioManager : MonoBehaviour
             }  
         }
         VoiceUIEnabled = !VoiceUIEnabled;
+    }
+    public MumbleActor GetMumbleActor(){
+        return mumble;
     }
 
     //called by the mumble actor to setup the actor and the Audio Manager.
@@ -391,8 +406,22 @@ public class AudioManager : MonoBehaviour
     IEnumerator SendEnable(){
         while(!GameManager.GhostsSent)
             yield return new WaitForSeconds(0.1f);
-        GameManager.SendEnableMessage(HostName + ":" + Password);
+        SendEnableMessage(HostName + ":" + Password);
     }
+    
+    //Moved to Audio manager to unclutter the gamemanager ASL object
+    private void SendEnableMessage(string HostName_Password){
+        List<float> ConnectionFloats = new List<float>();
+        var header = new List<float>(){
+            CNNCT,                                  //_f[0]: CNNCT = Enable Voice Chat Header Response
+            HostName_Password.Length,
+        };
+        ConnectionFloats.AddRange(header);
+        ConnectionFloats.AddRange(GameManager.stringToFloats(HostName_Password));
+        var ConnectionFloatsArray = ConnectionFloats.ToArray();
+        _myASLObject.SendAndSetClaim(() => {_myASLObject.SendFloatArray(ConnectionFloatsArray); }, -1);
+    }
+    
     #endregion 
 
 }
