@@ -4,7 +4,8 @@ using UnityEngine;
 using UnityEngine.UI;
 using ASL;
 using System.Linq;
-
+//The itent of the Collaborative Manager class is to modify the Assessment Manager in such a way that the quiz becomes synched across multiple users
+//-This is primarily done through using ASL messages to ensure that specific 
 public class CollaborativeManager : MonoBehaviour
 {
     public BoothManager _myBooth;
@@ -398,6 +399,7 @@ public class CollaborativeManager : MonoBehaviour
                 }
                 case BackSpace:{
                     //txtField.text = txtField.text.Remove(txtField.text.Length - 1);
+                    //deprecated
                     break;
                 }
                 case FinalSubmit:{
@@ -466,6 +468,8 @@ public class CollaborativeManager : MonoBehaviour
     public GameObject ForceSubmitText;
     public Coroutine ForceCoroutineInstance;
     public bool ForceRoutineRunning = false;
+
+    private bool FinalSubmissionRunning = false;
 
     Color greenColor;
     Color redColor;
@@ -777,7 +781,7 @@ public class CollaborativeManager : MonoBehaviour
 
     void FinalSubmitToggle(bool ToggleVal){
         if(ToggleVal){
-            FinalSubmitButton.onClick.AddListener(() => SendInput(FinalSubmit));
+            FinalSubmitButton.onClick.AddListener(() => FinalSubmission());
             
             if(!FinalSubmitButton.gameObject.activeSelf){
                 FinalSubmitButton.gameObject.SetActive(true);
@@ -794,7 +798,25 @@ public class CollaborativeManager : MonoBehaviour
         FinalSubmitButton.interactable = ToggleVal;
         FinalSubmitText.SetActive(ToggleVal);
         if(!ToggleVal)
-            FinalSubmitButton.onClick.RemoveListener(()=>SendInput(FinalSubmit));
+            FinalSubmitButton.onClick.RemoveListener(()=>FinalSubmission());
+    }
+
+    //intent is to limit the users ability to spam press the final submission button
+    //So while the final submission is locked out the user may press the button as many times as theyd like but the button will not do anything
+    IEnumerator FinalSubmissionLockOutTimer(float time){
+        FinalSubmissionRunning = true;
+        yield return new WaitForSeconds(time);
+        FinalSubmissionRunning = false;
+        yield return null;
+    }
+
+    public void FinalSubmission(){
+        //intent is that if the user has already press the button then it should not send input again
+        if(FinalSubmitBool[GameManager.players[GameManager.MyID]] == true || FinalSubmissionRunning){
+            return;
+        }
+        SendInput(FinalSubmit);
+        StartCoroutine(FinalSubmissionLockOutTimer(1f));
     }
 
     public void CheckVotes(){
@@ -823,13 +845,10 @@ public class CollaborativeManager : MonoBehaviour
                 StopCoroutine(ForceCoroutineInstance);
                 ForceRoutineRunning = false;
             }
-            for(int i = 0; i < curStudents.Count; i++){
-                if(FinalSubmitBool[GameManager.players[(int)curStudents[i]]] == false)
-                    return;
-            }
+            if(FinalSubmitBool.ContainsValue(false))
+                return;
             FinalSubmitToggle(false);
             //Spawn final submit button and when that is pressed submit inputs
-            //When submit button is pressed check votes again to make sure they are still distinct
             SubmitInputs(distinctList[0]);
             SetupVoteList();//clear old votes
         }
