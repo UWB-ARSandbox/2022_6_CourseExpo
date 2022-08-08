@@ -28,7 +28,7 @@ public class GrabCanvas : MonoBehaviour
         leftDevices = new List<InputDevice>();
 		var desiredCharacteristicsLeft = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Left | UnityEngine.XR.InputDeviceCharacteristics.Controller;
 		InputDevices.GetDevicesWithCharacteristics(desiredCharacteristicsLeft, leftDevices);
-        GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(setPosition);
+        gameObject.GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(setPosition);
     }
 
     // Update is called once per frame
@@ -132,8 +132,8 @@ public class GrabCanvas : MonoBehaviour
             }
             objectToMove.position = new Vector3(objectToMove.position.x, currentY, objectToMove.position.z);
             float[] fArray = {ASL.GameLiftManager.GetInstance().m_PeerId, objectToMove.position.x, currentY, objectToMove.position.z, objectToMove.parent.position.x, objectToMove.parent.position.z};
-           GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
-                GetComponent<ASL.ASLObject>().SendFloatArray(fArray); 
+            gameObject.GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
+                gameObject.GetComponent<ASL.ASLObject>().SendFloatArray(fArray); 
             });
             yield return new WaitForSeconds(1 / 20.0f);
         }
@@ -154,8 +154,8 @@ public class GrabCanvas : MonoBehaviour
     public void ResetPosition()
     {
         float[] fArray = { -1f, originalStartPos.x, originalStartPos.y, originalStartPos.z, 0f,  0f };
-        GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
-            GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
+        gameObject.GetComponent<ASL.ASLObject>().SendAndSetClaim(() => {
+            gameObject.GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
         });
     }
 }
