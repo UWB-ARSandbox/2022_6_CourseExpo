@@ -85,6 +85,7 @@ public class CollaborativeManager : MonoBehaviour
         MaxStudents = maxStudents;
     }
 
+    //Teleport player to the teleportation point of the booth
     public IEnumerator KickPlayerOut(){
         Player.transform.GetComponent<CharacterController>().enabled = false;
         Player.transform.position = gameObject.GetComponentInChildren<LockToggle>().transform.position + (Vector3.up);
@@ -127,7 +128,13 @@ public class CollaborativeManager : MonoBehaviour
         }
     }
 
+    //intent is that the Synced Timer is called by all clients locally when an individual sends a start message
+    //as such upon recieving a start message all users add that individual to the Quizzes curstudents list
+    //And start the timer upon the first start message recieve once started the timer will not be called again 
+    //until the quiz has ended
     public void SyncedTimer(){
+        //Timer has not started
+        //Quiz is not active
         if(!TimerStarted && !QuizActive){
             if(curStudents[0] == (float)GameManager.MyID)
                 SendNewRandom();
@@ -165,7 +172,15 @@ public class CollaborativeManager : MonoBehaviour
     }
 
     public void StartGroupQuiz(){
-
+        //To determine if the user should start a group quiz
+        //Check to see if their group is not null IE they have a group
+        //Check to see if the size of the group is less then that of the maximum amount of users
+        //Check to see that no one has already started the quiz
+        //Check to make sure they are not a teacher
+        //-------------------------------------------------------
+        //May not be necessary checks?
+        //Check to make sure that curStudents does not contain their id
+        //Check to make sure that the user is not currently taking an assessment
         if(m_GroupManager.MyGroup != null && m_GroupManager.MyGroup.members.Count <= _myAssessmentManager.NumberOfConcurrentUsers && curStudents.Count == 0){
             if(!GameManager.AmTeacher && !curStudents.Contains(GameManager.MyID) && !GameManager.isTakingAssessment){
                 Debug.Log("Starting Group Quiz for: " + m_GroupManager.MyGroup.groupNumber);
