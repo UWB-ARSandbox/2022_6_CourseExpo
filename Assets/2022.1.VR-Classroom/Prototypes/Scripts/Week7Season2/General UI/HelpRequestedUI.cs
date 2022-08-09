@@ -15,6 +15,10 @@ public class HelpRequestedUI : MonoBehaviour
     //public GameObject HelpingFinishedPrefab;
     GameObject HelpingFinishedButton;
 
+    const float STUDENT_REQUEST = 100;
+    const float REENABLE_BUTTON = 101;
+    const float FINISH_HELPING = 102;
+
     void Start()
     {
         // requestHelpButton = GameObject.Find("RequestHelpButton");
@@ -34,22 +38,16 @@ public class HelpRequestedUI : MonoBehaviour
 
     // called by student when pressing request help button
     public void HelpRequested() {
-        id[0] = GameManager.MyID;
-        id[1] = 100; // student request
         requestHelpButton.GetComponent<Button>().enabled = false;
-        m_ASLObject.SendAndSetClaim(() => {
-            m_ASLObject.SendFloatArray(id);
-        });
+        float[] m_myFloatArray = new float[2] { STUDENT_REQUEST, GameManager.MyID };
+        m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(m_myFloatArray); });
     }
 
     public void ReenableButton(float _id) {
         CurrentlyHelping = true;
         CurrentlyHelping_id = _id;
-        id[0] = _id;
-        id[1] = 101;
-        m_ASLObject.SendAndSetClaim(() => {
-            m_ASLObject.SendFloatArray(id);
-        });
+        float[] m_myFloatArray = new float[2] { REENABLE_BUTTON, _id };
+        m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(m_myFloatArray); });
     }
     //call the HelpFinished function when the teacher clicks the done helping button-> should return the user being helped and the teacher to their previous channels
     public void HelpFinished(){
@@ -58,13 +56,10 @@ public class HelpRequestedUI : MonoBehaviour
         if(HelpingFinishedButton != null){
             Destroy(HelpingFinishedButton);
         }
-        id[0] = CurrentlyHelping_id;
-        id[1] = 102;
-        m_ASLObject.SendAndSetClaim(() => {
-            m_ASLObject.SendFloatArray(id);
-        });
         CurrentlyHelping = false;
         CurrentlyHelping_id = -1;
+        float[] m_myFloatArray = new float[2] { FINISH_HELPING, CurrentlyHelping_id };
+        m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(m_myFloatArray); });
     }
     public void SpawnHelpFinishedButton(){
         if(HelpingFinishedButton != null){
@@ -79,31 +74,33 @@ public class HelpRequestedUI : MonoBehaviour
 
     void FloatReceive(string _id, float[] _f)
     {
-        if ((int)_f[1] == 101 && !GameManager.AmTeacher)
-        {
-            if ((int)_f[0] == GameManager.MyID){
-                requestHelpButton.GetComponent<Button>().enabled = true;
-                //move user to private voice channel when teacher teleports to them
-                GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
-                GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = true;
-            }
+        switch(_f[0]) {
+            case REENABLE_BUTTON:
+                if (!GameManager.AmTeacher && (int)_f[1] == GameManager.MyID)
+                {
+                    requestHelpButton.GetComponent<Button>().enabled = true;
+                    //move user to private voice channel when teacher teleports to them
+                    GameObject.Find("GameManager").GetComponent<AudioManager>().moveChannel("Private");
+                    GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = true;
+                }
+                break;
+            case STUDENT_REQUEST:
+                if (GameManager.AmTeacher)
+                {
+                    Debug.Log(GameManager.players[(int)_f[1]] + " has requested help");
+                    GameObject newButton = (GameObject)Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity, scrollPanel.transform);
+                    newButton.transform.localScale = new Vector3(1, 1, 1);
+                    newButton.GetComponent<HelpRequestButton>().username = GameManager.players[(int)_f[1]];
+                    newButton.GetComponent<HelpRequestButton>().id = (int)_f[1];
+                }
+                break;
+            case FINISH_HELPING:
+                if (!GameManager.AmTeacher && (int)_f[1] == GameManager.MyID)
+                {
+                    GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = false;
+                    GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
+                }
+                break;
         }
-        else if ((int)_f[1] == 100 && GameManager.AmTeacher)
-        {
-            Debug.Log(GameManager.players[(int)_f[0]] + " has requested help");
-            GameObject newButton = (GameObject)Instantiate(buttonPrefab, Vector3.zero, Quaternion.identity, scrollPanel.transform);
-            //newButton.transform.parent = scrollPanel.transform;
-            newButton.transform.localScale = new Vector3(1, 1, 1);
-            newButton.GetComponent<HelpRequestButton>().username = GameManager.players[(int)_f[0]];
-            newButton.GetComponent<HelpRequestButton>().id = (int)_f[0];
-        }
-        else if((int)_f[1] == 102 && !GameManager.AmTeacher){
-        //Move User back to their original channel
-            if ((int)_f[0] == GameManager.MyID){
-                GameObject.Find("GameManager").GetComponent<AudioManager>().IsBeingHelped = false;
-                GameObject.Find("GameManager").GetComponent<AudioManager>().ReturnToPreviousChannel();
-            }
-        }
-        
     }
 }

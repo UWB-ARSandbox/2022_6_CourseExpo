@@ -45,14 +45,7 @@ public class MenuScreen : MonoBehaviour
             }
             else
                 CurrentGroupList.SetActive(true);
-            if (PlayerList.GetComponent<PlayerListScreen>().GenerateType)
-            {
-                PlayerList.GetComponent<PlayerListScreen>().generateRangeList();
-            }
-            else
-            {
-                PlayerList.GetComponent<PlayerListScreen>().generateList();
-            }
+            PlayerList.GetComponent<PlayerListScreen>().generateList();
             gameObject.SetActive(true);
             Refresh.onClick.Invoke();
         }

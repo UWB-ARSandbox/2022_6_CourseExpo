@@ -1,4 +1,3 @@
-using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -8,26 +7,34 @@ using ASL;
 public class GroupManager : MonoBehaviour
 {
     public List<Group> groups = new List<Group>();
+    public ASLObject m_ASLObject;
+    public bool VR_UI_Script;
+
+    // teacher variables
+    public int maxGroups = 5; // keep at five for now
     public TMP_Dropdown groupList;
     public Button groupsButton;
     public Button addMemberButton;
     public TMP_Text groupName;
     public TMP_Text groupMembers;
     public GameObject addPlayerContainer;
-
     public Dictionary<int, string> playerList;
     public GameObject addPlayerList;
     public GameObject addPlayerListItem;
     public GameObject memberListItem;
     public GameObject memberList;
+    public Text groupNameText;
+
+    // student variables
     public GameObject currentGroupWindow;
     public GameObject currentGroupListItem;
     public GameObject currentGroupList;
-    public Text groupNameText;
-    public bool VR_UI_Script;
     public Group MyGroup = null;
 
-    public ASLObject m_ASLObject;
+    // ASL variables
+    const float ADD_PLAYER = 500;
+    const float REMOVE_PLAYER = 501;
+
     void Start()
     {
         groupName.enabled = false;
@@ -38,7 +45,9 @@ public class GroupManager : MonoBehaviour
             m_ASLObject._LocallySetFloatCallback(FloatReceive);
         else if(!VR_UI_Script && !PlayerController.isXRActive)
             m_ASLObject._LocallySetFloatCallback(FloatReceive);
-        for (int i = 0; i < 5; i++)
+        
+        // create groups and populate groupList dropdown for teacher's UI
+        for (int i = 0; i < maxGroups; i++)
         {
             Group group = new Group();
             group.groupName = "Group " + (i + 1);
@@ -56,14 +65,16 @@ public class GroupManager : MonoBehaviour
         }
     }
 
+    // called when teacher clicks on a player list item in the AddPlayer UI
     public void AddPlayer(string playerName)
-    {
+    {   
+        // remove player from group if they are already in one
         foreach (Group group in groups)
         {
             if (group.members.Contains(playerName))
             {
                 List<float> myFloats = new List<float>();
-                myFloats.Add(502);
+                myFloats.Add(REMOVE_PLAYER);
                 myFloats.Add(group.groupNumber);
                 myFloats.AddRange(GameManager.stringToFloats(playerName));
                 var myFloatsArray = myFloats.ToArray();
@@ -71,29 +82,34 @@ public class GroupManager : MonoBehaviour
             }
         }
 
+        // add the player if they are already not in the group
         if (!groups[groupList.value - 1].members.Contains(playerName))
         {
             List<float> myFloats = new List<float>();
-            myFloats.Add(500);
-            myFloats.Add(groupList.value - 1);
+            myFloats.Add(ADD_PLAYER);
+            myFloats.Add(groupList.value);
             myFloats.AddRange(GameManager.stringToFloats(playerName));
             var myFloatsArray = myFloats.ToArray();
             m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
         }
     }
 
+    // called when teacher clicks on a player list item in the groups UI
     public void RemovePlayer(string playerName)
     {
         List<float> myFloats = new List<float>();
-        myFloats.Add(501);
-        myFloats.Add(groupList.value - 1);
+        myFloats.Add(REMOVE_PLAYER);
+        myFloats.Add(groupList.value);
         myFloats.AddRange(GameManager.stringToFloats(playerName));
         var myFloatsArray = myFloats.ToArray();
         m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
     }
 
+    // called when a player is added or removed from a group
+    // or when a new group is selected from the teacher's group UI
     public void ValueChanged()
     {
+        // update teachers group manager UI
         if (groupList.value == 0)
         {
             groupName.enabled = false;
@@ -112,6 +128,7 @@ public class GroupManager : MonoBehaviour
             LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
         }
 
+        // update students group UI
         if (!GameManager.AmTeacher)
         {
             groupNameText.text = "Group: None";
@@ -124,18 +141,19 @@ public class GroupManager : MonoBehaviour
                 if (group.members.Contains(GameManager.players[GameManager.MyID]))
                 {
                     groupNameText.text = group.groupName;
-                    foreach (string item in group.members)
+                    foreach (string playerName in group.members)
                     {
-                        var listItem = Instantiate(currentGroupListItem, currentGroupList.transform, false) as GameObject;
-                        listItem.GetComponent<SinglelineContainer>().setText(item);
+                        if (playerName == GameManager.players[GameManager.MyID])
+                            continue;
+                        AddUserToList(playerName, currentGroupListItem, currentGroupList);
                     }
+                    AddUserToList(GameManager.players[GameManager.MyID], currentGroupListItem, currentGroupList);
                 }
             }
         }
-
-        Debug.Log("Value changed to " + groupList.options[groupList.value].text);
     }
 
+    // used by teacher to update group manager UI
     public void LoadGroupData(int index)
     {
         groupName.text = groups[index].groupName;
@@ -143,14 +161,13 @@ public class GroupManager : MonoBehaviour
         {
             foreach (string member in groups[index].members)
             {
-                // groupMembers.text += (member + "\n");
-                var listItem = Instantiate(memberListItem, memberList.transform, false) as GameObject;
-                listItem.GetComponent<SinglelineContainer>().setText(member);
+                AddUserToList(member, memberListItem, memberList);   
             }
         }
         UpdateAddPlayerList();
     }
 
+    // called when teacher clicks on add player from the group manager UI
     public void ShowAddPlayerScreen()
     {
         UpdateAddPlayerList();
@@ -159,17 +176,17 @@ public class GroupManager : MonoBehaviour
 
     void UpdateAddPlayerList()
     {
+        // clear list before populating it
         foreach (Transform child in addPlayerList.transform)
         {
             GameObject.Destroy(child.gameObject);
         }
         playerList = GameLiftManager.GetInstance().m_Players;
-        foreach (string item in playerList.Values)
+        foreach (string playerName in playerList.Values)
         {
-            if (!groups[groupList.value - 1].members.Contains(item) && item != GameManager.players[GameManager.MyID])
+            if (!groups[groupList.value - 1].members.Contains(playerName) && playerName != GameManager.players[GameManager.MyID])
             {
-                var listItem = Instantiate(addPlayerListItem, addPlayerList.transform, false) as GameObject;
-                listItem.GetComponent<SinglelineContainer>().setText(item);
+                AddUserToList(playerName, addPlayerListItem, addPlayerList);
             }
         }
     }
@@ -179,32 +196,27 @@ public class GroupManager : MonoBehaviour
         addPlayerContainer.SetActive(false);
     }
 
+    void AddUserToList(string name, GameObject listItem, GameObject list)
+    {
+        GameObject newListItem = Instantiate(listItem, list.transform, false) as GameObject;
+        newListItem.GetComponent<SinglelineContainer>().setText(name);
+    }
+
     public void FloatReceive(string _id, float[] _f) {
         string username;
         switch(_f[0]) {
-            case 500:
+            case ADD_PLAYER:
                 username = "";
                 for (int i = 2; i < _f.Length; i++) {
                     username += (char)(int)_f[i];
                 }
-                groups[(int)_f[1]].members.Add(username);
+                groups[(int)_f[1] - 1].members.Add(username);
                 if (username == GameManager.players[GameManager.MyID]){
                     MyGroup = groups[(int)_f[1]];
                 }
                 ValueChanged();
                 break;
-            case 501:
-                username = "";
-                for (int i = 2; i < _f.Length; i++) {
-                    username += (char)(int)_f[i];
-                }
-                groups[(int)_f[1]].members.Remove(username);
-                if (username == GameManager.players[GameManager.MyID]){
-                    MyGroup = null;
-                }
-                ValueChanged();
-                break;
-            case 502:
+            case REMOVE_PLAYER:
                 username = "";
                 for (int i = 2; i < _f.Length; i++) {
                     username += (char)(int)_f[i];

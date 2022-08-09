@@ -95,7 +95,7 @@ GameObject:
   - component: {fileID: 496271298835784050}
   - component: {fileID: -8155983938989461974}
   m_Layer: 22
-  m_Name: PlayerList_Button
+  m_Name: PlayerListItem
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
