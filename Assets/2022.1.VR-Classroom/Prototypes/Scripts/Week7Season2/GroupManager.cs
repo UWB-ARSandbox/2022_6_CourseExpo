@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
@@ -63,6 +64,7 @@ public class GroupManager : MonoBehaviour
             groupsButton.gameObject.SetActive(true);
             currentGroupWindow.SetActive(false);
         }
+        StartCoroutine(MyGroupUpdater());
     }
 
     // called when teacher clicks on a player list item in the AddPlayer UI
@@ -103,6 +105,24 @@ public class GroupManager : MonoBehaviour
         myFloats.AddRange(GameManager.stringToFloats(playerName));
         var myFloatsArray = myFloats.ToArray();
         m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
+    }
+
+    IEnumerator MyGroupUpdater(){
+        while(true){
+            yield return new WaitForSeconds(3f);
+            bool GroupFound = false;
+            for(int i = 0; i < groups.Count; i++){
+                if(groups[i].members.Contains(GameManager.players[GameManager.MyID])){
+                    if(MyGroup != groups[i]){
+                        MyGroup = groups[i];
+                        Debug.LogWarning("My group has been changed to: " + MyGroup.groupName);
+                    }
+                    GroupFound = true;
+                }
+            }
+            if(!GroupFound)
+                MyGroup = null;
+        }
     }
 
     // called when a player is added or removed from a group
