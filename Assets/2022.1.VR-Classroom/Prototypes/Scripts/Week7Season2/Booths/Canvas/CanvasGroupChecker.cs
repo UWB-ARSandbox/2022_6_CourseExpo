@@ -16,8 +16,17 @@ public class CanvasGroupChecker : MonoBehaviour
     {
         Debug.Assert(m_GroupManager != null);
         Debug.Assert(studentCanvases.Capacity == 5); // For now, 5 groups = 5 canvases
+        GroupManager.OnGroupChange += RefreshTablesStart;
     }
 
+    void RefreshTablesStart()
+    {
+        if (GameManager.AmTeacher)
+        {
+            RefreshTables();
+        }
+    }
+    /*
     private void OnTriggerEnter(Collider other)
     {
         if (GameManager.AmTeacher)
@@ -27,6 +36,7 @@ public class CanvasGroupChecker : MonoBehaviour
         }
             
     }
+    */
 
     void RefreshTables()
     {

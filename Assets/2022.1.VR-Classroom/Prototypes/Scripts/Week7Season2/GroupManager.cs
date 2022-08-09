@@ -4,6 +4,7 @@ using UnityEngine;
 using TMPro;
 using UnityEngine.UI;
 using ASL;
+using System;
 
 public class GroupManager : MonoBehaviour
 {
@@ -31,6 +32,8 @@ public class GroupManager : MonoBehaviour
     public GameObject currentGroupListItem;
     public GameObject currentGroupList;
     public Group MyGroup = null;
+
+    public static event Action OnGroupChange;
 
     // ASL variables
     const float ADD_PLAYER = 500;
@@ -171,6 +174,7 @@ public class GroupManager : MonoBehaviour
                 }
             }
         }
+        OnGroupChange.Invoke();
     }
 
     // used by teacher to update group manager UI
