@@ -3927,8 +3927,6 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: PushToTalk
       m_Image: {fileID: 0}
-    - m_Text: Microphone Off
-      m_Image: {fileID: 21300000, guid: a73c9a588832f544cba0112bbba198ea, type: 3}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

@@ -5,6 +5,7 @@ using UnityEngine.UI;
 
 public class VoiceUI : MonoBehaviour
 {
+
     public Dropdown User_Microphones;
     public Dropdown User_MicType;
     public GameObject MicrophonePanel;
@@ -68,12 +69,7 @@ public class VoiceUI : MonoBehaviour
             MicrophoneSensitivity.value = UserMicrophone.MinAmplitude;
         }
         UpdatePushToTalkText();
-        if(myMumble != null){
-            MuteSelf.isOn = myMumble.getClient().IsSelfMuted();
-        }
-        else if(myMumble == null && _AudioManager.VoiceChatEnabled){
-            MuteSelf.isOn = _AudioManager.GetMumbleActor().getClient().IsSelfMuted();
-        }
+        MuteSelf.isOn = _AudioManager.isSelfMuted;
         
         if(_AudioManager.VoiceChatEnabled)
             HideConnectionPanel();
@@ -160,11 +156,6 @@ public class VoiceUI : MonoBehaviour
                 UserMicrophone.MicNumberToUse = User_Microphones.value;
                 UserMicrophone.StopSendingAudio();
                 break;
-            case 3:
-                UserMicrophone.VoiceSendingType = Mumble.MumbleMicrophone.MicType.MethodBased;
-                UserMicrophone.MicNumberToUse = User_Microphones.value;
-                UserMicrophone.StopSendingAudio();
-                break;
         }                
     }
 
@@ -173,10 +164,14 @@ public class VoiceUI : MonoBehaviour
     }
 
     public void ToggleMute(){
-        if(myMumble.getClient().IsSelfMuted())
-            myMumble.getClient().SetSelfMute(false);
-        else
+        if(MuteSelf.isOn){
             myMumble.getClient().SetSelfMute(true);
+            _AudioManager.isSelfMuted = true;
+        }
+        else if(!MuteSelf.isOn){
+            myMumble.getClient().SetSelfMute(false);
+            _AudioManager.isSelfMuted = false;
+        }
     }
 
     public void ShowConnectionPanel(){

@@ -3074,7 +3074,7 @@ MonoBehaviour:
   m_FallbackScreenDPI: 96
   m_DefaultSpriteDPI: 96
   m_DynamicPixelsPerUnit: 5
-  m_PresetInfoIsWorld: 1
+  m_PresetInfoIsWorld: 0
 --- !u!114 &3042772998998967309
 MonoBehaviour:
   m_ObjectHideFlags: 0
@@ -5798,8 +5798,6 @@ MonoBehaviour:
       m_Image: {fileID: 0}
     - m_Text: PushToTalk
       m_Image: {fileID: 0}
-    - m_Text: Microphone Off
-      m_Image: {fileID: 21300000, guid: a73c9a588832f544cba0112bbba198ea, type: 3}
   m_OnValueChanged:
     m_PersistentCalls:
       m_Calls:

@@ -52,6 +52,8 @@ public class AudioManager : MonoBehaviour
     public bool runningTest = false;
     public bool TestSuccess_bool = false;
 
+    public bool isSelfMuted = false;
+
     private const float CNNCT = 26628;
 
     private void Awake() {
