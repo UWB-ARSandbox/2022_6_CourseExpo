@@ -28,10 +28,10 @@ public class EnableViewCanvases : MonoBehaviour, IClickable
                 {
                     if(!visible)
                     {
-                        canvas.enableViewingForPlayer(i);
+                        StartCoroutine(canvas.enableViewingForPlayer(i));
                     }
                     else{
-                        canvas.disableViewingForPlayer(i);
+                        StartCoroutine(canvas.disableViewingForPlayer(i));
                     }
                     
                 }
@@ -41,5 +41,6 @@ public class EnableViewCanvases : MonoBehaviour, IClickable
         
         
     }
+    
     
 }
