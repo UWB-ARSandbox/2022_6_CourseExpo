@@ -66,16 +66,16 @@ public class GroupManager : MonoBehaviour
         }
     }
 
-    // called when teacher adds a player from the AddPlayer UI
+    // called when teacher clicks on a player list item in the AddPlayer UI
     public void AddPlayer(string playerName)
     {   
-        // 
+        // remove player from group if they are already in one
         foreach (Group group in groups)
         {
             if (group.members.Contains(playerName))
             {
                 List<float> myFloats = new List<float>();
-                myFloats.Add(501);
+                myFloats.Add(REMOVE_PLAYER);
                 myFloats.Add(group.groupNumber);
                 myFloats.AddRange(GameManager.stringToFloats(playerName));
                 var myFloatsArray = myFloats.ToArray();
@@ -83,10 +83,11 @@ public class GroupManager : MonoBehaviour
             }
         }
 
+        // add the player if they are already not in the group
         if (!groups[groupList.value - 1].members.Contains(playerName))
         {
             List<float> myFloats = new List<float>();
-            myFloats.Add(500);
+            myFloats.Add(ADD_PLAYER);
             myFloats.Add(groupList.value);
             myFloats.AddRange(GameManager.stringToFloats(playerName));
             var myFloatsArray = myFloats.ToArray();
@@ -94,18 +95,22 @@ public class GroupManager : MonoBehaviour
         }
     }
 
+    // called when teacher clicks on a player list item in the groups UI
     public void RemovePlayer(string playerName)
     {
         List<float> myFloats = new List<float>();
-        myFloats.Add(501);
+        myFloats.Add(REMOVE_PLAYER);
         myFloats.Add(groupList.value);
         myFloats.AddRange(GameManager.stringToFloats(playerName));
         var myFloatsArray = myFloats.ToArray();
         m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
     }
 
+    // called when a player is added or removed from a group
+    // or when a new group is selected from the teacher's group UI
     public void ValueChanged()
     {
+        // update teachers group manager UI
         if (groupList.value == 0)
         {
             groupName.enabled = false;
@@ -124,6 +129,7 @@ public class GroupManager : MonoBehaviour
             LoadGroupData(int.Parse(groupList.options[groupList.value].text.Split(' ')[1]) - 1);
         }
 
+        // update students group UI
         if (!GameManager.AmTeacher)
         {
             groupNameText.text = "Group: None";
@@ -148,6 +154,7 @@ public class GroupManager : MonoBehaviour
         }
     }
 
+    // used by teacher to update group manager UI
     public void LoadGroupData(int index)
     {
         groupName.text = groups[index].groupName;
@@ -161,6 +168,7 @@ public class GroupManager : MonoBehaviour
         UpdateAddPlayerList();
     }
 
+    // called when teacher clicks on add player from the group manager UI
     public void ShowAddPlayerScreen()
     {
         UpdateAddPlayerList();
@@ -169,6 +177,7 @@ public class GroupManager : MonoBehaviour
 
     void UpdateAddPlayerList()
     {
+        // clear list before populating it
         foreach (Transform child in addPlayerList.transform)
         {
             GameObject.Destroy(child.gameObject);
