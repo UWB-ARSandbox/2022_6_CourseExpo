@@ -18,14 +18,16 @@ public class PlayerListScreen : MonoBehaviour
         // populate the playerList entry grid with a list item
         // for each connected player
         players = GameLiftManager.GetInstance().m_Players;
-
         foreach (string playerName in players.Values)
         {
+            // skip if playerName is equal to client's name
             if (playerName == GameManager.players[GameManager.MyID])
                 continue;
             AddUser(playerName);
         }
-
+        
+        // add client's name last to ensure they are on top
+        // of the player list
         AddUser(GameManager.players[GameManager.MyID]);
     }
 
