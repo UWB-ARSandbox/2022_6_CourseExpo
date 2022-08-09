@@ -8,6 +8,10 @@ using ASL;
 public class GroupManager : MonoBehaviour
 {
     public List<Group> groups = new List<Group>();
+    public ASLObject m_ASLObject;
+    public bool VR_UI_Script;
+
+    // teacher variables
     public int maxGroups = 5; // keep at five for now
     public TMP_Dropdown groupList;
     public Button groupsButton;
@@ -20,14 +24,18 @@ public class GroupManager : MonoBehaviour
     public GameObject addPlayerListItem;
     public GameObject memberListItem;
     public GameObject memberList;
+    public Text groupNameText;
+
+    // student variables
     public GameObject currentGroupWindow;
     public GameObject currentGroupListItem;
     public GameObject currentGroupList;
-    public Text groupNameText;
-    public bool VR_UI_Script;
     public Group MyGroup = null;
 
-    public ASLObject m_ASLObject;
+    // ASL variables
+    const float ADD_PLAYER = 500;
+    const float REMOVE_PLAYER = 501;
+
     void Start()
     {
         groupName.enabled = false;
@@ -58,14 +66,16 @@ public class GroupManager : MonoBehaviour
         }
     }
 
+    // called when teacher adds a player from the AddPlayer UI
     public void AddPlayer(string playerName)
     {   
+        // 
         foreach (Group group in groups)
         {
             if (group.members.Contains(playerName))
             {
                 List<float> myFloats = new List<float>();
-                myFloats.Add(502);
+                myFloats.Add(501);
                 myFloats.Add(group.groupNumber);
                 myFloats.AddRange(GameManager.stringToFloats(playerName));
                 var myFloatsArray = myFloats.ToArray();
@@ -77,7 +87,7 @@ public class GroupManager : MonoBehaviour
         {
             List<float> myFloats = new List<float>();
             myFloats.Add(500);
-            myFloats.Add(groupList.value - 1);
+            myFloats.Add(groupList.value);
             myFloats.AddRange(GameManager.stringToFloats(playerName));
             var myFloatsArray = myFloats.ToArray();
             m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
@@ -88,7 +98,7 @@ public class GroupManager : MonoBehaviour
     {
         List<float> myFloats = new List<float>();
         myFloats.Add(501);
-        myFloats.Add(groupList.value - 1);
+        myFloats.Add(groupList.value);
         myFloats.AddRange(GameManager.stringToFloats(playerName));
         var myFloatsArray = myFloats.ToArray();
         m_ASLObject.SendAndSetClaim(() => { m_ASLObject.SendFloatArray(myFloatsArray); });
@@ -136,8 +146,6 @@ public class GroupManager : MonoBehaviour
                 }
             }
         }
-
-        Debug.Log("Value changed to " + groupList.options[groupList.value].text);
     }
 
     public void LoadGroupData(int index)
@@ -189,29 +197,18 @@ public class GroupManager : MonoBehaviour
     public void FloatReceive(string _id, float[] _f) {
         string username;
         switch(_f[0]) {
-            case 500:
+            case ADD_PLAYER:
                 username = "";
                 for (int i = 2; i < _f.Length; i++) {
                     username += (char)(int)_f[i];
                 }
-                groups[(int)_f[1]].members.Add(username);
+                groups[(int)_f[1] - 1].members.Add(username);
                 if (username == GameManager.players[GameManager.MyID]){
                     MyGroup = groups[(int)_f[1]];
                 }
                 ValueChanged();
                 break;
-            case 501:
-                username = "";
-                for (int i = 2; i < _f.Length; i++) {
-                    username += (char)(int)_f[i];
-                }
-                groups[(int)_f[1]].members.Remove(username);
-                if (username == GameManager.players[GameManager.MyID]){
-                    MyGroup = null;
-                }
-                ValueChanged();
-                break;
-            case 502:
+            case REMOVE_PLAYER:
                 username = "";
                 for (int i = 2; i < _f.Length; i++) {
                     username += (char)(int)_f[i];
