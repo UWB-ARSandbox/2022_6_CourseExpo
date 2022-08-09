@@ -10,7 +10,10 @@ public class EnableViewCanvases : MonoBehaviour, IClickable
     // Start is called before the first frame update
     void Start()
     {
-        
+        if (!GameManager.AmTeacher)
+        {
+            gameObject.SetActive(false);
+        }
     }
 
     // Update is called once per frame
@@ -20,24 +23,23 @@ public class EnableViewCanvases : MonoBehaviour, IClickable
     }
     public void IClickableClicked()
     {
-        if(ASL.GameLiftManager.GetInstance().m_PeerId == 1)
+        
+        foreach (NewPaint canvas in canvases)
         {
-            foreach (NewPaint canvas in canvases)
+            for(int i = 2; i < ASL.GameLiftManager.GetInstance().m_Players.Count + 1; i++)
             {
-                for(int i = 2; i < ASL.GameLiftManager.GetInstance().m_Players.Count; i++)
+                if(!visible)
                 {
-                    if(!visible)
-                    {
-                        StartCoroutine(canvas.enableViewingForPlayer(i));
-                    }
-                    else{
-                        StartCoroutine(canvas.disableViewingForPlayer(i));
-                    }
-                    
+                    StartCoroutine(canvas.enableViewingForPlayer(i));
                 }
+                else{
+                    StartCoroutine(canvas.disableViewingForPlayer(i));
+                }
+                
             }
-            visible = !visible;
         }
+        visible = !visible;
+        
         
         
     }
