@@ -8,13 +8,13 @@ using ASL;
 public class GroupManager : MonoBehaviour
 {
     public List<Group> groups = new List<Group>();
+    public int maxGroups = 5; // keep at five for now
     public TMP_Dropdown groupList;
     public Button groupsButton;
     public Button addMemberButton;
     public TMP_Text groupName;
     public TMP_Text groupMembers;
     public GameObject addPlayerContainer;
-
     public Dictionary<int, string> playerList;
     public GameObject addPlayerList;
     public GameObject addPlayerListItem;
@@ -38,7 +38,9 @@ public class GroupManager : MonoBehaviour
             m_ASLObject._LocallySetFloatCallback(FloatReceive);
         else if(!VR_UI_Script && !PlayerController.isXRActive)
             m_ASLObject._LocallySetFloatCallback(FloatReceive);
-        for (int i = 0; i < 5; i++)
+        
+        // create groups and populate groupList dropdown for teacher's UI
+        for (int i = 0; i < maxGroups; i++)
         {
             Group group = new Group();
             group.groupName = "Group " + (i + 1);
@@ -57,7 +59,7 @@ public class GroupManager : MonoBehaviour
     }
 
     public void AddPlayer(string playerName)
-    {
+    {   
         foreach (Group group in groups)
         {
             if (group.members.Contains(playerName))
@@ -124,11 +126,13 @@ public class GroupManager : MonoBehaviour
                 if (group.members.Contains(GameManager.players[GameManager.MyID]))
                 {
                     groupNameText.text = group.groupName;
-                    foreach (string item in group.members)
+                    foreach (string playerName in group.members)
                     {
-                        var listItem = Instantiate(currentGroupListItem, currentGroupList.transform, false) as GameObject;
-                        listItem.GetComponent<SinglelineContainer>().setText(item);
+                        if (playerName == GameManager.players[GameManager.MyID])
+                            continue;
+                        AddUserToList(playerName, currentGroupListItem, currentGroupList);
                     }
+                    AddUserToList(GameManager.players[GameManager.MyID], currentGroupListItem, currentGroupList);
                 }
             }
         }
@@ -143,9 +147,7 @@ public class GroupManager : MonoBehaviour
         {
             foreach (string member in groups[index].members)
             {
-                // groupMembers.text += (member + "\n");
-                var listItem = Instantiate(memberListItem, memberList.transform, false) as GameObject;
-                listItem.GetComponent<SinglelineContainer>().setText(member);
+                AddUserToList(member, memberListItem, memberList);   
             }
         }
         UpdateAddPlayerList();
@@ -164,12 +166,11 @@ public class GroupManager : MonoBehaviour
             GameObject.Destroy(child.gameObject);
         }
         playerList = GameLiftManager.GetInstance().m_Players;
-        foreach (string item in playerList.Values)
+        foreach (string playerName in playerList.Values)
         {
-            if (!groups[groupList.value - 1].members.Contains(item) && item != GameManager.players[GameManager.MyID])
+            if (!groups[groupList.value - 1].members.Contains(playerName) && playerName != GameManager.players[GameManager.MyID])
             {
-                var listItem = Instantiate(addPlayerListItem, addPlayerList.transform, false) as GameObject;
-                listItem.GetComponent<SinglelineContainer>().setText(item);
+                AddUserToList(playerName, addPlayerListItem, addPlayerList);
             }
         }
     }
@@ -177,6 +178,12 @@ public class GroupManager : MonoBehaviour
     public void CloseAddPlayerScreen()
     {
         addPlayerContainer.SetActive(false);
+    }
+
+    void AddUserToList(string name, GameObject listItem, GameObject list)
+    {
+        GameObject newListItem = Instantiate(listItem, list.transform, false) as GameObject;
+        newListItem.GetComponent<SinglelineContainer>().setText(name);
     }
 
     public void FloatReceive(string _id, float[] _f) {
