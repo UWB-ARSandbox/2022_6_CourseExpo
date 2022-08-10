@@ -1166,6 +1166,7 @@ public class GameManager : MonoBehaviour {
     // from other peoples group UI
     void removeFromGroup(string name)
     {
+        // remove player from group if they are in a group
         foreach (Group group in groupManager.groups)
         {
             if (group.members.Contains(name))
@@ -1173,6 +1174,8 @@ public class GameManager : MonoBehaviour {
                 group.members.Remove(name);
             }
         }
+        // update UI with group changes
+        groupManager.ValueChanged();
     }
 
     private void CheckBooths() {
