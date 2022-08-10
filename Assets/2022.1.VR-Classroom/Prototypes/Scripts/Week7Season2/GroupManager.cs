@@ -16,10 +16,8 @@ public class GroupManager : MonoBehaviour
     public int maxGroups = 5; // keep at five for now
     public TMP_Dropdown groupList;
     public Button groupsButton;
-    public Button addMemberButton;
     public TMP_Text groupName;
     public TMP_Text groupMembers;
-    public GameObject addPlayerContainer;
     public Dictionary<int, string> playerList;
     public GameObject addPlayerList;
     public GameObject addPlayerListItem;
@@ -43,8 +41,6 @@ public class GroupManager : MonoBehaviour
     {
         groupName.enabled = false;
         groupMembers.enabled = false;
-        addMemberButton.gameObject.SetActive(false);
-        addPlayerContainer.SetActive(false);
         if(VR_UI_Script && PlayerController.isXRActive)
             m_ASLObject._LocallySetFloatCallback(FloatReceive);
         else if(!VR_UI_Script && !PlayerController.isXRActive)
@@ -137,11 +133,9 @@ public class GroupManager : MonoBehaviour
         {
             groupName.enabled = false;
             groupMembers.enabled = false;
-            addMemberButton.gameObject.SetActive(false);
         }
         else
         {
-            addMemberButton.gameObject.SetActive(true);
             groupName.enabled = true;
             groupMembers.enabled = true;
             groupName.text = "";
@@ -191,13 +185,6 @@ public class GroupManager : MonoBehaviour
         UpdateAddPlayerList();
     }
 
-    // called when teacher clicks on add player from the group manager UI
-    public void ShowAddPlayerScreen()
-    {
-        UpdateAddPlayerList();
-        addPlayerContainer.SetActive(true);
-    }
-
     void UpdateAddPlayerList()
     {
         // clear list before populating it
@@ -213,11 +200,6 @@ public class GroupManager : MonoBehaviour
                 AddUserToList(playerName, addPlayerListItem, addPlayerList);
             }
         }
-    }
-
-    public void CloseAddPlayerScreen()
-    {
-        addPlayerContainer.SetActive(false);
     }
 
     void AddUserToList(string name, GameObject listItem, GameObject list)

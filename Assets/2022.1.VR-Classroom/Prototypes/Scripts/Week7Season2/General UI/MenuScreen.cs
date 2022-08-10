@@ -13,7 +13,6 @@ public class MenuScreen : MonoBehaviour
     public GameObject Quit;
     public GameObject PlayerList;
     public GameObject CurrentGroupList;
-    public GameObject AddPlayerScreen;
     public Button Refresh;
     public List<GameObject> Screens;
     public AudioClip flipAudio;
@@ -41,7 +40,6 @@ public class MenuScreen : MonoBehaviour
             if (GameManager.AmTeacher)
             {
                 Groups.SetActive(false);
-                AddPlayerScreen.SetActive(false);
             }
             else
                 CurrentGroupList.SetActive(true);
@@ -68,7 +66,6 @@ public class MenuScreen : MonoBehaviour
             if (GameManager.AmTeacher)
             {
                 Groups.SetActive(false);
-                AddPlayerScreen.SetActive(false);
             }
             else
                 CurrentGroupList.SetActive(false);
