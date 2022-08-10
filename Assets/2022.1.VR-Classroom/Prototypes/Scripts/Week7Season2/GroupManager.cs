@@ -62,6 +62,7 @@ public class GroupManager : MonoBehaviour
         {
             groupsButton.gameObject.SetActive(true);
             currentGroupWindow.SetActive(false);
+            groupList.value = 1;
         }
         StartCoroutine(MyGroupUpdater());
     }
