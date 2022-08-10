@@ -322,7 +322,7 @@ public class CollaborativeManager : MonoBehaviour
 
     IEnumerator TeleportUser(string testStarter)
     {
-        m_ChatManager.AddMessage(testStarter + " has started a test, you will be teleported in 10 seconds.");
+        m_ChatManager.AddMessage('\n' + testStarter + " has started a test, you will be teleported in 10 seconds.");
         yield return new WaitForSeconds(10f);
         //teleport user infront of lectern
         GameObject player = FindObjectOfType<XpoPlayer>().gameObject;

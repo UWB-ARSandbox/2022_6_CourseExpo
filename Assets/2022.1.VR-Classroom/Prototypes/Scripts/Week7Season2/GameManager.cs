@@ -53,6 +53,7 @@ public class GameManager : MonoBehaviour {
     private bool readyAcknowledged = false;
     private bool AllUsersReady = false;
     private Dictionary<int, bool> playerReadiness = new Dictionary<int,bool>();
+    GroupManager groupManager;
 
     public void Quit()
     {
@@ -87,6 +88,7 @@ public class GameManager : MonoBehaviour {
     private void Start() {
         
         ASL_PhysicsMasterSingleton.Instance.SetUpPhysicsMaster();
+        groupManager = GameObject.Find("GroupsUI").GetComponent<GroupManager>();
         
         _asl._LocallySetFloatCallback(FloatReceive);
 
@@ -1086,6 +1088,7 @@ public class GameManager : MonoBehaviour {
                 for (int i = 1; i < _f.Length; i++) {
                     username += (char)(int)_f[i];
                 }
+                removeFromGroup(username);
                 GameObject GhostPlayer = GameObject.Find(username + "_GhostPlayer");
                 if(GhostPlayer != null)
                     GhostPlayer.gameObject.SetActive(false);
@@ -1156,6 +1159,23 @@ public class GameManager : MonoBehaviour {
                     break;
             }
         }
+    }
+
+    // used in the ping request section in the float recieve function
+    // to check if a removed player was in a group in order to removed them
+    // from other peoples group UI
+    void removeFromGroup(string name)
+    {
+        // remove player from group if they are in a group
+        foreach (Group group in groupManager.groups)
+        {
+            if (group.members.Contains(name))
+            {
+                group.members.Remove(name);
+            }
+        }
+        // update UI with group changes
+        groupManager.ValueChanged();
     }
 
     private void CheckBooths() {
