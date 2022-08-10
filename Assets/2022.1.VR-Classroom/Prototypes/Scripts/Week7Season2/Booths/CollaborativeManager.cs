@@ -782,13 +782,13 @@ public class CollaborativeManager : MonoBehaviour
     void FinalSubmitToggle(bool ToggleVal){
         if(ToggleVal){
             FinalSubmitButton.onClick.AddListener(() => FinalSubmission());
-            
+            FinalSubmitText.GetComponent<Text>().text = "Press to Submit Final Answer";
             if(!FinalSubmitButton.gameObject.activeSelf){
                 FinalSubmitButton.gameObject.SetActive(true);
                 FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.SetActive(false);
             }
             FinalSubmitButton.gameObject.transform.Find("lbl_QuestionTimer").gameObject.SetActive(false);
-            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = greenColor;
+            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = yellowColor;
         }
         else if(!ToggleVal && FinalSubmitButton.gameObject.activeSelf){
             if(FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.activeSelf)
@@ -815,6 +815,8 @@ public class CollaborativeManager : MonoBehaviour
         if(FinalSubmitBool[GameManager.players[GameManager.MyID]] == true || FinalSubmissionRunning){
             return;
         }
+        FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = greenColor;
+        FinalSubmitText.GetComponent<Text>().text = "Waiting on group members";
         SendInput(FinalSubmit);
         StartCoroutine(FinalSubmissionLockOutTimer(1f));
     }
