@@ -34,6 +34,9 @@ public class CollaborativeManager : MonoBehaviour
 
     public InputField txtField;
 
+    //intent is to have a bool that is set to false upon sending a message that flips to true upon recieving that message
+    private bool MyMessageRecieved = false;
+
     #region MessageHeaders
     //Answer inputs - dont necessarily need to be message headers could use the same header for all depends on how much information we want to send
     public const float GroupQuizStarted = 99;
@@ -232,7 +235,7 @@ public class CollaborativeManager : MonoBehaviour
     //Send ID of player that has started quiz IE hit the button
     //Send ID of player that has started quiz IE hit the button
     public IEnumerator DelayedStart(float Delay){
-        yield return new WaitForSeconds(Delay/20);
+        yield return new WaitForSeconds(Delay/5);
         SendStartMessage();
         yield return null;
     }
@@ -254,6 +257,8 @@ public class CollaborativeManager : MonoBehaviour
                 m_ASLObject.SendFloatArray(FloatsArray);
             });
             _myAssessmentManager.walls.gameObject.SetActive(true);
+            MyMessageRecieved = false;
+            StartCoroutine(AwaitPersonalResponse(FloatsArray));
         }    
     }
     //expected input should be a float between the values of 101 - 107
@@ -320,6 +325,22 @@ public class CollaborativeManager : MonoBehaviour
         }
     }
 
+    //Intent is to make sure that start messages are recieved by yourself
+    //can be adapted to ensure that other inputs are also sent
+    //but most inputs your able to send multiple times
+    IEnumerator AwaitPersonalResponse(float[] InputToResend){
+        yield return new WaitForSeconds(.5f);
+        if(!MyMessageRecieved){
+            switch(InputToResend[1]){
+                case QuizStarted:{
+                    SendStartMessage();
+                    yield return null;
+                    break;
+                }
+            }
+        }
+    }
+
     IEnumerator TeleportUser(string testStarter)
     {
         m_ChatManager.AddMessage('\n' + testStarter + " has started a test, you will be teleported in 10 seconds.");
@@ -339,9 +360,13 @@ public class CollaborativeManager : MonoBehaviour
             switch(_f[1]){
                 case QuizStarted:{
                     MaxStudents = _myAssessmentManager.NumberOfConcurrentUsers;
-                    if(!curStudents.Contains(_f[2]))
+                    if(_f[2] == GameManager.MyID){
+                        MyMessageRecieved = true;
+                    }
+                    if(!curStudents.Contains(_f[2])){
                         curStudents.Add(_f[2]);
-                    Debug.Log("Student ID:" +_f[2] +" has started a test");
+                        Debug.Log("Student ID:" +_f[2] +" has started a test");
+                    }
                     SyncedTimer();
                     break;
                 }
@@ -366,7 +391,6 @@ public class CollaborativeManager : MonoBehaviour
                         //issue with everyone in the group starting at once
                         StartCoroutine(DelayedStart((float)m_GroupManager.MyGroup.members.IndexOf(GameManager.players[GameManager.MyID])));
                         StartCoroutine(TeleportUser(GameManager.players[(int)_f[2]]));
-                        GameManager.isTakingAssessment = true;
                     }
                     break;
                 }
@@ -788,7 +812,10 @@ public class CollaborativeManager : MonoBehaviour
                 FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.SetActive(false);
             }
             FinalSubmitButton.gameObject.transform.Find("lbl_QuestionTimer").gameObject.SetActive(false);
+            if(FinalSubmitBool[GameManager.players[GameManager.MyID]] == false)
             FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = yellowColor;
+            if(FinalSubmitBool[GameManager.players[GameManager.MyID]] == true)
+            FinalSubmitButton.gameObject.transform.Find("img_QuestionTimer").gameObject.GetComponent<Image>().color = greenColor;
         }
         else if(!ToggleVal && FinalSubmitButton.gameObject.activeSelf){
             if(FinalSubmitButton.gameObject.transform.Find("txt_QuestionTimer").gameObject.activeSelf)
