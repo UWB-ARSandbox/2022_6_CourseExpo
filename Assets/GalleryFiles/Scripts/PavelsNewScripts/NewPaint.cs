@@ -1,12 +1,4 @@
-/* PaintOnCanvas.cs
- * Author: Tyler Miller
- * Date: 4/7/2022
- * Description: PaintOnCanvas allows user to create a blank canvas
- * then paint on it. User must save canvas before quitting application
- * to save progress. The load button will allow the user to load a png.
- * The user is allowed to change the brush size and color. User can type
- * text in two sizes 7 pixels wide or 12 pixels wide.
-*/
+
 using System;
 using System.Collections;
 using System.Collections.Generic;
@@ -17,74 +9,125 @@ using SimpleFileBrowser;
 using UnityEngine.XR;
 
 
+
+
+//This script handles all aspects of drawing on a canvas
+//It operates by taking user inputs, sending the information over ASL, and using the inputs to build the drawings
+//The script is organized into three parts.
+//1. The public methods that allow interaction with the canvas
+//2. The methods that send and recieeve user input
+//3. The methods that build the drawing using the user input
+//The canvas should be modular enough that it can just be used wherever
+//Dependencies: ASLObject, 2 MeshRenderers (one for the canvas and one for the canvas's mask), CanvasInput, SimpleFileBrowser, and a bunch of UI components
+
+//Things to do:
+//1. Rename script and variables, a lot of them or confusing
+//2. Move the building of the drawings to the GPU, to help improve performance
+//3. Make a mask for line tool.
+//4. Improve line tool in general, solution is not the best solution
+//5. Consider change the brush shape from a square to a circle
+//6. better way of doing text, where the text size increases at a better rate (currently it is just interpolated to make it bigger)
+
+//Important notes:
+//The canvas drawing get built on each client whether they can see it or not. Needs more testing to see full performance impact of people drawing at once
+//
+
+
 public class NewPaint : MonoBehaviour
 {
 	
+	//Variable determines whether a player is allowed to draw on the canvas
+	//Important note: The canvas can be not visible (black texture) but still be drawn on
 	public bool allowedPlayer;
 
+	//When enabled at start up this will make the canvas be usable for drawing for all players
 	[SerializeField] bool allowForEveryone;
+
+	//When enabled at start up this will make the texture on the canvas visible for all players
 	[SerializeField] bool visibleForEveryone;
+
+	//The IDs of the players allowed to use the canvas at startup
 	[SerializeField] List<int> startingAllowedPlayers;
+
+	//The IDs of the players allowed to see the canvas at startup
 	[SerializeField] List<int> startingAllowedViewers;
+
+
+
+	//Note: the enable/disable canvas methods allow for players to draw on the canvas, but do not make them visible. Same thing goes for the enable/disable viewing methods
+
+	//Enables the canvas for the player locally
 	public void enableCanvasLocal()
 	{
 		allowedPlayer = true;
 		
 		
 	}
+	//Disables the canvas for the player locally
 	public void disableCanvasLocal()
 	{
 		allowedPlayer = false;
 		
 	}
+	//Enables viewing of the canvas locally, does this by switching the texture of the canvas to the main texture
 	public void enableViewingLocal()
 	{
 		gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
+
+		//Event gets invoked so that canvas mirrors get updated with the knew texture
 		canvasTextureSwitch.Invoke(studentCanvas);
 	}
+	//Enables viewing of the canvas locally, does this by switching the texture of the canvas to the blank texture
 	public void disableViewingLocal()
 	{
 		gameObject.GetComponent<Renderer>().material.mainTexture = blankCanvas;
+
+		//Event gets invoked so that canvas mirrors get updated with the knew texture
 		canvasTextureSwitch.Invoke(blankCanvas);
 	}
+
+	//Enables a player to use the canvas based off their id, can be called from anyone, not just the local player
 	public IEnumerator enableCanvasForPlayer(int peerID)
 	{
-		yield return new WaitForSeconds(1);
-		float[] fArray = {1, peerID};
+		yield return new WaitForSeconds(1); //This is necessary for when this method gets called during Start, there may be better solution 
+		float[] fArray = {1, peerID}; 
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
             {
 				
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
             });
 	}
+	//Disables a player to use the canvas based off their id, can be called from anyone, not just the local player
 	public IEnumerator disableCanvasForPlayer(int peerID)
 	{
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(1); //This is necessary for when this method gets called during Start, there may be better solution
 		float[] fArray = {2, peerID};
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
             {
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
             });
 	}
+	//Enables a player to view the canvas based off their id, can be called from anyone, not just the local player
 	public IEnumerator enableViewingForPlayer(int peerID)
 	{
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(1); //This is necessary for when this method gets called during Start, there may be better solution
 		float[] fArray = {3, peerID};
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
             {
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
             });
 	}
+	//Disables a player to view the canvas based off their id, can be called from anyone, not just the local player
 	public IEnumerator disableViewingForPlayer(int peerID)
 	{
-		yield return new WaitForSeconds(1);
+		yield return new WaitForSeconds(1); //This is necessary for when this method gets called during Start, there may be better solution
 		float[] fArray = {4, peerID};
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
             {
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
             });
 	}
-
+	//Returns the current texture applied to the canvas
 	public Texture2D getTexture()
 	{
 		if(allowedPlayer)
@@ -97,35 +140,56 @@ public class NewPaint : MonoBehaviour
 		}
 	}
 
+	//Event that signifies that the canvas has switched textures, so that the canvas mirrors can know to be updated as well
 	public event Action<Texture2D> canvasTextureSwitch;
 
 	
-	
+	//Struct containing all the input information that is needed to build whatever the player is drawing on the canvas
 
-    struct InputInformation //: IEquatable<InputInformation>, IComparable<InputInformation>
+    struct InputInformation 
 	{
 
 
-		//public int peerID;
+		//When this is true, it means that the clear command gets called. Should not be within InputInformation
 		public bool ClearCanvas;
 
+		//When this is true, it means the load texture command gets called. Also should not be within InputInformation
 		public bool loadTexture;
+
+		//The texture that gets loaded when the loadTexture command is called. Also should not be within InputInformation
 		public Texture2D textureToLoad;
+
+		//Where on the canvas the player clicked.
 		public Vector2 canvasClick;
 
+		//Whether the mouse was held down.
 		public bool mouseDown;
-		public bool previousMouseDown;
-		public Vector2 previousCanvasClick;
 
+		//Whether the mouse was held down on the previous input
+		public bool previousMouseDown;
+
+		//Where on the canvas the player had clicked previously (used for interpolation)
+		public Vector2 previousCanvasClick;
+		
+		//The color the player was using
 		public Color brushColor;
+
+		//The brush size the player was using
 		public int brushSize;
 
+		//Whether erase mode was on
 		public bool eraseMode;
+
+		//Whether text mode was on
 		public bool textMode;
+
+		//Whether line mode was on
 		public bool lineMode;
 
+		//The text that was inputed if text mode was on
 		public string textInput;
 
+		//Which alphabet (essentially the font) that was being used. 0 corresponds to the smaller alphabet, 1 to the bigger
 		public int alphabetNumber;
 
 		
@@ -133,15 +197,24 @@ public class NewPaint : MonoBehaviour
 		
 	}
 
+	//Queue of inputs to go through when using the inputs to build the texture
     Queue<InputInformation> myQueue;
 
 	//the canvas of the students
 	public Texture2D studentCanvas;
 
+	//A fully black texture that gets put up when the user isn't allowed to see the canvas
+
 	Texture2D blankCanvas;
 
+	//Texture for the mask (the part that shows where the user will be drawing)
+
+	Texture2D maskCanvas;
+
+	//An empty canvas mask to copy into the maskCanvas to reset it
 	Texture2D unMarkedCanvasMask;
 
+	//The size of the brush of the current user (linked to ui)
     int brushSize;
 
 	//how wide the canvas is in pixels
@@ -188,76 +261,89 @@ public class NewPaint : MonoBehaviour
 
 	Texture2D inputAlphabet; //Recieved alphabet
 
+	//Which alphabet (essentially the font) that was being used. 0 corresponds to the smaller alphabet, 1 to the bigger
 	int alphabetNumber;
 
-    Vector2 pixelToDraw;
-
+	//The amount of times it redraws the square between the previous mouse click and the next. THis allows for the drawing to be smooth
 	public int numberOfInterpolations;
 
-	// Current Canvas has been loaded
-	bool clicked = false;
-	float freeze = 1f;
-	float maskClock = 0.2f;
-
+	//Previous coordinate that the mouse hit, used for interpolation
 	Vector2 previousCoord;
 
+	//Whether the mouse was down on the previous frame or not
 	bool previousMouseDown = false;
 
+	
+	//The renderer to be used by the canvas mask
     public Renderer maskRenderer;
-	Texture2D maskCanvas;
-	Color maskColor;
-
+	
+	//Method that stores the last built InputInfo, for debugging purposes mostly. 
     InputInformation inputInfo;
 
+	//All the UI fields that need to be linked
 
-    // UI field listeners
+	//Color fields
 	[SerializeField] Slider rSlider, gSlider, bSlider;
 	[SerializeField] InputField rInput, gInput, bInput;
-	[SerializeField] InputField aField = null;
 
-	[SerializeField] InputField slField = null;
+	//Fields for text and brush sizes
 	[SerializeField] InputField textField = null;
 	[SerializeField] InputField brushSizeInput = null;
 	[SerializeField] Slider brushSizeSlider = null;
 
-	// UI button listeners
+	//Buttons for deleting and loading things into the canvas
 	[SerializeField] Button loadB = null;
-	[SerializeField] Button saveB = null;
 	[SerializeField] Button deleteB = null;
-	[SerializeField] Button controlsB = null;
+	
 
-	[SerializeField] Button subGalB = null;
-	[SerializeField] Button subStuB = null;
-
-	// UI toggle listeners
+	//Toggles for the different canvas modes
 	[SerializeField] Toggle eraseTog = null;
 	[SerializeField] Toggle textTog = null;
 	[SerializeField] Toggle lineTog = null;
 
-	//UI dropdown listeners
+	//Field for changing the text size
 	[SerializeField] Dropdown textSizeDrop = null;
 
+	//Special UI field containing a circle gameobject which gets colored the sanme as the brush color
     [SerializeField] GameObject brushColorUI;
+	//End of UI fields ---------------------------------------------------------------------------------------------------------
 
+	//Whether the image being loaded is done being loaded
 	bool doneLoading;
 
+	//Whether the pointer is on the canvas, used for the canvas mask
 	bool OnCanvas;
-
+	
+	//Whether the left controller is on the canvas, used for the vr canvas mask
 	bool OnCanvasLeft;
 
+	//Whether the right controller is on the canvas, used for the vr canvas mask
 	bool OnCanvasRight;
+
+	//Whether the canvas mask is blank
 
 	bool maskIsEmpty;
 
+	//List of left vr input devices (should only be one)
+
 	List<InputDevice>  leftDevices;
+
+	//List of right vr input devices (should only be one)
 
 	List<InputDevice>  rightDevices;
 
+	//Whether the trigger on the left controller was down in the previous frame
 	bool previousTriggerDownLeft;
+
+	//Whether the trigger on the right controller was down in the previous frame
 
 	bool previousTriggerDownRight;
 
+	//Where the left controller hit on the canvas
+
 	Vector2 previousVRCoordL;
+
+	//Where the right contoller hit on the canvas
 
 	Vector2 previousVRCoordR;
 
@@ -267,9 +353,10 @@ public class NewPaint : MonoBehaviour
     void Start()
     {
 
-        
+        //Sets what to do with the float array when recieved
         GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(recieveInput);
 
+		//Finds and sets the VR devices, will need to be changed if switching from windows to VR is desired
 		leftDevices = new List<InputDevice>();
 		var desiredCharacteristicsLeft = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Left | UnityEngine.XR.InputDeviceCharacteristics.Controller;
 		InputDevices.GetDevicesWithCharacteristics(desiredCharacteristicsLeft, leftDevices);
@@ -278,10 +365,7 @@ public class NewPaint : MonoBehaviour
 		var desiredCharacteristicsRight = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Right | UnityEngine.XR.InputDeviceCharacteristics.Controller;
 		InputDevices.GetDevicesWithCharacteristics(desiredCharacteristicsRight, rightDevices);
 		
-
-		int numOfPlayers = ASL.GameLiftManager.GetInstance().m_Players.Count;
-		
-
+		//Statup initialization of variables
         myQueue = new Queue<InputInformation>();
         brushSize = 10;
 		canvasWidth = 768;
@@ -300,7 +384,6 @@ public class NewPaint : MonoBehaviour
 		OnCanvasRight = false;
 		textOnType = "";
 		brushColor = Color.black;
-		pixelToDraw = new Vector2(0, 0);
         previousCoord = new Vector2(0, 0);
 
 		allowedPlayer = true;
@@ -316,9 +399,9 @@ public class NewPaint : MonoBehaviour
 		brushColorUI.GetComponent<Image>().color = brushColor;
 
 		
-        //Texture stuff
+        
 
-		
+		//Start up initialization of textures, can maybe be improved?
 
         studentCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
 		maskCanvas = new Texture2D(canvasWidth, canvasHeight, TextureFormat.RGBA32, false);
@@ -345,9 +428,7 @@ public class NewPaint : MonoBehaviour
         gameObject.GetComponent<Renderer>().material.mainTexture = studentCanvas;
 		maskRenderer.material.mainTexture = maskCanvas;
 
-        //UI stuff
-
-		// UI field code
+        
 		
 
         // Adding Listeners to all relevant objects.
@@ -357,14 +438,12 @@ public class NewPaint : MonoBehaviour
 		rSlider.onValueChanged.AddListener(delegate { ChangeRed(rSlider.value); });
 		gSlider.onValueChanged.AddListener(delegate { ChangeGreen(gSlider.value); });
 		bSlider.onValueChanged.AddListener(delegate { ChangeBlue(bSlider.value); });
-		//aField.onEndEdit.AddListener(ChangeAlpha);
+		
 
 		rInput.onEndEdit.AddListener(ChangeRed);
 		gInput.onEndEdit.AddListener(ChangeGreen);
 		bInput.onEndEdit.AddListener(ChangeBlue);
 
-		//slField.onEndEdit.AddListener(SaveOrLoadToPNG);
-		//slField.onValueChanged.AddListener(ChangeToWhite);
 		textField.onEndEdit.AddListener(SetTextOnType);
 		brushSizeInput.onEndEdit.AddListener(SetBrushSize);
 		brushSizeSlider.onValueChanged.AddListener(delegate { SetBrushSize(brushSizeSlider.value); });
@@ -381,7 +460,11 @@ public class NewPaint : MonoBehaviour
 
 		loadB.onClick.AddListener(SetCanLoad);
 
+
+		//Starts the loop for building user inputs on the canvas
 		StartCoroutine(UpdateCanvas());
+
+		//Enables the starting players who can access and view the canvas
 		if(!allowForEveryone)
 		{
 			
@@ -415,24 +498,30 @@ public class NewPaint : MonoBehaviour
 		
     }
 
-    // Update is called once per frame
+
+	//Method gets necessary inputs and sends them across the network
 	void GetAndSendInputs()
 	{
+
+		//Updates the canvas mask
 		UpdateMask();
 
 		//Get inputs to send over for the canvas
 		int playerID = ASL.GameLiftManager.GetInstance().m_PeerId;
+
+		//Activates when the mouse isn't over UI and was pressed (and not text mode since it only activates on button up)
 		if (!EventSystem.current.IsPointerOverGameObject())
 		{
 			if (Input.GetMouseButton(0) == true && !textMode)
 			{
 				
-				
+				//Checks if CanvasInput hit anything
 				if(CanvasInput.Instance.getRaycastHitObject())
 				{
 					
 					RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHit();
 
+					//If the raycast hit this canvas, send the inputs
 					if (raycastHit.transform == this.transform)
 					{
 						selected = true;
@@ -466,6 +555,8 @@ public class NewPaint : MonoBehaviour
 							previousCoord = pixelCoord;
 						}
 						previousMouseDown = true;
+
+						//Sends the inputs if not in line mode (line mode sends on button up only, but still needs some of the previous click information for interpolation)
 						if(!lineMode)
 						{
 							SendInput(inputInfo);
@@ -481,20 +572,18 @@ public class NewPaint : MonoBehaviour
 				}
 				
 			}
+			//Activates when the mouse is up and the canvas is in line mode or text mode
 			if(Input.GetMouseButtonUp(0))
 			{
 				if(textMode || lineMode)
 				{
+					//Checks if raycast hit anything
 					if(CanvasInput.Instance.getRaycastHitObject())
 					{
 						
 						RaycastHit raycastHit = CanvasInput.Instance.GetRaycastHit();
 						
-						
-						
-
-
-
+						//If the raycast hit the canvas, create and send the inputs
 						if (raycastHit.transform == this.transform)
 						{
 							selected = true;
@@ -534,9 +623,14 @@ public class NewPaint : MonoBehaviour
 			
 		}
 	}
+
+	//Same as GetAndSendInput, but for VR. Essentially, does getAndSendInput but twice, once for each controller. 
 	void GetAndSendInputsVR()
 	{
+		//Updates the canvas mask
 		UpdateMaskVR();
+
+		
 		bool triggerDownLeft;
 		if (leftDevices[0].TryGetFeatureValue(CommonUsages.triggerButton, out triggerDownLeft) && triggerDownLeft)
 		{
@@ -763,9 +857,10 @@ public class NewPaint : MonoBehaviour
 		
 	}
 
+	
     void Update()
     {
-        // Makes sure that the paint brush mask is not applied every frame
+        //If player is allowed to draw on the canvas, send the player's inputs
 		if(allowedPlayer)
 		{
 			
@@ -784,6 +879,8 @@ public class NewPaint : MonoBehaviour
 		
 
     }
+
+	//Method reads through the input queue and builds the inputs
     IEnumerator UpdateCanvas()
 	{
         
@@ -825,8 +922,11 @@ public class NewPaint : MonoBehaviour
             yield return null;
 		}
 	}
+
+	//Method draws using the InputInformation. 
     void Draw(InputInformation inp, Color brush)
 	{
+		//Dictionary for making sure we aren't applying repeats (not sure if repeats hinders performance when the changes get applied to the texture)
 		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
         if (!inp.previousMouseDown)
         {
@@ -835,7 +935,7 @@ public class NewPaint : MonoBehaviour
             {
                 
 
-
+				
                 for (int x = (int)(inp.canvasClick.x - (inp.brushSize / 2)); x < (int)(inp.canvasClick.x + (inp.brushSize / 2)); x++)
                 {
                     if (x >= canvasWidth || x < 0)
@@ -927,8 +1027,11 @@ public class NewPaint : MonoBehaviour
             }
             
         }
+
+		//Applies all the changes made to the texture
 		studentCanvas.Apply();
 	}
+	//Gets alphabet and draws the text
 	void DrawText(InputInformation inp)
 	{
 		
@@ -962,7 +1065,7 @@ public class NewPaint : MonoBehaviour
 			}
 		}
 	}
-	//Helper methods for drawing text
+	//Determines which character should be drawn
 	int DetermineCharacter(char c)
 	{
 		int modifiedVal = -1;
@@ -988,6 +1091,8 @@ public class NewPaint : MonoBehaviour
 		}
 		return modifiedVal;
 	}
+
+	//Draws a single character
 	void DrawCharacter(Vector2 currUV, int spot, int tWidth, int tHeight, InputInformation inp)
 	{
 		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
@@ -1035,6 +1140,8 @@ public class NewPaint : MonoBehaviour
 
 	void DrawLine(InputInformation inp) 
 	{
+		//Old way of drawing line
+		
 		/*
 		Dictionary<(int, int), bool> dictionary = new Dictionary<(int, int), bool>();
 		float lineInterpolations = 1000 - 9 * inp.brushSize;
@@ -1150,6 +1257,7 @@ public class NewPaint : MonoBehaviour
 
 	}
 	
+	//Updates the area
     void UpdateMask()
     {
 		
@@ -1201,6 +1309,7 @@ public class NewPaint : MonoBehaviour
 		}
 		
     }
+	//Works the same as update mask but takes in two VR controllers as inputs
 	void UpdateMaskVR()
     {
 		
@@ -1286,6 +1395,7 @@ public class NewPaint : MonoBehaviour
 		}
 		
     }
+	//The mask for draw, works the same way as the draw method but without interpolation
     void drawMask(Vector2 canvasClick, Color brush)
     {
 		Color clearBrush = brush;
@@ -1324,6 +1434,7 @@ public class NewPaint : MonoBehaviour
 		}
 		maskCanvas.Apply();
     }
+	//The mask for the text, works the same as the draw text method
     void textMask(Vector2 pixelCoord)
     {
 		if (textOnType.Equals("") == false && textMode == true)
@@ -1343,6 +1454,7 @@ public class NewPaint : MonoBehaviour
 
 		}
     }
+	//same as drawcharacter, but for the mask
 	void DrawCharacterMask(Vector2 currUV, int spot)
 	{
 		spot *= textWidth;
@@ -1381,7 +1493,7 @@ public class NewPaint : MonoBehaviour
 		}
 		maskCanvas.Apply();
 	}
-    
+    //Not implemented yet.
     void lineMask()
     {
 
@@ -1527,16 +1639,6 @@ public class NewPaint : MonoBehaviour
 		
 		brushColorUI.GetComponent<Image>().color = brushColor;
 	}
-    /*DetermineCharacter
-	* Description: converts the character value (bascially an int)
-	* to where it is in the alphabet.png or alphabet2.png. Due to functionality
-	* issues with some of the ascii values (NUL, carriage return, etc.) 
-	* the alphabet.png and alphabet2.png do not follow ascii and if changed
-	* must reflect in this function.
-	* Parameter: char c, which character to pull from the alphabet.
-	* Return: int, modified spot in ascii inside of the png. -1 is a 
-	* character that does not currently exist in the png.
-	*/
 	
 	public void ChangeTextSize(int option)
 	{
@@ -1556,6 +1658,7 @@ public class NewPaint : MonoBehaviour
 		}
 	}
 
+	//Method for load button, starts the simplefilebrowser for selecting an image
 	public void SetCanLoad()
 	{
 		
@@ -1574,6 +1677,7 @@ public class NewPaint : MonoBehaviour
 		
 
 	}
+	//Opens up simplefielbrowser and waits for user to put in a file. Then it makes a texture out of it and Sends the texture.
 	IEnumerator LoadWindow(Texture2D texture)
 	{
 		yield return FileBrowser.WaitForLoadDialog(FileBrowser.PickMode.FilesAndFolders, true,
@@ -1588,13 +1692,13 @@ public class NewPaint : MonoBehaviour
 			SendTexture(texture);
 			yield return FileBrowser.Result[0];
 		}
-		// Allow user to open a file explorer without loading a null image
+		
 		else
 		{
 			doneLoading = true;
 		}
 	}
-	
+	//Sends a texture using ASL. Notee that this is typically pretty expensive on the recieving end
 	public void SendTexture(Texture2D newPng)
 	{
 		this.GetComponent<ASL.ASLObject>().SendAndSetClaim(() =>
@@ -1604,6 +1708,7 @@ public class NewPaint : MonoBehaviour
 				
 			});
 	}
+	//Methods called when a texture is recieved from ASL. It takes it, puts makes a InputInformation out of it, and puts it on the queue.
 	public static void recieveTexture(GameObject gameObject, Texture2D tex)
 	{
 		gameObject.GetComponent<NewPaint>().makeTextureInput(tex);
@@ -1616,6 +1721,8 @@ public class NewPaint : MonoBehaviour
 		i.textureToLoad = tex;
 		myQueue.Enqueue(i);
 	}
+
+	//Applies a texture to the canvas.
 	void applyTexture(Texture2D tex)
 	{
 		for (int x = 0; x < canvasWidth; x++)
@@ -1632,7 +1739,7 @@ public class NewPaint : MonoBehaviour
 		}
 		studentCanvas.Apply();
 	}
-
+	//Sends the command to clear the canvas
 	void sendClearCanvas()
 	{
 		
@@ -1644,6 +1751,7 @@ public class NewPaint : MonoBehaviour
 		
 		
 	}
+	//Clears the canvas. May be better to use Graphics.copy with a blank white texture, but since this isn't called that much this should be fine
 	void ClearCanvas()
 	{
 		for (int x = 0; x < canvasWidth; x++)
@@ -1661,7 +1769,7 @@ public class NewPaint : MonoBehaviour
 		
 	
 
-    //Methods for sending/receiving input
+    //Method turns input information into an array and sends it
     void SendInput(InputInformation i)
     {
         var fArray = ConstructFloatsFromInput(i);
@@ -1670,6 +1778,8 @@ public class NewPaint : MonoBehaviour
                 GetComponent<ASL.ASLObject>().SendFloatArray(fArray);
             });
     }
+
+	//Method recieves ASL input and turns it back into InputInformation/calls commands with it
     public void recieveInput(string id, float[] i)
 	{
 		
