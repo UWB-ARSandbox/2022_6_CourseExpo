@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using UnityEngine.EventSystems;
 
+//Unused, implementation is now within CanvasInput
 public class GraphicRaycastFix : MonoBehaviour
 {
     GraphicRaycaster mRaycaster;

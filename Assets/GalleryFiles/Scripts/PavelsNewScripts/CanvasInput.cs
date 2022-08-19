@@ -6,23 +6,35 @@ using UnityEngine.XR.Interaction.Toolkit;
 using UnityEngine.UI;
 using UnityEngine.XR;
 
+//Singleton script handles the raycasting for the canvas
+//Script determines whether to use XR or mouse input at startup
+//Script also handles some wacky stuff for getting the sliders to work in world space, needs to be moved out of that script and a more elegant solution would be nice.
 public class CanvasInput : MonoBehaviour
 {
-    // Start is called before the first frame update
+    
 
-
+    //The singleton instance to access
     public static CanvasInput Instance {get; private set; }
 
+    //The raycast hit of the mouse
     RaycastHit raycastHit;
 
+    //The raycast hit from the two vr controllers
     RaycastHit[] raycastHitsVR = new RaycastHit[2];
+
+    //Whether the raycast hit an object, exists to help avoid null reference exceptions
     bool raycastHitObject;
+
+    //Same as raycastHitObject but for the two VR inputs
     bool[] raycastHitObjectVR = new bool[2];
 
+    //variable used to find the raycaster components for the VR
     bool foundPlayer = false;
 
+    //The raycaster components for the VR
     XRRayInteractor[] VRRaycasters;
 
+    //The input devices for the VR
     List<InputDevice> leftDevices;
 
     List<InputDevice> rightDevices;
@@ -39,7 +51,10 @@ public class CanvasInput : MonoBehaviour
     }
     void Start()
     {
+        //Finds the raycast components for the VR, waits to make sure the player is actually spawned
         StartCoroutine(findPlayer());
+
+        //Gets the left and right input devices for the VR
         leftDevices = new List<InputDevice>();
 		var desiredCharacteristicsLeft = UnityEngine.XR.InputDeviceCharacteristics.HeldInHand | UnityEngine.XR.InputDeviceCharacteristics.Left | UnityEngine.XR.InputDeviceCharacteristics.Controller;
 		InputDevices.GetDevicesWithCharacteristics(desiredCharacteristicsLeft, leftDevices);
@@ -53,16 +68,20 @@ public class CanvasInput : MonoBehaviour
     //Casts a ray on each update
     void Update()
     {
+        //Performs
         if(PlayerController.isXRActive)
         {
             
             if(foundPlayer)
             {
+                //Gets the raycast hits for both of the controllers
                 for(int i = 0; i < VRRaycasters.Length; i++)
                 {
+                    
                     raycastHitObjectVR[i] = VRRaycasters[i].TryGetCurrent3DRaycastHit(out raycastHitsVR[i]);
                 }
-                //For sliders in world space
+
+                //For sliders to work in world space --------------------------------------------------------
                 bool triggerDownLeft;
                 if (leftDevices[0].TryGetFeatureValue(CommonUsages.triggerButton, out triggerDownLeft) && triggerDownLeft)
                 {
@@ -81,6 +100,7 @@ public class CanvasInput : MonoBehaviour
                         }
                     }
                 }
+
                 bool triggerDownRight;
 		        if (rightDevices[0].TryGetFeatureValue(CommonUsages.triggerButton, out triggerDownRight) && triggerDownRight)
 		        {
@@ -99,6 +119,7 @@ public class CanvasInput : MonoBehaviour
                         }
                     }
                 }
+                //-------------------------------------------------------------------------------------------
             }
             
 		
@@ -120,7 +141,7 @@ public class CanvasInput : MonoBehaviour
                 raycastHitObject = Physics.Raycast(ray, out raycastHit, Mathf.Infinity, layerMask);
             }
 
-            //For sliders in world space
+            ///For sliders to work in world space --------------------------------------------------------
             if(Input.GetMouseButton(0))
             {
                 List<RaycastResult> results = new List<RaycastResult>();
@@ -149,9 +170,12 @@ public class CanvasInput : MonoBehaviour
                     
                 }
             }
+            //-------------------------------------------------------------------------------------------
             
         }
     }
+
+    
     public RaycastHit GetRaycastHit()
     {
         return raycastHit;
@@ -160,17 +184,18 @@ public class CanvasInput : MonoBehaviour
     {
         return raycastHitsVR;
     }
+
+    //Gets whether the raycast hit an object. Should always be checked to be true before getting the raycast information to make sure the raycast is correct
     public bool getRaycastHitObject()
     {
-        
-        
-        
         return raycastHitObject && !EventSystem.current.IsPointerOverGameObject();
     }
+    //Same as above but for VR
     public bool getRaycastHitObjectVR(int i)
     {
         return raycastHitObjectVR[i];
     }
+    //Waits for the player to spawn and gets it's vr components
     IEnumerator findPlayer()
     {
         while(!foundPlayer)

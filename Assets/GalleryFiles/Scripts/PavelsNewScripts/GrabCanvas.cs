@@ -4,6 +4,9 @@ using UnityEngine;
 using UnityEngine.XR;
 using UnityEngine.XR.Interaction.Toolkit;
 
+//Script handles moving the canvas around. Canvas can be grabbed by clicking on the handle
+//Vr implementation currently works only with the left hand
+
 public class GrabCanvas : MonoBehaviour
 {
     Vector3 originalStartPos; // Original position of object in the editor, for reset purposes

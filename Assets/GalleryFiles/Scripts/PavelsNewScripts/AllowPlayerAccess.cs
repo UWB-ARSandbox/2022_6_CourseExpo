@@ -4,6 +4,7 @@ using UnityEngine;
 using UnityEngine.UI;
 using ASL;
 
+//Currently unsued script. Was intended as a way of requesting access to a canvas so that a person can join it
 public class AllowPlayerAccess : MonoBehaviour, IClickable
 {
     // Start is called before the first frame update
@@ -18,7 +19,7 @@ public class AllowPlayerAccess : MonoBehaviour, IClickable
     int studentToEnable;
 
     
-
+    
     void Start()
     {
         GetComponent<ASL.ASLObject>()._LocallySetFloatCallback(recieveInput);
